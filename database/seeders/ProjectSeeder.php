@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\ProjectTask;
 use App\Enums\DefaultProjectStatus;
 use App\Models\Project;
 use App\Models\ProjectStatus;
@@ -20,6 +21,9 @@ class ProjectSeeder extends Seeder
         Project::query()->delete();
 
         $project = Project::factory()->create();
+        ProjectTask::factory()->count(5)->create([
+            'project_id' => $project->id
+        ]);
 
         foreach(DefaultProjectStatus::cases() as $status) {
             ProjectStatus::create([
