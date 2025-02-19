@@ -20,19 +20,21 @@ class ProjectSeeder extends Seeder
     {
         Project::query()->delete();
 
-        $project = Project::factory()->create();
-        ProjectTask::factory()->count(5)->create([
-            'project_id' => $project->id
-        ]);
-
-        foreach(DefaultProjectStatus::cases() as $status) {
-            ProjectStatus::create([
-                'name' => $status->value,
-                'project_id' => $project->id,
+        for($i = 0; $i < 10; $i++) {
+            $project = Project::factory()->create();
+            ProjectTask::factory()->count(5)->create([
+                'project_id' => $project->id
             ]);
-        }
 
-        $user = User::query()->where('email', 'user@example.com')->first();
-        $project->users()->attach($user, ['owner' => true]);
+            foreach(DefaultProjectStatus::cases() as $status) {
+                ProjectStatus::create([
+                    'name' => $status->value,
+                    'project_id' => $project->id,
+                ]);
+            }
+
+            $user = User::query()->where('email', 'user@example.com')->first();
+            $project->users()->attach($user, ['owner' => true]);
+        }
     }
 }

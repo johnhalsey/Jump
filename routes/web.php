@@ -20,7 +20,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::get('project/{project}', [ProjectController::class, 'show'])
+    Route::get('projects/{project}', [ProjectController::class, 'show'])
         ->name('project.show')
         ->can('view', 'project');
 });
