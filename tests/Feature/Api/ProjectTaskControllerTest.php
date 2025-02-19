@@ -7,9 +7,12 @@ use App\Models\User;
 use App\Models\Project;
 use App\Models\TaskNote;
 use App\Models\ProjectTask;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectTaskControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_project_user_can_index_tasks()
     {
         $user = User::factory()->create();

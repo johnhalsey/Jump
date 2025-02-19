@@ -6,9 +6,12 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use Inertia\Testing\AssertableInertia;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class DashboardControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_it_will_send_users_projects_to_dashboard()
     {
         $user = User::factory()->create();

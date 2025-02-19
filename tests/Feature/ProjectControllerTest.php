@@ -6,9 +6,12 @@ use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use Inertia\Testing\AssertableInertia;
+use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectControllerTest extends TestCase
 {
+    use RefreshDatabase;
+
     public function test_gate_will_stop_unauth_user()
     {
         $user = User::factory()->create();
