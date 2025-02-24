@@ -6,7 +6,6 @@ use App\Models\User;
 use App\Models\Project;
 use App\Models\TaskNote;
 use App\Models\ProjectTask;
-use App\Models\ProjectStatus;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -14,6 +13,8 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProjectTaskFactory extends Factory
 {
+
+    protected $model = ProjectTask::class;
     /**
      * Define the model's default state.
      *
@@ -33,7 +34,6 @@ class ProjectTaskFactory extends Factory
             'creator_id'  => function () {
                 return User::factory()->create()->id;
             },
-
         ];
     }
 

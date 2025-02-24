@@ -13,7 +13,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-100 bg-white shadow">
+            <nav className="border-b border-gray-50 bg-white shadow">
                 <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
                     <div className="flex h-16 justify-between">
                         <div className="flex">
@@ -164,7 +164,7 @@ export default function AuthenticatedLayout({ header, children }) {
 
             {header && (
                 <header className="">
-                    <div className="mx-auto max-w-7xl px-4 py-8 sm:px-6 lg:px-8">
+                    <div className="px-4 py-8 sm:px-6 lg:px-8">
                         {header}
                     </div>
                 </header>

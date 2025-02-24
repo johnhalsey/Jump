@@ -12,10 +12,6 @@ class ProjectTaskObserver
      */
     public function created(ProjectTask $projectTask): void
     {
-        Log::info('created');
-        Log::info($projectTask->project->short_code);
-        Log::info($projectTask->id);
-
         $projectTask->update([
             'reference' => $projectTask->project->short_code . '-' . $projectTask->id,
         ]);

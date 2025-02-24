@@ -19,6 +19,7 @@ class ProjectTaskResource extends JsonResource
             'description' => $this->description,
             'assignee_id' => $this->assignee_id,
             'creator_id'  => $this->creator_id,
+            'reference'   => $this->reference,
             'status'      => $this->status()->name,
             'notes'       => $this->notes
         ];

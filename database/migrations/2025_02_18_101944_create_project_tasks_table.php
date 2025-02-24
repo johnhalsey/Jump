@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('project_tasks', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('project_id');
-            $table->unsignedBigInteger('assignee_id');
+            $table->unsignedBigInteger('assignee_id')->nullable();
             $table->unsignedBigInteger('creator_id');
             $table->unsignedBigInteger('status_id');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
