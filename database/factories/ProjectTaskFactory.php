@@ -27,17 +27,13 @@ class ProjectTaskFactory extends Factory
             'project_id'  => function () {
                 return Project::factory()->create()->id;
             },
-            'assignee_id'  => function () {
+            'assignee_id' => function () {
                 return User::factory()->create()->id;
             },
-            'creator_id'   => function () {
+            'creator_id'  => function () {
                 return User::factory()->create()->id;
             },
-            'status_id' => function (array $attributes) {
-                return ProjectStatus::factory()->create([
-                    'project_id' => $attributes['project_id']
-                ])->id;
-            }
+
         ];
     }
 

@@ -1,7 +1,32 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head } from '@inertiajs/react';
+import {Head} from '@inertiajs/react';
+import {useEffect, useState} from 'react'
+import axios from 'axios'
+import ProjectStatusColumn from "@/Partials/ProjectStatusColumn.jsx"
 
-export default function ShowProject({project}) {
+export default function ShowProject ({project}) {
+
+    const [loading, setLoading] = useState(true)
+    const [tasks, setTasks] = useState([])
+
+    useEffect(() => {
+        getTasks()
+    }, [])
+
+    const getTasks = function () {
+        axios.get('/api/projects/' + project.data.id + '/tasks')
+            .then(response => {
+                setTasks(response.data.data)
+                setLoading(false)
+            })
+    }
+
+    const tasksByStatus = function (status) {
+        console.log(status)
+        console.log(tasks.filter(task => task.status == status))
+        return tasks.filter(task => task.status == status)
+    }
+
     return (
         <AuthenticatedLayout
             header={
@@ -10,18 +35,28 @@ export default function ShowProject({project}) {
                 </h2>
             }
         >
-            <Head title="Project" />
+            <Head title="Project"/>
 
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
 
-            <div className="grid grid-cols-3 gap-12 min-h-screen">
-                <div className="border bg-white p-8 rounded-md shadow-md">To Do</div>
-                <div className="border bg-white p-8 rounded-md shadow-md">In Progress</div>
-                <div className="border bg-white p-8 rounded-md shadow-md">Done</div>
+                {!loading && <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10 pb-12">
+                    <ProjectStatusColumn
+                        status="To Do"
+                        tasks={tasksByStatus('To Do')}
+                    ></ProjectStatusColumn>
+
+                    <ProjectStatusColumn
+                        status="In Progress"
+                        tasks={tasksByStatus('In Progress')}
+                    ></ProjectStatusColumn>
+
+                    <ProjectStatusColumn
+                        status="Done"
+                        tasks={tasksByStatus('Done')}
+                    ></ProjectStatusColumn>
+                </div>}
+
             </div>
-
-        </div>
-
 
         </AuthenticatedLayout>
     );

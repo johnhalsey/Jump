@@ -19,12 +19,10 @@ class ProjectSeeder extends Seeder
     public function run(): void
     {
         Project::query()->delete();
+        ProjectStatus::query()->delete();
 
         for($i = 0; $i < 10; $i++) {
             $project = Project::factory()->create();
-            ProjectTask::factory()->count(5)->create([
-                'project_id' => $project->id
-            ]);
 
             foreach(DefaultProjectStatus::cases() as $status) {
                 ProjectStatus::create([
@@ -32,6 +30,21 @@ class ProjectSeeder extends Seeder
                     'project_id' => $project->id,
                 ]);
             }
+
+            ProjectTask::factory()->count(5)->create([
+                'project_id' => $project->id,
+                'status_id' => $project->statuses()->where('name', 'To Do')->first()->id,
+            ]);
+
+            ProjectTask::factory()->count(5)->create([
+                'project_id' => $project->id,
+                'status_id' => $project->statuses()->where('name', 'In Progress')->first()->id,
+            ]);
+
+            ProjectTask::factory()->count(5)->create([
+                'project_id' => $project->id,
+                'status_id' => $project->statuses()->where('name', 'Done')->first()->id,
+            ]);
 
             $user = User::query()->where('email', 'user@example.com')->first();
             $project->users()->attach($user, ['owner' => true]);

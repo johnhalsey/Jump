@@ -17,7 +17,7 @@ class ProjectTask extends Model
 
     public function status()
     {
-        return $this->project->statuses()->where('id', $this->status_id);
+        return $this->project->statuses()->where('id', $this->status_id)->first();
     }
 
     public function notes(): \Illuminate\Database\Eloquent\Relations\HasMany
