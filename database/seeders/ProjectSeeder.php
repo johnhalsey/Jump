@@ -25,26 +25,16 @@ class ProjectSeeder extends Seeder
             $project = Project::factory()->create();
 
             foreach(DefaultProjectStatus::cases() as $status) {
-                ProjectStatus::create([
+                $status = ProjectStatus::create([
                     'name' => $status->value,
                     'project_id' => $project->id,
                 ]);
+
+                ProjectTask::factory()->count(5)->create([
+                    'project_id' => $project->id,
+                    'status_id' => $status->id,
+                ]);
             }
-
-            ProjectTask::factory()->count(5)->create([
-                'project_id' => $project->id,
-                'status_id' => $project->statuses()->where('name', 'To Do')->first()->id,
-            ]);
-
-            ProjectTask::factory()->count(5)->create([
-                'project_id' => $project->id,
-                'status_id' => $project->statuses()->where('name', 'In Progress')->first()->id,
-            ]);
-
-            ProjectTask::factory()->count(5)->create([
-                'project_id' => $project->id,
-                'status_id' => $project->statuses()->where('name', 'Done')->first()->id,
-            ]);
 
             $user = User::query()->where('email', 'user@example.com')->first();
             $project->users()->attach($user, ['owner' => true]);

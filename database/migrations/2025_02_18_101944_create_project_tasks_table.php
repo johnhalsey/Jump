@@ -21,6 +21,7 @@ return new class extends Migration
             $table->foreign('assignee_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('creator_id')->references('id')->on('users')->onDelete('cascade');
             $table->foreign('status_id')->references('id')->on('project_statuses')->onDelete('cascade');
+            $table->string('reference', 15)->nullable();
             $table->string('title');
             $table->text('description')->nullable();
             $table->timestamps();

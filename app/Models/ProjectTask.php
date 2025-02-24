@@ -3,12 +3,16 @@
 namespace App\Models;
 
 use Laravel\Prompts\Note;
+use App\Observers\ProjectTaskObserver;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
+#[ObservedBy([ProjectTaskObserver::class])]
 class ProjectTask extends Model
 {
     use HasFactory;
+
+    protected $guarded = ['id'];
 
     public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
     {

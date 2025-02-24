@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -18,6 +19,7 @@ class ProjectFactory extends Factory
     {
         return [
             'name' => $this->faker->words(3, true),
+            'short_code' => Str::upper(Str::random(4)),
         ];
     }
 }
