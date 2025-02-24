@@ -7,6 +7,8 @@ use App\Models\User;
 use App\Models\Project;
 use App\Models\TaskNote;
 use App\Models\ProjectTask;
+use App\Models\ProjectStatus;
+use App\Enums\DefaultProjectStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class ProjectTaskControllerTest extends TestCase
@@ -17,8 +19,13 @@ class ProjectTaskControllerTest extends TestCase
     {
         $user = User::factory()->create();
         $project = Project::factory()->create();
+        $status = ProjectStatus::factory()->create([
+            'project_id' => $project->id,
+            'name' => DefaultProjectStatus::TO_DO->value
+        ]);
         ProjectTask::factory()->count(5)->create([
             'project_id' => $project->id,
+            'status_id' => $status->id,
         ]);
 
         $user->projects()->attach($project->id);
