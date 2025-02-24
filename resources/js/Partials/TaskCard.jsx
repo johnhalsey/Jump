@@ -4,15 +4,18 @@ export default function TaskCard ({task}) {
 
     return (
         <>
-            <div className="m-3 p-3 border rounded shadow bg-white">
+            <Link href={'/projects/' + task.project.id + '/task/' + task.id}>
+                <div className="m-3 p-3 border rounded shadow bg-white hover:bg-blue-50">
 
-                <div>
-                    {task.title}
+                    <div>
+                        {task.title}
+                    </div>
+                    <div className="mt-5">
+                        {task.reference}
+                    </div>
                 </div>
-                <div className="mt-5">
-                    {task.reference}
-                </div>
-            </div>
+            </Link>
+
         </>
     );
 }

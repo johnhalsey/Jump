@@ -6,6 +6,7 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Http\Controllers\ProjectTaskController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -20,9 +21,17 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::get('projects/{project}', [ProjectController::class, 'show'])
-        ->name('project.show')
-        ->can('view', 'project');
+    Route::prefix('projects/{project}')->middleware('can:view,project')->group(function () {
+
+        Route::get('/', [ProjectController::class, 'show'])
+            ->name('project.show');
+
+        Route::get('/task/{projectTask}', [ProjectTaskController::class, 'show'])
+            ->name('project.task.show');
+    });
+
+
+
 });
 
 Route::middleware('auth')->group(function () {

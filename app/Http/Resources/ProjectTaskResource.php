@@ -15,6 +15,8 @@ class ProjectTaskResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'          => $this->id,
+            'project'     => new ProjectResource($this->project),
             'title'       => $this->title,
             'description' => $this->description,
             'assignee_id' => $this->assignee_id,
