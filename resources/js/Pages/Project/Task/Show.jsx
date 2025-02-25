@@ -1,21 +1,47 @@
 import {Head, Link} from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {useState} from "react"
+import {useState, useEffect, useRef} from "react"
 import axios from 'axios'
 
 export default function ShowProjectTask ({project, task}) {
 
-    const [status, setStatus] = useState(task.data.status)
-    const [assignee, setAssignee] = useState(task.data.assignee)
+    const [statusId, setStatusId] = useState(task.data.status.id)
+    const [assigneeId, setAssigneeId] = useState(task.data.assignee.id)
+    const firstUpdate = useRef(true);
+
+    useEffect(() => {
+        if (firstUpdate.current) {
+            // STOP
+            firstUpdate.current = false;
+            return;
+        }
+
+        // hammer time
+        updateTask()
+    }, [statusId, assigneeId]);
 
     const updateTask = function () {
-        axios.patch('/api/projects/' + project.data.id + '/tasks/' + task.data.id)
+        let data = {
+            'status_id': statusId,
+            'assignee_id': assigneeId
+        }
+
+        axios.patch('/api/project/' + project.data.id + '/task/' + task.data.id, data)
             .then(response => {
-                // OK
+                console.log('ok')
             })
             .catch(error => {
-                // not OK.
+                console.log('error')
+                console.log(error.response.data)
             })
+    }
+
+    function updateStatus(e) {
+        setStatusId(e.target.value)
+    }
+
+    function updateAssignee(e) {
+        setAssigneeId(e.target.value)
     }
 
     return (
@@ -51,11 +77,13 @@ export default function ShowProjectTask ({project, task}) {
                                     <select name="status"
                                             id="status"
                                             className="w-full border shadow rounded border-gray-300"
-                                            className="w-full border border-gray-300 shadow rounded "
+                                            onChange={updateStatus}
+                                            value={statusId}
                                     >
-                                        {project.data.statuses.map((status, index) => (
+                                        {project.data.statuses.map((projectStatus, index) => (
                                             <option key={'status-' + index}
-                                                    selected={status.name == task.data.status}>{status.name}</option>
+                                                    value={projectStatus.id}
+                                            >{projectStatus.name}</option>
                                         ))}
                                     </select>
                                 </div>
@@ -66,16 +94,19 @@ export default function ShowProjectTask ({project, task}) {
                                 <div>
                                     <select name="assignee"
                                             id="assignee"
-                                            className="w-full border border-gray-300 shadow rounded outline-0"
+                                            className="w-full border shadow rounded border-gray-300"
+                                            onChange={updateAssignee}
+                                            value={assigneeId}
                                     >
 
-                                        <option selected={task.data.assignee == null}>
+                                        <option value={null}>
                                             Unassigned
                                         </option>
 
                                         {project.data.users.map((user, index) => (
                                             <option key={'user-' + index}
-                                                    selected={user.id == task.data.assignee.id}>
+                                                    value={user.id}
+                                            >
                                                 {user.name}
                                             </option>
                                         ))}
@@ -89,7 +120,9 @@ export default function ShowProjectTask ({project, task}) {
                                 </div>
                                 <div>
                                     {task.data.notes.map((note, index) => (
-                                        <div className="border rounded shadow mb-3 p-3 bg-white">
+                                        <div className="border rounded shadow mb-3 p-3 bg-white"
+                                             key={'task-note-' + index}
+                                        >
                                             <div>{note.note}</div>
                                             <div className="text-sm text-right mt-5">
                                                 {note.user.name} - {note.date}
@@ -99,11 +132,8 @@ export default function ShowProjectTask ({project, task}) {
                                 </div>
                             </div>
                         </div>
-
                     </div>
-
                 </div>
-
             </AuthenticatedLayout>
         </>
     );

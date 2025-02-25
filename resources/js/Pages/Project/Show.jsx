@@ -22,7 +22,7 @@ export default function ShowProject ({project}) {
     }
 
     const tasksByStatus = function (status) {
-        return tasks.filter(task => task.status == status)
+        return tasks.filter(task => task.status.name == status)
     }
 
     return (

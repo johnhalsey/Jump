@@ -13,7 +13,7 @@ Route::middleware(['auth', 'verified'])->prefix('api/')->group(function () {
             )->name('api.project.tasks.index');
 
             Route::patch(
-                '/tasks/{projectTask}', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
+                '/task/{projectTask}', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
             )->name('api.project.task.update');
         });
     });
