@@ -21,11 +21,11 @@ class ProjectTaskControllerTest extends TestCase
         $project = Project::factory()->create();
         $status = ProjectStatus::factory()->create([
             'project_id' => $project->id,
-            'name' => DefaultProjectStatus::TO_DO->value
+            'name'       => DefaultProjectStatus::TO_DO->value
         ]);
         ProjectTask::factory()->count(5)->create([
             'project_id' => $project->id,
-            'status_id' => $status->id,
+            'status_id'  => $status->id,
         ])->each(function (ProjectTask $task) {
             TaskNote::factory()->count(5)->create([
                 'task_id' => $task->id,
@@ -44,8 +44,8 @@ class ProjectTaskControllerTest extends TestCase
         $this->assertCount(5, $data); // 5 tasks
         $this->assertCount(5, $data[0]['notes']);
         // make sure all notes belong to the project
-        for($i = 0; $i < 5; $i++){
-            for($n = 0; $n < 5; $n++){
+        for ($i = 0; $i < 5; $i++) {
+            for ($n = 0; $n < 5; $n++) {
                 $this->assertTrue(TaskNote::where('id', $data[$i]['notes'][$n]['id'])->whereHas('task.project', function ($query) use ($project) {
                     $query->where('project_id', $project->id);
                 })->exists());
@@ -77,4 +77,111 @@ class ProjectTaskControllerTest extends TestCase
                 'message' => 'Unauthenticated.'
             ]);
     }
+
+    public function test_project_user_can_update_project_task()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $project = Project::factory()->create();
+
+        foreach (DefaultProjectStatus::cases() as $status) {
+            ProjectStatus::create([
+                'name'       => $status->value,
+                'project_id' => $project->id,
+            ]);
+        }
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses()->where('name', DefaultProjectStatus::TO_DO->value)->first()->id,
+            'assignee_id' => null,
+        ]);
+
+        $this->assertNull($task->assignee_id);
+
+        $project->users()->sync([$user, $user2]);
+        $this->actingAs($user);
+
+        $inProgressStatus = $project->statuses()->where('name', DefaultProjectStatus::IN_PROGRESS->value)->first();
+
+        $response = $this->json(
+            'PATCH',
+            'api/project/' . $project->id . '/task/' . $project->tasks->first()->id,
+            [
+                'status_id'   => $inProgressStatus->id,
+                'assignee_id' => $user2->id,
+            ]
+        )->assertStatus(200);
+
+        $task = $task->refresh();
+        $this->assertSame($user2->id, $task->assignee_id);
+        $this->assertSame($inProgressStatus->id, $task->status_id);
+    }
+
+    public function test_cannot_update_task_with_assignee_who_is_not_in_project()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $project = Project::factory()->create();
+
+        $status = ProjectStatus::create([
+            'name'       => DefaultProjectStatus::TO_DO->value,
+            'project_id' => $project->id,
+        ]);
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses()->where('name', DefaultProjectStatus::TO_DO->value)->first()->id,
+            'assignee_id' => null,
+        ]);
+
+        $this->assertNull($task->assignee_id);
+
+        // not attaching user2
+        $project->users()->sync([$user]);
+        $this->actingAs($user);
+
+        $response = $this->json(
+            'PATCH',
+            'api/project/' . $project->id . '/task/' . $task->id,
+            [
+                'status_id'   => $status->id,
+                'assignee_id' => $user2->id,
+            ]
+        )->assertStatus(422)
+            ->assertJsonValidationErrors('assignee_id');
+    }
+
+    public function test_cannot_update_task_with_status_that_does_not_belong_to_the_project()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+
+        $status = ProjectStatus::factory()->create([
+            'project_id' => $project->id,
+        ]);
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'assignee_id' => null,
+            'status_id'   => $status->id,
+        ]);
+
+        // not attaching user2
+        $project->users()->sync([$user]);
+        $this->actingAs($user);
+
+        $newStatus = ProjectStatus::factory()->create();
+
+        $response = $this->json(
+            'PATCH',
+            'api/project/' . $project->id . '/task/' . $task->id,
+            [
+                'status_id'   => $newStatus->id,
+            ]
+        )->assertStatus(422)
+            ->assertJsonValidationErrors('status_id');
+    }
+
+
 }

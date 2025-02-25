@@ -9,6 +9,7 @@ use App\Enums\DefaultProjectStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProjectTaskResource;
+use App\Http\Requests\UpdateProjectTaskRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectTaskController extends Controller
@@ -18,7 +19,7 @@ class ProjectTaskController extends Controller
         return ProjectTaskResource::collection($project->tasks);
     }
 
-    public function update(Request $request, Project $project, ProjectTask $projectTask)
+    public function update(UpdateProjectTaskRequest $request, Project $project, ProjectTask $projectTask)
     {
         // update the project here
         $projectTask->update([

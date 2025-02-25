@@ -10,6 +10,8 @@ class ProjectStatus extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
