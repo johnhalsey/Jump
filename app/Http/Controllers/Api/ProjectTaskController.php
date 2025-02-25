@@ -7,10 +7,11 @@ use App\Models\ProjectTask;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProjectTaskResource;
+use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectTaskController extends Controller
 {
-    public function index(Request $request, Project $project): ProjectTaskResource
+    public function index(Request $request, Project $project): JsonResource
     {
         return ProjectTaskResource::collection($project->tasks);
     }
