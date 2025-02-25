@@ -13,12 +13,12 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100">
-            <nav className="border-b border-gray-50 bg-white shadow">
-                <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                    <div className="flex h-16 justify-between">
+            <nav className="shadow">
+                <div className="mx-auto px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-sky-50 to-sky-400">
+                    <div className="flex h-16 justify-between ">
                         <div className="flex">
-                            <div className="flex shrink-0 items-center">
-                                <Link href="/">
+                            <div className="flex w-40 items-center">
+                                <Link href="/" className="p-3">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>

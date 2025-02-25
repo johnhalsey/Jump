@@ -16,7 +16,7 @@ export default function ShowProjectTask ({project, task}) {
             return;
         }
 
-        // hammer time
+        // hammer time 🔨
         updateTask()
     }, [statusId, assigneeId]);
 
