@@ -18,9 +18,9 @@ class ProjectTask extends Model
         return $this->belongsTo(Project::class);
     }
 
-    public function status()
+    public function status(): BelongsTo
     {
-        return $this->project->statuses()->where('id', $this->status_id)->first();
+        return $this->belongsTo(ProjectStatus::class);
     }
 
     public function notes(): HasMany

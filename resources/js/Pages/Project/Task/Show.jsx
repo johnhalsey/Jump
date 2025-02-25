@@ -6,7 +6,7 @@ import axios from 'axios'
 export default function ShowProjectTask ({project, task}) {
 
     const [statusId, setStatusId] = useState(task.data.status.id)
-    const [assigneeId, setAssigneeId] = useState(task.data.assignee.id)
+    const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id)
     const firstUpdate = useRef(true);
 
     useEffect(() => {

@@ -22,7 +22,7 @@ class ProjectTaskResource extends JsonResource
             'assignee'    => new UserResource($this->assignee),
             'creator_id'  => $this->creator_id,
             'reference'   => $this->reference,
-            'status'      => $this->status(),
+            'status'      => $this->status,
             'notes'       => TaskNoteResource::collection($this->notes)
         ];
     }

@@ -41,6 +41,8 @@ export default function ShowProject ({project}) {
                     <ProjectStatusColumn
                         status="To Do"
                         tasks={tasksByStatus('To Do')}
+                        addTask
+                        getTasks={getTasks}
                     ></ProjectStatusColumn>
 
                     <ProjectStatusColumn

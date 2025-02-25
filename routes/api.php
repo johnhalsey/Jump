@@ -12,9 +12,15 @@ Route::middleware(['auth', 'verified'])->prefix('api/')->group(function () {
                 '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'index']
             )->name('api.project.tasks.index');
 
+            Route::post(
+                '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'store']
+            )->name('api.project.tasks.store');
+
             Route::patch(
                 '/task/{projectTask}', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
             )->name('api.project.task.update');
+
+
         });
     });
 });
