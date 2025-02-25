@@ -11,8 +11,6 @@ class ProjectController extends Controller
 {
     public function show(Request $request, Project $project)
     {
-        return Inertia::render('Project/Show', [
-            'project' => new ProjectResource($project),
-        ]);
+        return Inertia::render('Project/Show');
     }
 }

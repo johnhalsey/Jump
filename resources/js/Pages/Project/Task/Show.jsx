@@ -8,7 +8,7 @@ export default function ShowProjectTask ({task}) {
             <AuthenticatedLayout
                 header={
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
-                        <Link href={'/projects/' + task.data.project.id}>{task.data.project.name}</Link>
+                        <Link href={'/project/' + task.data.project.id}>{task.data.project.name}</Link>
                     </h2>
                 }
             >
@@ -16,28 +16,34 @@ export default function ShowProjectTask ({task}) {
                 <div className="mx-8 bg-white rounded-md border shadow">
 
                     <div className="p-8 border-b border-dashed">
-                        {task.data.title}
+                        {task.data.reference} - {task.data.title}
                     </div>
-                    <div className="p-8 bg-gray-50">
+                    <div className="p-8 bg-gray-50 rounded-b-md">
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
-
-
-                            <div className="bg-white p-3 rounded border shadow">
-                                {task.data.description}
-                            </div>
                             <div>
+                                <div className="mb-3 font-bold">
+                                    Description
+                                </div>
+                                <div className="bg-white p-3 rounded border shadow">
+                                    {task.data.description}
+                                </div>
+                            </div>
 
-                                {task.data.notes.map((note, index) => (
-                                    <div className="border rounded shadow mb-3 p-3 bg-white">
-                                        <div>{note.note}</div>
-                                        <div className="text-sm text-right mt-5">
-                                            {note.user.name} - {note.date}
+                            <div>
+                                <div className="mb-3 font-bold">
+                                    Notes
+                                </div>
+                                <div>
+                                    {task.data.notes.map((note, index) => (
+                                        <div className="border rounded shadow mb-3 p-3 bg-white">
+                                            <div>{note.note}</div>
+                                            <div className="text-sm text-right mt-5">
+                                                {note.user.name} - {note.date}
+                                            </div>
                                         </div>
-                                    </div>
-                                ))}
-
-
+                                    ))}
+                                </div>
                             </div>
                         </div>
 

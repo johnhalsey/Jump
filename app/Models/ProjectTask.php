@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Laravel\Prompts\Note;
-use App\Observers\ProjectTaskObserver;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 
 class ProjectTask extends Model
@@ -13,7 +13,7 @@ class ProjectTask extends Model
 
     protected $guarded = ['id'];
 
-    public function project(): \Illuminate\Database\Eloquent\Relations\BelongsTo
+    public function project(): BelongsTo
     {
         return $this->belongsTo(Project::class);
     }
@@ -23,8 +23,13 @@ class ProjectTask extends Model
         return $this->project->statuses()->where('id', $this->status_id)->first();
     }
 
-    public function notes(): \Illuminate\Database\Eloquent\Relations\HasMany
+    public function notes(): HasMany
     {
         return $this->hasMany(TaskNote::class, 'task_id');
+    }
+
+    public function assignee(): BelongsTo
+    {
+        return $this->belongsTo(User::class);
     }
 }

@@ -20,7 +20,7 @@ class ProjectControllerTest extends TestCase
         $this->actingAs($user);
         $this->call(
             'GET',
-            '/projects/' . $project->id,
+            '/project/' . $project->id,
         )->assertStatus(403);
     }
 
@@ -32,7 +32,7 @@ class ProjectControllerTest extends TestCase
         $this->actingAs($user);
         $this->call(
             'GET',
-            '/projects/' . $project->id,
+            '/project/' . $project->id,
         )->assertStatus(200)
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->has('project', 1)

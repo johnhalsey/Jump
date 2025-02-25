@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::prefix('projects/{project}')->middleware('can:view,project')->group(function () {
+    Route::prefix('project/{project}')->middleware('can:view,project')->group(function () {
 
         Route::get('/', [ProjectController::class, 'show'])
             ->name('project.show');

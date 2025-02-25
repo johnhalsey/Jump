@@ -37,10 +37,10 @@ class ProjectTaskFactory extends Factory
         ];
     }
 
-    public function configure(): static
+    public function withNotes(): static
     {
         return $this->afterCreating(function (ProjectTask $task) {
-            TaskNote::factory()->count(5)->create([
+            TaskNote::factory()->count(random_int(3, 20))->create([
                 'task_id' => $task->id,
                 'user_id' => $task->assignee_id,
             ]);

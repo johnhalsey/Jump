@@ -17,11 +17,13 @@ class DatabaseSeeder extends Seeder
         // User::factory(10)->create();
         User::query()->delete();
 
-        User::factory()->create([
-            'name'  => 'Test User',
-            'email' => 'user@example.com',
-            'super_admin' => 0,
-        ]);
+        for ($i = 0; $i < 10; $i++) {
+            User::factory()->create([
+                'name'        => 'Test User ' . $i,
+                'email'       => 'user' . $i . '@example.com',
+                'super_admin' => 0,
+            ]);
+        }
 
         User::factory()->create([
             'name'        => 'Admin User',

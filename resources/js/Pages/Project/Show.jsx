@@ -14,7 +14,7 @@ export default function ShowProject ({project}) {
     }, [])
 
     const getTasks = function () {
-        axios.get('/api/projects/' + project.data.id + '/tasks')
+        axios.get('/api/project/' + project.data.id + '/tasks')
             .then(response => {
                 setTasks(response.data.data)
                 setLoading(false)
@@ -22,8 +22,6 @@ export default function ShowProject ({project}) {
     }
 
     const tasksByStatus = function (status) {
-        console.log(status)
-        console.log(tasks.filter(task => task.status == status))
         return tasks.filter(task => task.status == status)
     }
 

@@ -4,6 +4,7 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use App\Http\Resources\ProjectResource;
 
 class HandleInertiaRequests extends Middleware
 {
@@ -29,11 +30,17 @@ class HandleInertiaRequests extends Middleware
      */
     public function share(Request $request): array
     {
-        return [
+        $shareData = [
             ...parent::share($request),
             'auth' => [
                 'user' => $request->user(),
             ],
         ];
+
+        if ($request->route('project')) {
+            $shareData['project'] = new ProjectResource($request->route('project'));
+        }
+
+        return $shareData;
     }
 }

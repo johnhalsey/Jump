@@ -16,6 +16,7 @@ class TaskNoteResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
+            'id'   => $this->id,
             'note' => $this->note,
             'user' => new UserResource($this->user),
             'date' => $this->created_at->diffForHumans()

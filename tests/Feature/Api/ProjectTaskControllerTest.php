@@ -26,13 +26,18 @@ class ProjectTaskControllerTest extends TestCase
         ProjectTask::factory()->count(5)->create([
             'project_id' => $project->id,
             'status_id' => $status->id,
-        ]);
+        ])->each(function (ProjectTask $task) {
+            TaskNote::factory()->count(5)->create([
+                'task_id' => $task->id,
+                'user_id' => $task->assignee_id,
+            ]);
+        });
 
         $user->projects()->attach($project->id);
         $this->actingAs($user);
         $response = $this->json(
             'GET',
-            'api/projects/' . $project->id . '/tasks'
+            'api/project/' . $project->id . '/tasks'
         )->assertStatus(200);
 
         $data = json_decode($response->getContent(), true)['data'];
@@ -56,7 +61,7 @@ class ProjectTaskControllerTest extends TestCase
         $this->actingAs($user);
         $response = $this->json(
             'GET',
-            'api/projects/' . $project->id . '/tasks'
+            'api/project/' . $project->id . '/tasks'
         )->assertStatus(403);
     }
 
@@ -66,7 +71,7 @@ class ProjectTaskControllerTest extends TestCase
 
         $response = $this->json(
             'GET',
-            'api/projects/' . $project->id . '/tasks'
+            'api/project/' . $project->id . '/tasks'
         )->assertStatus(401)
             ->assertJsonFragment([
                 'message' => 'Unauthenticated.'
