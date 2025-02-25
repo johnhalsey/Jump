@@ -23,7 +23,7 @@ class ProjectTaskResource extends JsonResource
             'creator_id'  => $this->creator_id,
             'reference'   => $this->reference,
             'status'      => $this->status()->name,
-            'notes'       => $this->notes
+            'notes'       => TaskNoteResource::collection($this->notes)
         ];
     }
 }
