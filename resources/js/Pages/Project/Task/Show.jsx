@@ -3,6 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {useState, useEffect, useRef} from "react"
 import axios from 'axios'
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
+import LoadingSpinner from "@/Components/LoadingSpinner.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
@@ -86,26 +87,27 @@ export default function ShowProjectTask ({project, task}) {
                                     Description
                                 </div>
                                 {!editingDescription &&
-                                    <div className="bg-white hover:bg-sky-50 p-3 rounded border shadow whitespace-pre-wrap cursor-pointer"
-                                         onClick={editDescription}
+                                    <div
+                                        className="bg-white hover:bg-sky-50 p-3 rounded border shadow whitespace-pre-wrap cursor-pointer"
+                                        onClick={editDescription}
                                     >
                                         {description}
                                     </div>
                                 }
 
-                                {editingDescription && <><textarea
-                                    className="w-full border-gray-300 rounded shadow"
-                                    rows="10"
-                                    value={description}
-                                    onChange={updateDescription}></textarea>
+                                {editingDescription && <>
+                                    <textarea
+                                        className="w-full border-gray-300 rounded shadow"
+                                        rows="10"
+                                        value={description}
+                                        onChange={updateDescription}></textarea>
                                     <PrimaryButton loading={loading}
                                                    disabled={loading}
                                                    onClick={updateTask}
                                     >
                                         Save
                                     </PrimaryButton>
-                                </>
-                                }
+                                </>}
 
                                 <div className="mb-3 mt-8 font-bold">
                                     Status
@@ -156,11 +158,30 @@ export default function ShowProjectTask ({project, task}) {
                                     Notes
                                 </div>
                                 <div>
+                                    <div className="border-b border-dashed pb-3">
+                                        <div className="">
+                                            <textarea className="p-3 flex grow border rounded shadow w-full border border-gray-300 text-gray-400"
+                                                      placeholder="New note here"
+                                            >
+                                            </textarea>
+                                        </div>
+                                        <div className="mt-3">
+                                            <PrimaryButton className=""
+                                                           disabled={loading}
+                                                           loading={loading}
+                                            >
+                                                Add
+                                            </PrimaryButton>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="mt-3">
                                     {task.data.notes.map((note, index) => (
                                         <div className="border rounded shadow mb-3 p-3 bg-white"
                                              key={'task-note-' + index}
                                         >
-                                            <div>{note.note}</div>
+                                            <div className="whitespace-pre-wrap">{note.note}</div>
                                             <div className="text-sm text-right mt-5">
                                                 {note.user.name} - {note.date}
                                             </div>
