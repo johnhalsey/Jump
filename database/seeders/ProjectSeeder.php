@@ -2,14 +2,11 @@
 
 namespace Database\Seeders;
 
-use App\Models\ProjectTask;
-use App\Enums\DefaultProjectStatus;
-use App\Models\Project;
-use App\Models\ProjectStatus;
 use App\Models\User;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Project;
+use App\Models\ProjectTask;
+use App\Models\ProjectStatus;
 use Illuminate\Database\Seeder;
-
 
 class ProjectSeeder extends Seeder
 {
@@ -24,12 +21,7 @@ class ProjectSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             $project = Project::factory()->create();
 
-            foreach (DefaultProjectStatus::cases() as $status) {
-                $status = ProjectStatus::create([
-                    'name'       => $status->value,
-                    'project_id' => $project->id,
-                ]);
-
+            foreach ($project->statuses() as $status) {
                 ProjectTask::factory()->withnotes()->count(5)->create([
                     'project_id'  => $project->id,
                     'status_id'   => $status->id,
@@ -39,7 +31,7 @@ class ProjectSeeder extends Seeder
             }
 
             $user = User::query()->where('email', 'user0@example.com')->first();
-            $otherUsers = User::query()->where('email', '!=', 'user0@example.com')->get();
+            $otherUsers = User::query()->whereNotIn('email', ['user0@example.com', 'admin@example.com'])->get();
 
             $project->users()->attach($user, ['owner' => true]);
             foreach ($otherUsers as $user) {

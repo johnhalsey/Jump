@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Models\Project;
 use App\Models\ProjectTask;
 use App\Policies\ProjectPolicy;
+use App\Observers\ProjectObserver;
 use Illuminate\Support\Facades\Vite;
 use Illuminate\Support\Facades\Gate;
 use App\Observers\ProjectTaskObserver;
@@ -28,6 +30,7 @@ class AppServiceProvider extends ServiceProvider
 
         Gate::define('view', [ProjectPolicy::class, 'view']);
 
+        Project::observe(ProjectObserver::class);
         ProjectTask::observe(ProjectTaskObserver::class);
     }
 }

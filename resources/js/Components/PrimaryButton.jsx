@@ -1,7 +1,9 @@
+import LoadingSpinner from "@/Components/LoadingSpinner.jsx"
 export default function PrimaryButton({
     className = '',
     disabled,
     children,
+    loading = false,
     ...props
 }) {
     return (
@@ -14,7 +16,8 @@ export default function PrimaryButton({
             }
             disabled={disabled}
         >
-            {children}
+            {loading && <span><LoadingSpinner></LoadingSpinner></span>}
+            {!loading && children}
         </button>
     );
 }

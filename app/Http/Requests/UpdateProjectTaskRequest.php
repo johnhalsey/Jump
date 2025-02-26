@@ -32,7 +32,7 @@ class UpdateProjectTaskRequest extends FormRequest
                 Rule::exists('project_statuses', 'id')->where(function ($query) {
                     $query->where('project_id', $this->route('project')->id);
                 })
-            ]
+            ],
         ];
     }
 }

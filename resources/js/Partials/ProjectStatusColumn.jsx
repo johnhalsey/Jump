@@ -5,7 +5,7 @@ import {useState} from 'react'
 import axios from 'axios'
 import LoadingSpinner from '@/Components/LoadingSpinner.jsx'
 
-export default function ProjectStatusColumn ({status, tasks, getTasks, addTask = false}) {
+export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
     const [newTitle, setNewTitle] = useState(null)
     const [loading, setLoading] = useState(false)
@@ -17,7 +17,7 @@ export default function ProjectStatusColumn ({status, tasks, getTasks, addTask =
             title: newTitle
         }).then(response => {
             setNewTitle(null)
-            getTasks()
+            tasks.unshift(response.data.data)
         }).catch(error => {
             // todo handle this error
         }).finally(() => {

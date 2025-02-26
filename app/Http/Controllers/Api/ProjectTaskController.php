@@ -9,6 +9,7 @@ use App\Enums\DefaultProjectStatus;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\ProjectTaskResource;
+use App\Http\Requests\StoreProjectTaskRequest;
 use App\Http\Requests\UpdateProjectTaskRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
@@ -19,7 +20,7 @@ class ProjectTaskController extends Controller
         return ProjectTaskResource::collection($project->tasks->sortByDesc('created_at'));
     }
 
-    public function store(Request $request, Project $project): JsonResource
+    public function store(StoreProjectTaskRequest $request, Project $project): JsonResource
     {
         $task = $project->tasks()->create([
             'status_id'  => $project->statuses()->where('name', DefaultProjectStatus::TO_DO->value)->first()->id,
@@ -36,6 +37,7 @@ class ProjectTaskController extends Controller
         $projectTask->update([
             'assignee_id' => $request->input('assignee_id', null),
             'status_id'   => $request->input('status_id', $project->statuses()->where('name', DefaultProjectStatus::TO_DO)->first()->id),
+            'description' => $request->input('description', null),
         ]);
 
         return new ProjectTaskResource($projectTask);

@@ -2,11 +2,16 @@ import {Head, Link} from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {useState, useEffect, useRef} from "react"
 import axios from 'axios'
+import PrimaryButton from "@/Components/PrimaryButton.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
     const [statusId, setStatusId] = useState(task.data.status.id)
     const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id)
+    const [description, setDescription] = useState(task.data.description)
+    const [editingDescription, setEditingDescription] = useState(false)
+    const [loading, setLoading] = useState(false)
+
     const firstUpdate = useRef(true);
 
     useEffect(() => {
@@ -21,14 +26,20 @@ export default function ShowProjectTask ({project, task}) {
     }, [statusId, assigneeId]);
 
     const updateTask = function () {
+        setLoading(true)
+
         let data = {
             'status_id': statusId,
-            'assignee_id': assigneeId
+            'assignee_id': assigneeId,
+            'description': description
         }
 
         axios.patch('/api/project/' + project.data.id + '/task/' + task.data.id, data)
             .then(response => {
-                console.log('ok')
+                task = response.data.data
+                setDescription(task.description)
+                setEditingDescription(false)
+                setLoading(false)
             })
             .catch(error => {
                 console.log('error')
@@ -36,12 +47,20 @@ export default function ShowProjectTask ({project, task}) {
             })
     }
 
-    function updateStatus(e) {
+    function updateStatus (e) {
         setStatusId(e.target.value)
     }
 
-    function updateAssignee(e) {
+    function updateAssignee (e) {
         setAssigneeId(e.target.value)
+    }
+
+    function editDescription () {
+        setEditingDescription(true)
+    }
+
+    function updateDescription (e) {
+        setDescription(e.target.value)
     }
 
     return (
@@ -66,9 +85,27 @@ export default function ShowProjectTask ({project, task}) {
                                 <div className="mb-3 font-bold">
                                     Description
                                 </div>
-                                <div className="bg-white p-3 rounded border shadow">
-                                    {task.data.description}
-                                </div>
+                                {!editingDescription &&
+                                    <div className="bg-white hover:bg-sky-50 p-3 rounded border shadow whitespace-pre-wrap cursor-pointer"
+                                         onClick={editDescription}
+                                    >
+                                        {description}
+                                    </div>
+                                }
+
+                                {editingDescription && <><textarea
+                                    className="w-full border-gray-300 rounded shadow"
+                                    rows="10"
+                                    value={description}
+                                    onChange={updateDescription}></textarea>
+                                    <PrimaryButton loading={loading}
+                                                   disabled={loading}
+                                                   onClick={updateTask}
+                                    >
+                                        Save
+                                    </PrimaryButton>
+                                </>
+                                }
 
                                 <div className="mb-3 mt-8 font-bold">
                                     Status

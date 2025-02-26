@@ -183,5 +183,38 @@ class ProjectTaskControllerTest extends TestCase
             ->assertJsonValidationErrors('status_id');
     }
 
+    public function test_project_user_can_store_new_task()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user]);
+
+        $this->actingAs($user);
+        $response = $this->json(
+            'POST',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'title' => 'My new task title'
+            ]
+        )->assertStatus(201);
+    }
+
+    public function test_cannot_add_task_if_title_is_null()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user]);
+
+        $this->actingAs($user);
+        $response = $this->json(
+            'POST',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'title' => null
+            ]
+        )->assertStatus(422)
+            ->assertJsonValidationErrors('title');
+    }
+
 
 }
