@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import {useState, useEffect, useRef} from "react"
 import axios from 'axios'
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
-import LoadingSpinner from "@/Components/LoadingSpinner.jsx"
+import TaskNotes from "@/Partials/TaskNotes.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
@@ -154,40 +154,7 @@ export default function ShowProjectTask ({project, task}) {
                             </div>
 
                             <div className="mt-3 md:mt-0">
-                                <div className="mb-3 font-bold">
-                                    Notes
-                                </div>
-                                <div>
-                                    <div className="border-b border-dashed pb-3">
-                                        <div className="">
-                                            <textarea className="p-3 flex grow border rounded shadow w-full border border-gray-300 text-gray-400"
-                                                      placeholder="New note here"
-                                            >
-                                            </textarea>
-                                        </div>
-                                        <div className="mt-3">
-                                            <PrimaryButton className=""
-                                                           disabled={loading}
-                                                           loading={loading}
-                                            >
-                                                Add
-                                            </PrimaryButton>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div className="mt-3">
-                                    {task.data.notes.map((note, index) => (
-                                        <div className="border rounded shadow mb-3 p-3 bg-white"
-                                             key={'task-note-' + index}
-                                        >
-                                            <div className="whitespace-pre-wrap">{note.note}</div>
-                                            <div className="text-sm text-right mt-5">
-                                                {note.user.name} - {note.date}
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
+                                <TaskNotes notes={task.data.notes}></TaskNotes>
                             </div>
                         </div>
                     </div>

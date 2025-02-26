@@ -20,6 +20,10 @@ Route::middleware(['auth', 'verified'])->prefix('api/')->group(function () {
                 '/task/{projectTask}', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
             )->name('api.project.task.update');
 
+            Route::post(
+                'task/{projectTask}/notes', [App\Http\Controllers\Api\TaskNoteController::class, 'store']
+            )->name('api.task.notes.store');
+
 
         });
     });

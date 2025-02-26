@@ -10,6 +10,8 @@ class TaskNote extends Model
 {
     use HasFactory;
 
+    protected $guarded = ['id'];
+
     public function task(): BelongsTo
     {
         return $this->belongsTo(ProjectTask::class, 'task_id');
