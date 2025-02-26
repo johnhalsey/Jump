@@ -16,15 +16,21 @@ Route::middleware(['auth', 'verified'])->prefix('api/')->group(function () {
                 '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'store']
             )->name('api.project.tasks.store');
 
-            Route::patch(
-                '/task/{projectTask}', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
-            )->name('api.project.task.update');
+            Route::prefix('/task/{projectTask}')->group(function () {
 
-            Route::post(
-                'task/{projectTask}/notes', [App\Http\Controllers\Api\TaskNoteController::class, 'store']
-            )->name('api.task.notes.store');
+                Route::patch(
+                    '/', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
+                )->name('api.project.task.update');
 
+                Route::post(
+                    '/notes', [App\Http\Controllers\Api\TaskNoteController::class, 'store']
+                )->name('api.task.notes.store');
 
+                Route::patch(
+                    '/note/{taskNote}', [App\Http\Controllers\Api\TaskNoteController::class, 'update']
+                )->name('api.task.note.update');
+
+            });
         });
     });
 });

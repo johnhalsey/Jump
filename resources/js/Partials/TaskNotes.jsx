@@ -2,7 +2,7 @@ import { usePage } from '@inertiajs/react'
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from "react"
 import axios from "axios"
-import {Document} from "postcss"
+import TaskNote from "@/Partials/TaskNote.jsx"
 
 export default function TaskNotes ({notes}) {
 
@@ -28,7 +28,7 @@ export default function TaskNotes ({notes}) {
             })
     }
 
-    function updateNote (e) {
+    function updateNewNote (e) {
         setNote(e.target.value)
         setScrollHeight(e.target.scrollHeight)
     }
@@ -41,15 +41,13 @@ export default function TaskNotes ({notes}) {
             <div>
                 <div className="border-b border-dashed pb-3">
                     <div className="">
-                        {/*{textareaLineHeight()}*/}
-
                         <textarea
                             id="new-note-textarea"
                             className="p-3 flex grow border rounded shadow w-full border border-gray-300"
                             style={{minHeight: scrollHeight + 'px'}}
                             placeholder="New note here"
                             value={note}
-                            onChange={updateNote}
+                            onChange={updateNewNote}
                         >
                         </textarea>
                     </div>
@@ -67,14 +65,7 @@ export default function TaskNotes ({notes}) {
 
             <div className="mt-3 max-h-[1000px] overflow-y-scroll">
                 {notes.map((note, index) => (
-                    <div className="border rounded shadow mb-3 p-3 bg-white"
-                         key={'task-note-' + index}
-                    >
-                        <div className="whitespace-pre-wrap">{note.note}</div>
-                        <div className="text-sm text-right mt-5">
-                            {note.user.name} - {note.date}
-                        </div>
-                    </div>
+                    <TaskNote note={note} key={'note-' + index}></TaskNote>
                 ))}
             </div>
         </>
