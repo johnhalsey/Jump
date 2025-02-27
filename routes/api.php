@@ -3,7 +3,7 @@
 use App\Http\Controllers\ProjectController;
 use Illuminate\Auth\Middleware\Authenticate;
 
-Route::middleware('can:view,project')->group(function () {
+Route::middleware(['auth', 'can:view,project'])->group(function () {
 
     Route::prefix('/project/{project}')->group(function () {
 
