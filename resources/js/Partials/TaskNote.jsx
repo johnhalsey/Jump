@@ -12,7 +12,8 @@ export default function TaskNote ({note}) {
     const [content, setContent] = useState(note.note)
     const [scrollHeight, setScrollHeight] = useState(0)
 
-    function editNote () {
+    function editNote (e) {
+        setScrollHeight(e.target.scrollHeight)
         setEditing(true)
     }
 
@@ -33,6 +34,15 @@ export default function TaskNote ({note}) {
             })
     }
 
+    function setCursorPosition (e) {
+        const input = e.target;
+        const length = input.value.length;
+        // put the cursor at the end of the note
+        input.setSelectionRange(length, length);
+        // scroll to the bottom in case the textarea is not quite big enough
+        input.scrollTo(0, input.scrollHeight)
+    }
+
     return (
         <>
             {!editing && <div className="border rounded shadow mb-3 p-3 bg-white hover:bg-sky-50"
@@ -48,8 +58,9 @@ export default function TaskNote ({note}) {
                 <textarea
                     className="w-full border-gray-400 rounded shadow"
                     value={content}
+                    autoFocus
+                    onFocus={setCursorPosition}
                     style={{minHeight: scrollHeight + 'px'}}
-                    onLoadStart={updateContent}
                     onChange={updateContent}></textarea>
                 <PrimaryButton loading={loading}
                                disabled={loading}
