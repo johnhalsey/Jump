@@ -71,7 +71,7 @@ class ProjectTaskControllerTest extends TestCase
 
         $response = $this->json(
             'GET',
-            'api/project/' . $project->id . '/tasks'
+            '/api/project/' . $project->id . '/tasks'
         )->assertStatus(401)
             ->assertJsonFragment([
                 'message' => 'Unauthenticated.'
