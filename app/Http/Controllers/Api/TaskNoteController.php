@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskNoteResource;
 use App\Http\Requests\StoreTaskNoteRequest;
+use App\Http\Requests\UpdateTaskNoteRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class TaskNoteController extends Controller
@@ -23,7 +24,7 @@ class TaskNoteController extends Controller
         return new TaskNoteResource($note);
     }
 
-    public function update(Request $request, Project $project, ProjectTask $projectTask, TaskNote $taskNote): JsonResource
+    public function update(UpdateTaskNoteRequest $request, Project $project, ProjectTask $projectTask, TaskNote $taskNote): JsonResource
     {
         $taskNote->update([
             'note' => $request->input('note'),
