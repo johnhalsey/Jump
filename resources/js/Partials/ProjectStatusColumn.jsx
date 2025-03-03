@@ -1,4 +1,4 @@
-import {Head, Link, router} from '@inertiajs/react';
+import {usePage } from '@inertiajs/react';
 import TaskCard from "@/Partials/TaskCard.jsx"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from 'react'
@@ -7,21 +7,24 @@ import LoadingSpinner from '@/Components/LoadingSpinner.jsx'
 
 export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
-    const [newTitle, setNewTitle] = useState(null)
+    const [newTitle, setNewTitle] = useState('')
     const [loading, setLoading] = useState(false)
+
+    const { project } = usePage().props
 
     function CreateNewTask () {
 
         setLoading(true)
-        axios.post('/api/project/' + tasks[0].project.id + '/tasks', {
+        axios.post('/api/project/' + project.data.id + '/tasks', {
             title: newTitle
         }).then(response => {
-            setNewTitle(null)
+            setNewTitle('')
             tasks.unshift(response.data.data)
+            setLoading(false)
         }).catch(error => {
             // todo handle this error
         }).finally(() => {
-            setLoading(false)
+
         })
 
     }
@@ -38,11 +41,12 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                 </div>
                 <div className="overflow-scroll">
 
-                    {addTask && <div className="flex items-stretch px-3 mt-3">
+                    {addTask && <div className="flex items-stretch px-3 my-3">
                         <div className="grow">
                             <input placeholder="New task title here"
                                    type="text"
                                    onChange={setNewTaskTitle}
+                                   value={newTitle}
                                    className="p-3 flex grow border rounded shadow w-full border border-gray-300"/>
                         </div>
                         <div className="shrink ml-3">

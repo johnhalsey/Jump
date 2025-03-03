@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use Inertia\Inertia;
 use App\Models\Project;
 use Illuminate\Http\Request;
-use App\Http\Resources\ProjectResource;
 
 class ProjectController extends Controller
 {
@@ -13,4 +12,5 @@ class ProjectController extends Controller
     {
         return Inertia::render('Project/Show');
     }
+
 }

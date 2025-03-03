@@ -2,9 +2,8 @@
 
 namespace App\Observers;
 
-use App\Models\User;
 use App\Models\Project;
-use App\Models\ProjectTask;
+use Illuminate\Support\Str;
 use App\Models\ProjectStatus;
 use App\Enums\DefaultProjectStatus;
 
@@ -21,5 +20,9 @@ class ProjectObserver
                 'project_id' => $project->id,
             ]);
         }
+
+        $project->update([
+            'short_code' => Str::upper(Str::random(4)),
+        ]);
     }
 }

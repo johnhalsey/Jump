@@ -67,7 +67,7 @@ export default function ShowProjectTask ({project, task}) {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
                             <div>
-                                <TaskDescription description={description}></TaskDescription>
+                                <TaskDescription description={task.data.description}></TaskDescription>
 
                                 <div className="mb-3 mt-8 font-bold">
                                     Status

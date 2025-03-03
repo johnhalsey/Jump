@@ -1,22 +1,64 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import { Head, Link } from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
+import PrimaryButton from "@/Components/PrimaryButton.jsx"
+import {useState} from "react"
+import TextInput from "@/Components/TextInput.jsx"
+import axios from "axios"
 
+export default function Dashboard ({projects, default_statuses}) {
 
-export default function Dashboard({projects}) {
+    const [loading, setLoading] = useState(false)
+    const [projectName, setProjectName] = useState('')
+    const [errorMessage, setErrorMessage] = useState(null)
 
-    let projectsList = [];
+    let tableRows = []
 
     projects.data.forEach((project, index) => {
-        projectsList.push(<div className="mb-6" key={index}>
-            <div className="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div className="overflow-hidden bg-white shadow-sm sm:rounded-lg">
-                    <div className="p-6 text-gray-900">
-                        <Link href={'/project/' + project.id}>{project.name}</Link>
-                    </div>
-                </div>
-            </div>
-        </div>)
+        tableRows.push(
+            <tr className={'hover:bg-sky-50 cursor-pointer'} onClick={() => {
+                redirectToProject('/project/' + project.id)
+            }}>
+                <td className={tdClasses()}>{project.owners[0].name}</td>
+                <td className={tdClasses()}>{project.name}</td>
+                {projectDefaultStatuses(project).map((status, index) => (
+                    <td className={tdClasses()} key={'project-' + project.id + '-status-' + status.id}>
+                        {status.count}
+                    </td>
+                ))}
+            </tr>
+        )
     })
+
+    function projectDefaultStatuses (project) {
+        return project.statuses.filter(status => default_statuses.includes(status.name))
+    }
+
+    function thClasses () {
+        return 'border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left text-gray-600 dark:border-gray-600 dark:text-gray-200'
+    }
+
+    function tdClasses () {
+        return 'border-b border-gray-200 p-4 pb-3 pl-8 text-left text-gray-500 dark:border-gray-600 dark:text-gray-200'
+    }
+
+    function redirectToProject (url) {
+        window.location = url
+    }
+
+    function createProject () {
+        setLoading(true)
+        axios.post('/api/projects', {
+            name: projectName
+        }).then(response => {
+            router.reload()
+            // no need to set loading back to false, as page has realoaded
+        }).catch(error => {
+            if (error.response.data.message) {
+                setErrorMessage(error.response.data.message)
+            }
+            setLoading(false)
+        })
+    }
 
     return (
         <AuthenticatedLayout
@@ -26,9 +68,45 @@ export default function Dashboard({projects}) {
                 </h2>
             }
         >
-            <Head title="Your Projects" />
+            <Head title="Your Projects"/>
 
-            {projectsList}
+            <div className="grid gap-4 grid-cols-3 mx-5">
+                <div className={'border p-5'}>Col 1</div>
+                <div className={'border col-span-2 pt-5 bg-white rounded shadow'}>
+
+                    <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                        <div className={'flex-grow'}>
+                            <TextInput placeholder={'Add new project here'}
+                                       className={'w-full border-gray-300 shadow rounded'}
+                                       value={projectName}
+                                       onChange={e => setProjectName(e.target.value)}
+                            ></TextInput>
+                        </div>
+                        <div className={'ml-5 content-stretch'}>
+                            <PrimaryButton loading={loading}
+                                           disabled={loading}
+                                           className={'h-full'}
+                                           onClick={createProject}
+                            >Add</PrimaryButton>
+                        </div>
+                    </div>
+
+                    <table className="w-full table-auto border-collapse">
+                        <thead>
+                        <tr>
+                            <th className={thClasses()}>Owner</th>
+                            <th className={thClasses()}>Project Name</th>
+                            {default_statuses.map((status, index) => (
+                                <th key={'default-status-' + index} className={thClasses()}>{status}</th>
+                            ))}
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {tableRows}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
 
         </AuthenticatedLayout>
     );

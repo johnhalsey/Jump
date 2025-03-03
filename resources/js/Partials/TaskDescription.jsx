@@ -7,7 +7,7 @@ export default function TaskDescription ({description}) {
 
     const [editing, setEditing] = useState(false)
     const [loading, setLoading] = useState(false)
-    const [content, setContent] = useState(description)
+    const [content, setContent] = useState(description ?? '')
     const [scrollHeight, setScrollHeight] = useState(0)
 
     const { project, task } = usePage().props
@@ -35,7 +35,7 @@ export default function TaskDescription ({description}) {
         setLoading(true)
 
         axios.patch('/api/project/' + project.data.id + '/task/' + task.data.id, {
-            'description': description
+            'description': content
         })
             .then(response => {
                 setEditing(false)
