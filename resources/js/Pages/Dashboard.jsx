@@ -4,6 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from "react"
 import TextInput from "@/Components/TextInput.jsx"
 import axios from "axios"
+import Panel from "@/Components/Panel.jsx"
 
 export default function Dashboard ({projects, default_statuses}) {
 
@@ -18,10 +19,10 @@ export default function Dashboard ({projects, default_statuses}) {
             <tr className={'hover:bg-sky-50 cursor-pointer'} onClick={() => {
                 redirectToProject('/project/' + project.id)
             }}>
-                <td className={tdClasses()}>{project.owners[0].name}</td>
-                <td className={tdClasses()}>{project.name}</td>
+                <td>{project.owners[0].name}</td>
+                <td>{project.name}</td>
                 {projectDefaultStatuses(project).map((status, index) => (
-                    <td className={tdClasses()} key={'project-' + project.id + '-status-' + status.id}>
+                    <td key={'project-' + project.id + '-status-' + status.id}>
                         {status.count}
                     </td>
                 ))}
@@ -31,14 +32,6 @@ export default function Dashboard ({projects, default_statuses}) {
 
     function projectDefaultStatuses (project) {
         return project.statuses.filter(status => default_statuses.includes(status.name))
-    }
-
-    function thClasses () {
-        return 'border-b border-gray-200 p-4 pt-0 pb-3 pl-8 text-left text-gray-600 dark:border-gray-600 dark:text-gray-200'
-    }
-
-    function tdClasses () {
-        return 'border-b border-gray-200 p-4 pb-3 pl-8 text-left text-gray-500 dark:border-gray-600 dark:text-gray-200'
     }
 
     function redirectToProject (url) {
@@ -72,7 +65,7 @@ export default function Dashboard ({projects, default_statuses}) {
 
             <div className="grid gap-4 grid-cols-3 mx-5">
                 <div className={'border p-5'}>Col 1</div>
-                <div className={'border col-span-2 pt-5 bg-white rounded shadow'}>
+                <Panel className={'col-span-2 pt-5'}>
 
                     <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
                         <div className={'flex-grow'}>
@@ -91,13 +84,13 @@ export default function Dashboard ({projects, default_statuses}) {
                         </div>
                     </div>
 
-                    <table className="w-full table-auto border-collapse">
+                    <table>
                         <thead>
                         <tr>
-                            <th className={thClasses()}>Owner</th>
-                            <th className={thClasses()}>Project Name</th>
+                            <th>Owner</th>
+                            <th>Project Name</th>
                             {default_statuses.map((status, index) => (
-                                <th key={'default-status-' + index} className={thClasses()}>{status}</th>
+                                <th key={'default-status-' + index}>{status}</th>
                             ))}
                         </tr>
                         </thead>
@@ -105,7 +98,7 @@ export default function Dashboard ({projects, default_statuses}) {
                         {tableRows}
                         </tbody>
                     </table>
-                </div>
+                </Panel>
             </div>
 
         </AuthenticatedLayout>

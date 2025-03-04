@@ -94,7 +94,6 @@ export default function ProjectSettings ({project}) {
                                 </div>
 
                                 <Panel className={'pt-5'}>
-
                                     <table>
                                         <thead>
                                             <tr>
