@@ -19,6 +19,10 @@ Route::middleware(['auth'])->group(function () {
                 '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'store']
             )->name('api.project.tasks.store');
 
+            Route::patch(
+                '/settings', [\App\Http\Controllers\Api\ProjectSettingsController::class, 'update']
+            )->name('api.project.settings.update');
+
             Route::prefix('/task/{projectTask}')->group(function () {
 
                 Route::patch(

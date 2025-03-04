@@ -1,4 +1,4 @@
-import {Head, Link} from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.jsx"
 import TextInput from "@/Components/TextInput.jsx"
 import {useState} from "react"
@@ -17,7 +17,7 @@ export default function ProjectSettings ({project}) {
             short_code: shortCode
         })
             .then(response => {
-
+                router.reload()
             })
             .catch(error => {
                 console.log(error.response.data)
