@@ -21,7 +21,8 @@ Route::middleware(['auth'])->group(function () {
 
             Route::patch(
                 '/settings', [\App\Http\Controllers\Api\ProjectSettingsController::class, 'update']
-            )->name('api.project.settings.update');
+            )->name('api.project.settings.update')
+                ->middleware('can:update,project');
 
             Route::prefix('/task/{projectTask}')->group(function () {
 

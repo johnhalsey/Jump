@@ -21,7 +21,8 @@ class ProjectControllerTest extends TestCase
         $this->call(
             'GET',
             '/project/' . $project->id,
-        )->assertStatus(403);
+        )->assertStatus(302)
+            ->assertRedirect(route('dashboard'));
     }
 
     public function test_gate_will_allow_user_to_access_project()

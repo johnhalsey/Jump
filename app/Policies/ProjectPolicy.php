@@ -21,7 +21,7 @@ class ProjectPolicy
      */
     public function view(User $user, Project $project): bool
     {
-        return $user->projects()->where('project_id', $project->id)->exists();
+        return $project->users->contains($user);
     }
 
     /**
@@ -37,7 +37,7 @@ class ProjectPolicy
      */
     public function update(User $user, Project $project): bool
     {
-        return false;
+        return $project->owners->contains($user);
     }
 
     /**

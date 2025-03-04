@@ -21,7 +21,7 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
         ->name('dashboard');
 
-    Route::prefix('project/{project}')->middleware('can:view,project')->group(function () {
+    Route::prefix('project/{project}')->middleware(\App\Http\Middleware\CanViewProject::class)->group(function () {
 
         Route::get('/', [ProjectController::class, 'show'])
             ->name('project.show');
@@ -29,13 +29,9 @@ Route::middleware(['auth', 'verified'])->group(function () {
         Route::get('/settings', [\App\Http\Controllers\ProjectSettingsController::class, 'index'])
             ->name('project.settings.index');
 
-
-
         Route::get('/task/{projectTask}', [ProjectTaskController::class, 'show'])
             ->name('project.task.show');
     });
-
-
 
 });
 
