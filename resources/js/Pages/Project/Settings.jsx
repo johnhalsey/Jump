@@ -10,8 +10,14 @@ export default function ProjectSettings ({project}) {
 
     const [shortCode, setShortCode] = useState(project.data.short_code)
     const [projectName, setProjectName] = useState(project.data.name)
+    const [newProjectName, setNewProjectName] = useState('')
+    const [loading, setLoading] = useState(false)
+    const [updateErrors, setUpdateErrors] = useState([])
 
     function saveSettings () {
+        setUpdateErrors([])
+        setLoading(true)
+
         axios.patch('/api/project/' + project.data.id + '/settings', {
             name: projectName,
             short_code: shortCode
@@ -20,12 +26,48 @@ export default function ProjectSettings ({project}) {
                 router.reload()
             })
             .catch(error => {
-                console.log(error.response.data)
+                let errors = []
+
+                for(let key in error.response.data.errors){
+                    errors.push({
+                        key: key,
+                        value: error.response.data.errors[key][0]
+                    })
+                    setUpdateErrors(errors)
+                }
+
+                setLoading(false)
             })
     }
 
-    function userRole(user) {
+    function inviteUserToProject () {
+
+    }
+
+    function errorsHas(key){
+        if (updateErrors.find(error => error.key == key)) {
+            return true
+        }
+
+        return false
+    }
+
+    function errorValue(key) {
+        return updateErrors.find(error => error.key == key).value
+    }
+    function userRole (user) {
         return project.data.owners.find(owner => owner.id == user.id) ? 'Administrator' : 'Editor';
+    }
+
+    function confirmRemoveUser (user) {
+        if (!confirm('Are you sure you wish to remove ' + user.name + ' from this project')) {
+            return
+        }
+
+        axios.delete('/api/projects/' + project.data.id + '/users/' + user.id)
+            .then(() => {
+                router.reload()
+            })
     }
 
     return (
@@ -70,7 +112,9 @@ export default function ProjectSettings ({project}) {
                                            onChange={(e) => setProjectName(e.target.value)}
                                 >
                                 </TextInput>
-
+                                {errorsHas('name') && <div className={'text-red-500'}>
+                                    {errorValue('name')}
+                                </div>}
 
                                 <div className="mb-3 font-bold mt-5">
                                     Short Code
@@ -85,6 +129,9 @@ export default function ProjectSettings ({project}) {
                                 <div className={'text-sm mt-2'}>
                                     Changing this code will only affect new tasks created
                                 </div>
+                                {errorsHas('short_code') && <div className={'text-red-500'}>
+                                    {errorValue('short_code')}
+                                </div>}
 
                             </div>
 
@@ -94,13 +141,31 @@ export default function ProjectSettings ({project}) {
                                 </div>
 
                                 <Panel className={'pt-5'}>
+
+                                    <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                                        <div className={'flex-grow'}>
+                                            <TextInput placeholder={'Add project user email here'}
+                                                       className={'w-full border-gray-300 shadow rounded'}
+                                                       value={newProjectName}
+                                                       onChange={e => setNewProjectName(e.target.value)}
+                                            ></TextInput>
+                                        </div>
+                                        <div className={'ml-5 content-stretch'}>
+                                            <PrimaryButton loading={loading}
+                                                           disabled={loading}
+                                                           className={'h-full'}
+                                                           onClick={inviteUserToProject}
+                                            >Add</PrimaryButton>
+                                        </div>
+                                    </div>
+
                                     <table>
                                         <thead>
-                                            <tr>
-                                                <th>Email</th>
-                                                <th>Permissions</th>
-                                                <th></th>
-                                            </tr>
+                                        <tr>
+                                            <th>Email</th>
+                                            <th>Permissions</th>
+                                            <th></th>
+                                        </tr>
                                         </thead>
                                         <tbody>
                                         {project.data.users.map((user, index) => (
@@ -109,7 +174,10 @@ export default function ProjectSettings ({project}) {
                                                 <td>
                                                     {userRole(user)}
                                                 </td>
-                                                <td className={'text-sm'}>Remove</td>
+                                                <td className={'text-sm'}>
+                                                    <span className={'text-sky-600 cursor-pointer'}
+                                                          onClick={() => confirmRemoveUser(user)}
+                                                    >Remove</span></td>
                                             </tr>
                                         ))}
                                         </tbody>
