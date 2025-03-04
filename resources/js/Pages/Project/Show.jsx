@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head} from '@inertiajs/react';
+import {Link, Head} from '@inertiajs/react';
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import ProjectStatusColumn from "@/Partials/ProjectStatusColumn.jsx"
@@ -28,12 +28,22 @@ export default function ShowProject ({project}) {
     return (
         <AuthenticatedLayout
             header={
+            <div className={'flex justify-between'}>
+
                 <h2 className="text-xl font-semibold leading-tight text-gray-800">
                     {project.data.name}
                 </h2>
+                <div>
+                    <Link href={'/project/' + project.data.id + '/settings'}
+                          className={'text-sky-600 hover:text-sky-800'}
+                    >
+                        Settings
+                    </Link>
+                </div>
+            </div>
             }
         >
-            <Head title="Project"/>
+            <Head title={project.data.name}/>
 
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
 

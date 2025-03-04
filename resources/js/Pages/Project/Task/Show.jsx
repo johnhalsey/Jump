@@ -58,6 +58,8 @@ export default function ShowProjectTask ({project, task}) {
                 }
             >
 
+                <Head title={task.data.title}/>
+
                 <div className="mx-4 md:mx-8 bg-white rounded-md border shadow">
 
                     <div className="p-8 border-b border-dashed">
