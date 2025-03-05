@@ -24,6 +24,11 @@ Route::middleware(['auth'])->group(function () {
             )->name('api.project.settings.update')
                 ->middleware('can:update,project');
 
+            Route::delete(
+                '/user/{user}', [\App\Http\Controllers\Api\ProjectUsersController::class, 'destroy']
+            )->name('api.project.users.destroy')
+                ->middleware('can:update,project');
+
             Route::prefix('/task/{projectTask}')->group(function () {
 
                 Route::patch(

@@ -64,9 +64,12 @@ export default function ProjectSettings ({project}) {
             return
         }
 
-        axios.delete('/api/projects/' + project.data.id + '/users/' + user.id)
+        axios.delete('/api/project/' + project.data.id + '/user/' + user.id)
             .then(() => {
                 router.reload()
+            })
+            .catch(error => {
+                alert(error.response.data.errors.user[0])
             })
     }
 
