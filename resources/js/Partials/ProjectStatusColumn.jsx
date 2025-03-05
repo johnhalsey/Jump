@@ -1,7 +1,7 @@
 import {usePage } from '@inertiajs/react';
 import TaskCard from "@/Partials/TaskCard.jsx"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
-import {useState} from 'react'
+import {useEffect, useState} from 'react'
 import axios from 'axios'
 import LoadingSpinner from '@/Components/LoadingSpinner.jsx'
 import * as FormErrors from "@/Utils/FormErrors.js"
@@ -12,6 +12,10 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
     const [loading, setLoading] = useState(false)
 
     const { project } = usePage().props
+
+    useEffect(() => {
+        FormErrors.resetErrors()
+    }, [])
 
     function CreateNewTask () {
         setLoading(true)

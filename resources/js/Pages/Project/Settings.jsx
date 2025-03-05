@@ -6,6 +6,7 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
+import FullPagePanel from "@/Components/FullPagePanel.jsx"
 
 export default function ProjectSettings ({project}) {
 
@@ -77,100 +78,97 @@ export default function ProjectSettings ({project}) {
             >
                 <Head title={project.data.name + ' Settings'}/>
 
-                <div className="mx-4 md:mx-8 bg-white rounded-md border shadow">
-                    <div className="p-8 border-b border-dashed flex justify-between">
-                        <span className={'font-bold'}>Settings</span>
+                <FullPagePanel title={
+                    <div className={'flex justify-between'}>
+                        <span className="font-bold">Settings</span>
                         <PrimaryButton onClick={saveSettings}>Save</PrimaryButton>
-                    </div>
+                    </div>}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
-                    <div className="p-8 bg-gray-50 rounded-b-md">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
+                        <div>
 
-                            <div>
+                            <div className="mb-3 font-bold">
+                                Project Name
+                            </div>
+                            <TextInput className={'w-full'}
+                                       value={projectName}
+                                       onChange={(e) => setProjectName(e.target.value)}
+                            >
+                            </TextInput>
+                            {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
+                                {FormErrors.errorValue('name')}
+                            </div>}
 
-                                <div className="mb-3 font-bold">
-                                    Project Name
-                                </div>
-                                <TextInput className={'w-full'}
-                                           value={projectName}
-                                           onChange={(e) => setProjectName(e.target.value)}
-                                >
-                                </TextInput>
-                                {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
-                                    {FormErrors.errorValue('name')}
-                                </div>}
-
-                                <div className="mb-3 font-bold mt-5">
-                                    Short Code
-                                </div>
-
-                                <TextInput className={'w-full'}
-                                           value={shortCode}
-                                           onChange={(e) => setShortCode(e.target.value)}
-                                >
-
-                                </TextInput>
-                                <div className={'text-sm mt-2 text-gray-500'}>
-                                    Changing this code will only affect new tasks created
-                                </div>
-                                {FormErrors.errorsHas('short_code') && <div className={'text-red-500'}>
-                                    {FormErrors.errorValue('short_code')}
-                                </div>}
-
+                            <div className="mb-3 font-bold mt-5">
+                                Short Code
                             </div>
 
-                            <div className={'mt-3 md:mt-0'}>
-                                <div className="mb-3 font-bold">
-                                    Project Users
+                            <TextInput className={'w-full'}
+                                       value={shortCode}
+                                       onChange={(e) => setShortCode(e.target.value)}
+                            >
+
+                            </TextInput>
+                            <div className={'text-sm mt-2 text-gray-500'}>
+                                Changing this code will only affect new tasks created
+                            </div>
+                            {FormErrors.errorsHas('short_code') && <div className={'text-red-500'}>
+                                {FormErrors.errorValue('short_code')}
+                            </div>}
+
+                        </div>
+
+                        <div className={'mt-3 md:mt-0'}>
+                            <div className="mb-3 font-bold">
+                                Project Users
+                            </div>
+
+                            <Panel className={'pt-5'}>
+
+                                <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                                    <div className={'flex-grow'}>
+                                        <TextInput placeholder={'Add project user email here'}
+                                                   className={'w-full border-gray-300 shadow rounded'}
+                                                   value={newProjectName}
+                                                   onChange={e => setNewProjectName(e.target.value)}
+                                        ></TextInput>
+                                    </div>
+                                    <div className={'ml-5 content-stretch'}>
+                                        <PrimaryButton loading={loading}
+                                                       disabled={loading}
+                                                       className={'h-full'}
+                                                       onClick={inviteUserToProject}
+                                        >Add</PrimaryButton>
+                                    </div>
                                 </div>
 
-                                <Panel className={'pt-5'}>
-
-                                    <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
-                                        <div className={'flex-grow'}>
-                                            <TextInput placeholder={'Add project user email here'}
-                                                       className={'w-full border-gray-300 shadow rounded'}
-                                                       value={newProjectName}
-                                                       onChange={e => setNewProjectName(e.target.value)}
-                                            ></TextInput>
-                                        </div>
-                                        <div className={'ml-5 content-stretch'}>
-                                            <PrimaryButton loading={loading}
-                                                           disabled={loading}
-                                                           className={'h-full'}
-                                                           onClick={inviteUserToProject}
-                                            >Add</PrimaryButton>
-                                        </div>
-                                    </div>
-
-                                    <table>
-                                        <thead>
-                                        <tr>
-                                            <th>Email</th>
-                                            <th>Permissions</th>
-                                            <th></th>
-                                        </tr>
-                                        </thead>
-                                        <tbody>
-                                        {project.data.users.map((user, index) => (
-                                            <tr key={'project-user-' + index}>
-                                                <td>{user.email}</td>
-                                                <td>
-                                                    {userRole(user)}
-                                                </td>
-                                                <td className={'text-sm'}>
+                                <table>
+                                    <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Permissions</th>
+                                        <th></th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {project.data.users.map((user, index) => (
+                                        <tr key={'project-user-' + index}>
+                                            <td>{user.email}</td>
+                                            <td>
+                                                {userRole(user)}
+                                            </td>
+                                            <td className={'text-sm'}>
                                                     <span className={'text-sky-600 cursor-pointer'}
                                                           onClick={() => confirmRemoveUser(user)}
                                                     >Remove</span></td>
-                                            </tr>
-                                        ))}
-                                        </tbody>
-                                    </table>
-                                </Panel>
-                            </div>
+                                        </tr>
+                                    ))}
+                                    </tbody>
+                                </table>
+                            </Panel>
                         </div>
                     </div>
-                </div>
+                </FullPagePanel>
 
             </AuthenticatedLayout>
         </>

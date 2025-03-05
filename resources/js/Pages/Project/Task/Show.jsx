@@ -5,6 +5,7 @@ import axios from 'axios'
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import TaskNotes from "@/Partials/TaskNotes.jsx"
 import TaskDescription from "@/Partials/TaskDescription.jsx"
+import FullPagePanel from "@/Components/FullPagePanel.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
@@ -60,67 +61,62 @@ export default function ShowProjectTask ({project, task}) {
 
                 <Head title={task.data.title}/>
 
-                <div className="mx-4 md:mx-8 bg-white rounded-md border shadow">
+                <FullPagePanel title={task.data.reference + ' - ' + task.data.title}>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
-                    <div className="p-8 border-b border-dashed">
-                        {task.data.reference} - {task.data.title}
-                    </div>
-                    <div className="p-8 bg-gray-50 rounded-b-md">
-                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
+                        <div>
+                            <TaskDescription description={task.data.description}></TaskDescription>
 
+                            <div className="mb-3 mt-8 font-bold">
+                                Status
+                            </div>
                             <div>
-                                <TaskDescription description={task.data.description}></TaskDescription>
-
-                                <div className="mb-3 mt-8 font-bold">
-                                    Status
-                                </div>
-                                <div>
-                                    <select name="status"
-                                            id="status"
-                                            className="w-full border shadow rounded border-gray-300"
-                                            onChange={updateStatus}
-                                            value={statusId}
-                                    >
-                                        {project.data.statuses.map((projectStatus, index) => (
-                                            <option key={'status-' + index}
-                                                    value={projectStatus.id}
-                                            >{projectStatus.name}</option>
-                                        ))}
-                                    </select>
-                                </div>
-
-                                <div className="mb-3 mt-8 font-bold">
-                                    Assignee
-                                </div>
-                                <div>
-                                    <select name="assignee"
-                                            id="assignee"
-                                            className="w-full border shadow rounded border-gray-300"
-                                            onChange={updateAssignee}
-                                            value={assigneeId}
-                                    >
-
-                                        <option value={null}>
-                                            Unassigned
-                                        </option>
-
-                                        {project.data.users.map((user, index) => (
-                                            <option key={'user-' + index}
-                                                    value={user.id}
-                                            >
-                                                {user.name}
-                                            </option>
-                                        ))}
-                                    </select>
-                                </div>
+                                <select name="status"
+                                        id="status"
+                                        className="w-full border shadow rounded border-gray-300"
+                                        onChange={updateStatus}
+                                        value={statusId}
+                                >
+                                    {project.data.statuses.map((projectStatus, index) => (
+                                        <option key={'status-' + index}
+                                                value={projectStatus.id}
+                                        >{projectStatus.name}</option>
+                                    ))}
+                                </select>
                             </div>
 
-                            <div className="mt-3 md:mt-0">
-                                <TaskNotes notes={task.data.notes}></TaskNotes>
+                            <div className="mb-3 mt-8 font-bold">
+                                Assignee
+                            </div>
+                            <div>
+                                <select name="assignee"
+                                        id="assignee"
+                                        className="w-full border shadow rounded border-gray-300"
+                                        onChange={updateAssignee}
+                                        value={assigneeId}
+                                >
+
+                                    <option value={null}>
+                                        Unassigned
+                                    </option>
+
+                                    {project.data.users.map((user, index) => (
+                                        <option key={'user-' + index}
+                                                value={user.id}
+                                        >
+                                            {user.name}
+                                        </option>
+                                    ))}
+                                </select>
                             </div>
                         </div>
+
+                        <div className="mt-3 md:mt-0">
+                            <TaskNotes notes={task.data.notes}></TaskNotes>
+                        </div>
                     </div>
-                </div>
+                </FullPagePanel>
+
             </AuthenticatedLayout>
         </>
     );
