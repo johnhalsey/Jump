@@ -83,7 +83,7 @@ export default function ProjectSettings ({project}) {
                         <span className="font-bold">Settings</span>
                         <PrimaryButton onClick={saveSettings}>Save</PrimaryButton>
                     </div>}>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
                         <div>
 
@@ -146,15 +146,15 @@ export default function ProjectSettings ({project}) {
                                     <thead>
                                     <tr>
                                         <th>Email</th>
-                                        <th>Permissions</th>
+                                        <th className={'hidden sm:table-cell'}>Permissions</th>
                                         <th></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {project.data.users.map((user, index) => (
                                         <tr key={'project-user-' + index}>
-                                            <td>{user.email}</td>
-                                            <td>
+                                            <td className={'max-w-28 overflow-x-scroll'}>{user.email}</td>
+                                            <td className={'hidden sm:table-cell'}>
                                                 {userRole(user)}
                                             </td>
                                             <td className={'text-sm'}>
