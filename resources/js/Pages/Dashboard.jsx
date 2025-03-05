@@ -19,7 +19,7 @@ export default function Dashboard ({projects, default_statuses}) {
             <tr className={'hover:bg-sky-50 cursor-pointer'} onClick={() => {
                 redirectToProject('/project/' + project.id)
             }}>
-                <td>{project.owners[0].name}</td>
+                <td>{project.owners[0].full_name}</td>
                 <td>{project.name}</td>
                 {projectDefaultStatuses(project).map((status, index) => (
                     <td key={'project-' + project.id + '-status-' + status.id}>
