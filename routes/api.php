@@ -1,10 +1,11 @@
 <?php
 
 use Illuminate\Auth\Middleware\Authenticate;
+use App\Http\Middleware\TaskBelongsToProject;
 
 Route::middleware(['auth'])->name('api.')->group(function () {
 
-    Route::post('projects', [App\Http\Controllers\Api\ProjectController::class, 'store'])
+    Route::post('projects', [\App\Http\Controllers\Api\ProjectController::class, 'store'])
         ->name('projects.store');
 
     Route::middleware(['can:view,project'])->group(function () {
@@ -12,11 +13,11 @@ Route::middleware(['auth'])->name('api.')->group(function () {
         Route::prefix('/project/{project}')->group(function () {
 
             Route::get(
-                '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'index']
+                '/tasks', [\App\Http\Controllers\Api\ProjectTaskController::class, 'index']
             )->name('project.tasks.index');
 
             Route::post(
-                '/tasks', [App\Http\Controllers\Api\ProjectTaskController::class, 'store']
+                '/tasks', [\App\Http\Controllers\Api\ProjectTaskController::class, 'store']
             )->name('project.tasks.store');
 
             Route::middleware(['can:update,project'])->group(function () {
@@ -35,21 +36,25 @@ Route::middleware(['auth'])->name('api.')->group(function () {
 
             });
 
-            Route::prefix('/task/{projectTask}')->group(function () {
+            Route::middleware(['can:ownTask,project,projectTask'])->prefix('/task/{projectTask}')->group(function () {
 
                 Route::patch(
-                    '/', [App\Http\Controllers\Api\ProjectTaskController::class, 'update']
+                    '/', [\App\Http\Controllers\Api\ProjectTaskController::class, 'update']
                 )->name('project.task.update');
 
+                Route::delete(
+                    '/', [\App\Http\Controllers\Api\ProjectTaskController::class, 'destroy']
+                )->name('project.task.destroy');
+
                 Route::post(
-                    '/notes', [App\Http\Controllers\Api\TaskNoteController::class, 'store']
+                    '/notes', [\App\Http\Controllers\Api\TaskNoteController::class, 'store']
                 )->name('task.notes.store');
 
                 Route::patch(
-                    '/note/{taskNote}', [App\Http\Controllers\Api\TaskNoteController::class, 'update']
+                    '/note/{taskNote}', [\App\Http\Controllers\Api\TaskNoteController::class, 'update']
                 )->name('task.note.update');
 
-            });
+            })->middleware(TaskBelongsToProject::class);
         });
     });
 

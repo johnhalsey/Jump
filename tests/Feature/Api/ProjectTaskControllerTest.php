@@ -218,4 +218,47 @@ class ProjectTaskControllerTest extends TestCase
                 'message' => 'A task title is required.',
             ]);
     }
+
+    public function test_project_user_can_delete_task()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->attach($user);
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses()->first()->id,
+        ]);
+
+        $this->assertCount(1, ProjectTask::all());
+        $this->actingAs($user);
+        $response = $this->json(
+            'DELETE',
+            'api/project/' . $project->id . '/task/' . $task->id,
+        )->assertStatus(204);
+        $this->assertCount(0, ProjectTask::all());
+    }
+
+    public function test_project_user_cannot_delete_task_for_different_project()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->attach($user);
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses()->first()->id,
+        ]);
+
+        $project2 = Project::factory()->create();
+        $task2 = ProjectTask::factory()->create([
+            'project_id'  => $project2->id,
+            'status_id'   => $project2->statuses()->first()->id,
+        ]);
+
+        $this->actingAs($user);
+        $this->json(
+            'DELETE',
+            'api/project/' . $project->id . '/task/' . $task2->id,
+        )->assertStatus(403);
+
+    }
 }

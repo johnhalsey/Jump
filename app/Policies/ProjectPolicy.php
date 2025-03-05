@@ -4,6 +4,7 @@ namespace App\Policies;
 
 use App\Models\Project;
 use App\Models\User;
+use App\Models\ProjectTask;
 use Illuminate\Auth\Access\Response;
 
 class ProjectPolicy
@@ -38,6 +39,11 @@ class ProjectPolicy
     public function update(User $user, Project $project): bool
     {
         return $project->owners->contains($user);
+    }
+
+    public function ownTask(User $user, Project $project, ProjectTask $task): bool
+    {
+        return $this->view($user, $project) && $task->project_id == $project->id;
     }
 
     /**

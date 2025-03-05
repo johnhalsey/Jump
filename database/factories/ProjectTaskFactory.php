@@ -13,7 +13,6 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ProjectTaskFactory extends Factory
 {
-
     protected $model = ProjectTask::class;
     /**
      * Define the model's default state.

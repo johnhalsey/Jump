@@ -42,4 +42,11 @@ class ProjectTaskController extends Controller
 
         return new ProjectTaskResource($projectTask);
     }
+
+    public function destroy(Request $request, Project $project, ProjectTask $projectTask)
+    {
+        $projectTask->delete();
+
+        return response()->noContent();
+    }
 }

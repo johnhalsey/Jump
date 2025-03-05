@@ -28,8 +28,6 @@ class AppServiceProvider extends ServiceProvider
     {
         Vite::prefetch(concurrency: 3);
 
-        Gate::define('view', [ProjectPolicy::class, 'view']);
-
         Project::observe(ProjectObserver::class);
         ProjectTask::observe(ProjectTaskObserver::class);
     }
