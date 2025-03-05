@@ -4,6 +4,8 @@ namespace App\Http\Middleware;
 
 use Illuminate\Http\Request;
 use Inertia\Middleware;
+use Illuminate\Auth\Access\Gate;
+use App\Http\Resources\UserResource;
 use App\Http\Resources\ProjectResource;
 
 class HandleInertiaRequests extends Middleware
@@ -33,12 +35,15 @@ class HandleInertiaRequests extends Middleware
         $shareData = [
             ...parent::share($request),
             'auth' => [
-                'user' => $request->user(),
+                'user' => $request->user() ? new UserResource($request->user()) : null,
             ],
         ];
 
+        $shareData['user_can_update_project'] = false;
+
         if ($request->route('project')) {
             $shareData['project'] = new ProjectResource($request->route('project'));
+            $shareData['user_can_update_project'] = $request->user()->can('update', $request->route('project'));
         }
 
         return $shareData;
