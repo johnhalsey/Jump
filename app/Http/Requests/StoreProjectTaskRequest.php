@@ -25,4 +25,11 @@ class StoreProjectTaskRequest extends FormRequest
             'title' => 'required',
         ];
     }
+
+    public function messages()
+    {
+        return [
+            'title.required' => 'A task title is required.',
+        ];
+    }
 }

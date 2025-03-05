@@ -5,6 +5,7 @@ import {useState} from "react"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
+import * as FormErrors from "@/Utils/FormErrors.js"
 
 export default function ProjectSettings ({project}) {
 
@@ -12,11 +13,10 @@ export default function ProjectSettings ({project}) {
     const [projectName, setProjectName] = useState(project.data.name)
     const [newProjectName, setNewProjectName] = useState('')
     const [loading, setLoading] = useState(false)
-    const [updateErrors, setUpdateErrors] = useState([])
 
     function saveSettings () {
-        setUpdateErrors([])
         setLoading(true)
+        FormErrors.resetErrors()
 
         axios.patch('/api/project/' + project.data.id + '/settings', {
             name: projectName,
@@ -24,18 +24,10 @@ export default function ProjectSettings ({project}) {
         })
             .then(response => {
                 router.reload()
+                setLoading(false)
             })
             .catch(error => {
-                let errors = []
-
-                for(let key in error.response.data.errors){
-                    errors.push({
-                        key: key,
-                        value: error.response.data.errors[key][0]
-                    })
-                    setUpdateErrors(errors)
-                }
-
+                FormErrors.pushErrors(error.response.data.errors)
                 setLoading(false)
             })
     }
@@ -44,17 +36,6 @@ export default function ProjectSettings ({project}) {
 
     }
 
-    function errorsHas(key){
-        if (updateErrors.find(error => error.key == key)) {
-            return true
-        }
-
-        return false
-    }
-
-    function errorValue(key) {
-        return updateErrors.find(error => error.key == key).value
-    }
     function userRole (user) {
         return project.data.owners.find(owner => owner.id == user.id) ? 'Administrator' : 'Editor';
     }
@@ -115,8 +96,8 @@ export default function ProjectSettings ({project}) {
                                            onChange={(e) => setProjectName(e.target.value)}
                                 >
                                 </TextInput>
-                                {errorsHas('name') && <div className={'text-red-500'}>
-                                    {errorValue('name')}
+                                {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
+                                    {FormErrors.errorValue('name')}
                                 </div>}
 
                                 <div className="mb-3 font-bold mt-5">
@@ -129,11 +110,11 @@ export default function ProjectSettings ({project}) {
                                 >
 
                                 </TextInput>
-                                <div className={'text-sm mt-2'}>
+                                <div className={'text-sm mt-2 text-gray-500'}>
                                     Changing this code will only affect new tasks created
                                 </div>
-                                {errorsHas('short_code') && <div className={'text-red-500'}>
-                                    {errorValue('short_code')}
+                                {FormErrors.errorsHas('short_code') && <div className={'text-red-500'}>
+                                    {FormErrors.errorValue('short_code')}
                                 </div>}
 
                             </div>

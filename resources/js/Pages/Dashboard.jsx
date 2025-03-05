@@ -5,12 +5,12 @@ import {useState} from "react"
 import TextInput from "@/Components/TextInput.jsx"
 import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
+import * as FormErrors from "@/Utils/FormErrors.js"
 
 export default function Dashboard ({projects, default_statuses}) {
 
     const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')
-    const [errorMessage, setErrorMessage] = useState(null)
 
     let tableRows = []
 
@@ -40,15 +40,16 @@ export default function Dashboard ({projects, default_statuses}) {
 
     function createProject () {
         setLoading(true)
+        FormErrors.resetErrors()
         axios.post('/api/projects', {
             name: projectName
         }).then(response => {
             router.reload()
+            setProjectName('')
+            setLoading(false)
             // no need to set loading back to false, as page has realoaded
         }).catch(error => {
-            if (error.response.data.message) {
-                setErrorMessage(error.response.data.message)
-            }
+            FormErrors.pushErrors(error.response.data.errors)
             setLoading(false)
         })
     }
@@ -74,6 +75,9 @@ export default function Dashboard ({projects, default_statuses}) {
                                        value={projectName}
                                        onChange={e => setProjectName(e.target.value)}
                             ></TextInput>
+                            {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
+                                {FormErrors.errorValue('name')}
+                            </div>}
                         </div>
                         <div className={'ml-5 content-stretch'}>
                             <PrimaryButton loading={loading}

@@ -213,8 +213,9 @@ class ProjectTaskControllerTest extends TestCase
                 'title' => null
             ]
         )->assertStatus(422)
-            ->assertJsonValidationErrors('title');
+            ->assertJsonValidationErrors('title')
+            ->assertJsonFragment([
+                'message' => 'A task title is required.',
+            ]);
     }
-
-
 }

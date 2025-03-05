@@ -4,6 +4,7 @@ import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from 'react'
 import axios from 'axios'
 import LoadingSpinner from '@/Components/LoadingSpinner.jsx'
+import * as FormErrors from "@/Utils/FormErrors.js"
 
 export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
@@ -13,8 +14,9 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
     const { project } = usePage().props
 
     function CreateNewTask () {
-
         setLoading(true)
+        FormErrors.resetErrors()
+
         axios.post('/api/project/' + project.data.id + '/tasks', {
             title: newTitle
         }).then(response => {
@@ -22,9 +24,8 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
             tasks.unshift(response.data.data)
             setLoading(false)
         }).catch(error => {
-            // todo handle this error
-        }).finally(() => {
-
+            FormErrors.pushErrors(error.response.data.errors)
+            setLoading(false)
         })
 
     }
@@ -48,6 +49,9 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                                    onChange={setNewTaskTitle}
                                    value={newTitle}
                                    className="p-3 flex grow border rounded shadow w-full border border-gray-300"/>
+                            {FormErrors.errorsHas('title') && <div className={'text-red-500'}>
+                                {FormErrors.errorValue('title')}
+                            </div>}
                         </div>
                         <div className="shrink ml-3">
                             <PrimaryButton className="h-full"
