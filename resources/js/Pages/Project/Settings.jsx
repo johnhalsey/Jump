@@ -14,6 +14,7 @@ export default function ProjectSettings ({project}) {
     const [projectName, setProjectName] = useState(project.data.name)
     const [newProjectName, setNewProjectName] = useState('')
     const [loading, setLoading] = useState(false)
+    const [newEmail, setNewEmail] = useState('')
 
     const {user_can_update_project} = usePage().props
 
@@ -29,7 +30,7 @@ export default function ProjectSettings ({project}) {
             name: projectName,
             short_code: shortCode
         })
-            .then(response => {
+            .then(() => {
                 router.reload()
                 setLoading(false)
             })
@@ -40,7 +41,25 @@ export default function ProjectSettings ({project}) {
     }
 
     function inviteUserToProject () {
+        if (!user_can_update_project) {
+            return
+        }
 
+        setLoading(true)
+        FormErrors.resetErrors()
+
+        axios.post('/api/project/' + project.data.id + '/users', {
+            'email': newEmail
+        })
+            .then(() => {
+                router.reload()
+                setLoading(false)
+            })
+            .catch(error => {
+                console.log(error.response.data.errors)
+                FormErrors.pushErrors(error.response.data.errors)
+                setLoading(false)
+            })
     }
 
     function userRole (user) {
@@ -142,9 +161,12 @@ export default function ProjectSettings ({project}) {
                                     <div className={'flex-grow'}>
                                         <TextInput placeholder={'Add project user email here'}
                                                    className={'w-full border-gray-300 shadow rounded'}
-                                                   value={newProjectName}
-                                                   onChange={e => setNewProjectName(e.target.value)}
+                                                   value={newEmail}
+                                                   onChange={e => setNewEmail(e.target.value)}
                                         ></TextInput>
+                                        {FormErrors.errorsHas('email') && <div className={'text-red-500'}>
+                                            {FormErrors.errorValue('email')}
+                                        </div>}
                                     </div>
                                     <div className={'ml-5 content-stretch'}>
                                         <PrimaryButton loading={loading}

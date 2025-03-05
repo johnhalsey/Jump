@@ -2,7 +2,7 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Validation\Rule;
+use App\Models\User;
 use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
@@ -29,10 +29,29 @@ class StoreProjectUserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
-                Rule::unique('project_users', 'email')->where(function ($query) {
-                    $query->where('project_id', $this->route('project')->id);
-                })
             ],
+        ];
+    }
+
+    public function after()
+    {
+        return [
+            function (Validator $validator) {
+                $project = $this->route('project');
+                $email = $this->input('email');
+
+                if (!$user = User::where('email', $email)->first()) {
+                    // the user is not in the db at all, you're good
+                    return;
+                }
+
+                if ($project->users->contains($user)) {
+                    $validator->errors()->add(
+                        'email',
+                        'This user has already been added to this project.'
+                    );
+                }
+            }
         ];
     }
 }
