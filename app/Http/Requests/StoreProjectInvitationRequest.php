@@ -3,10 +3,12 @@
 namespace App\Http\Requests;
 
 use App\Models\User;
+use App\Models\Invitation;
+use Illuminate\Validation\Rule;
 use Illuminate\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
 
-class StoreProjectUserRequest extends FormRequest
+class StoreProjectInvitationRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -29,7 +31,17 @@ class StoreProjectUserRequest extends FormRequest
                 'string',
                 'email',
                 'max:255',
+                Rule::unique('invitations', 'email')->where(function ($query) {
+                    return $query->where('project_id', $this->route('project')->id);
+                })
             ],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'email.unique' => 'This user has already been invited to this project.',
         ];
     }
 
@@ -50,6 +62,7 @@ class StoreProjectUserRequest extends FormRequest
                         'email',
                         'This user has already been added to this project.'
                     );
+
                 }
             }
         ];

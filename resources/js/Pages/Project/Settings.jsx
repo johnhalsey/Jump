@@ -12,7 +12,6 @@ export default function ProjectSettings ({project}) {
 
     const [shortCode, setShortCode] = useState(project.data.short_code)
     const [projectName, setProjectName] = useState(project.data.name)
-    const [newProjectName, setNewProjectName] = useState('')
     const [loading, setLoading] = useState(false)
     const [newEmail, setNewEmail] = useState('')
 
@@ -48,7 +47,7 @@ export default function ProjectSettings ({project}) {
         setLoading(true)
         FormErrors.resetErrors()
 
-        axios.post('/api/project/' + project.data.id + '/users', {
+        axios.post('/api/project/' + project.data.id + '/invitations', {
             'email': newEmail
         })
             .then(() => {

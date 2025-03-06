@@ -2,11 +2,10 @@
 
 namespace Tests\Feature\Api;
 
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
 class ProjectSettingsControllerTest extends TestCase
 {

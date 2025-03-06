@@ -1,7 +1,6 @@
 <?php
 
 use Illuminate\Auth\Middleware\Authenticate;
-use App\Http\Middleware\TaskBelongsToProject;
 
 Route::middleware(['auth', 'verified'])->name('api.')->group(function () {
 
@@ -27,8 +26,8 @@ Route::middleware(['auth', 'verified'])->name('api.')->group(function () {
                 )->name('project.settings.update');
 
                 Route::post(
-                    '/users', [\App\Http\Controllers\Api\ProjectUsersController::class, 'store']
-                )->name('project.users.store');
+                    '/invitations', [\App\Http\Controllers\Api\ProjectInvitationsController::class, 'store']
+                )->name('project.invitations.store');
 
                 Route::delete(
                     '/user/{user}', [\App\Http\Controllers\Api\ProjectUsersController::class, 'destroy']
@@ -54,7 +53,7 @@ Route::middleware(['auth', 'verified'])->name('api.')->group(function () {
                     '/note/{taskNote}', [\App\Http\Controllers\Api\TaskNoteController::class, 'update']
                 )->name('task.note.update');
 
-            })->middleware(TaskBelongsToProject::class);
+            });
         });
     });
 
