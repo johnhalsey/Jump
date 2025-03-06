@@ -38,15 +38,8 @@ class ProjectUsersController extends Controller
         return response(null, 204);
     }
 
-    private function registerUser($email)
+    private function inviteUser($email)
     {
-        $user = User::create([
-            'email' => $email,
-            'password' => Hash::make(Str::random(10)),
-        ]);
-
-        event(new Registered($user));
-
-        return $user;
+        // create invitation and email them
     }
 }

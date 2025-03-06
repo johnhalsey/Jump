@@ -57,3 +57,8 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+// new route to accept invitatation
+// it should find a user if it exists, or ask them to register.
+// once registered we can show rows in the dashboard with invitations to accept.
+

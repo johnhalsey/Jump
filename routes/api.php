@@ -3,7 +3,7 @@
 use Illuminate\Auth\Middleware\Authenticate;
 use App\Http\Middleware\TaskBelongsToProject;
 
-Route::middleware(['auth'])->name('api.')->group(function () {
+Route::middleware(['auth', 'verified'])->name('api.')->group(function () {
 
     Route::post('projects', [\App\Http\Controllers\Api\ProjectController::class, 'store'])
         ->name('projects.store');
