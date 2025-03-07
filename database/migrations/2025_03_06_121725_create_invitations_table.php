@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('email');
             $table->unsignedBigInteger('project_id');
             $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
+            $table->string('token')->nullable();
             $table->timestamps();
         });
     }

@@ -55,7 +55,6 @@ export default function ProjectSettings ({project}) {
                 setLoading(false)
             })
             .catch(error => {
-                console.log(error.response.data.errors)
                 FormErrors.pushErrors(error.response.data.errors)
                 setLoading(false)
             })

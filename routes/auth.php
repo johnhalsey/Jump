@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\ProjectInvitationController;
 use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
@@ -57,6 +58,12 @@ Route::middleware('auth')->group(function () {
     Route::post('logout', [AuthenticatedSessionController::class, 'destroy'])
         ->name('logout');
 });
+
+// middleware to redirect to regoister page if user not exists, passing the token and project id in.
+
+Route::get('/project/{project}/{email}/invitations/{token}/', [ProjectInvitationController::class, 'accept'])
+    ->name('project.invitations.accept')
+    ->middleware('signed');
 
 // new route to accept invitatation
 // it should find a user if it exists, or ask them to register.

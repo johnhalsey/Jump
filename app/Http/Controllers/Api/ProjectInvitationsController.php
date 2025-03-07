@@ -6,7 +6,6 @@ use App\Models\Project;
 use App\Models\Invitation;
 use Illuminate\Http\JsonResponse;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Events\UserInvitedToProject;
 use App\Http\Requests\StoreProjectInvitationRequest;
 
