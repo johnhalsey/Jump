@@ -21,8 +21,8 @@ class ProjectResource extends JsonResource
             'short_code'          => $this->short_code,
             'users'               => UserResource::collection($this->users),
             'owners'              => UserResource::collection($this->users()->wherePivot('owner', true)->get()),
-            'user_added_recently' => $this->userAddedWithinLastHour($request->user()),
-            'can_update'          => $request->user()?->can('update', $this),
+            'user_added_recently' => $this->resource->userAddedWithinLastHour($request->user()),
+            'user_can_update'     => $request->user()->can('update', $this->resource),
 
         ];
 

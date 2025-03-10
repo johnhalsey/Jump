@@ -1,7 +1,7 @@
 import {Head, Link, router, usePage} from '@inertiajs/react';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.jsx"
 import TextInput from "@/Components/TextInput.jsx"
-import {useState} from "react"
+import {useEffect, useState} from "react"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
@@ -15,10 +15,8 @@ export default function ProjectSettings ({project}) {
     const [loading, setLoading] = useState(false)
     const [newEmail, setNewEmail] = useState('')
 
-    const {user_can_update_project} = usePage().props
-
     function saveSettings () {
-        if (!user_can_update_project) {
+        if (!project.data.user_can_update) {
             return
         }
 
@@ -40,7 +38,7 @@ export default function ProjectSettings ({project}) {
     }
 
     function inviteUserToProject () {
-        if (!user_can_update_project) {
+        if (!project.data.user_can_update) {
             return
         }
 
@@ -65,7 +63,7 @@ export default function ProjectSettings ({project}) {
     }
 
     function confirmRemoveUser (user) {
-        if (!user_can_update_project) {
+        if (!project.data.user_can_update) {
             return
         }
 
@@ -108,8 +106,8 @@ export default function ProjectSettings ({project}) {
                 <FullPagePanel title={
                     <div className={'flex justify-between'}>
                         <span className="font-bold">Settings</span>
-                        {user_can_update_project && <PrimaryButton onClick={saveSettings}>Save</PrimaryButton>}
-                        {!user_can_update_project && <span>Only Administrators can make changes</span>}
+                        {project.data.user_can_update && <PrimaryButton onClick={saveSettings}>Save</PrimaryButton>}
+                        {!project.data.user_can_update && <span>Only Administrators can make changes</span>}
                     </div>}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
@@ -121,7 +119,7 @@ export default function ProjectSettings ({project}) {
                             <TextInput className={'w-full'}
                                        value={projectName}
                                        onChange={(e) => setProjectName(e.target.value)}
-                                       readOnly={!user_can_update_project}
+                                       readOnly={!project.data.user_can_update}
                             >
                             </TextInput>
                             {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
@@ -135,7 +133,7 @@ export default function ProjectSettings ({project}) {
                             <TextInput className={'w-full'}
                                        value={shortCode}
                                        onChange={(e) => setShortCode(e.target.value)}
-                                       readOnly={!user_can_update_project}
+                                       readOnly={!project.data.user_can_update}
                             >
 
                             </TextInput>
@@ -155,7 +153,7 @@ export default function ProjectSettings ({project}) {
 
                             <Panel className={'pt-5'}>
 
-                                {user_can_update_project && <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                                {project.data.user_can_update && <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
                                     <div className={'flex-grow'}>
                                         <TextInput placeholder={'Add project user email here'}
                                                    className={'w-full border-gray-300 shadow rounded'}
@@ -180,7 +178,7 @@ export default function ProjectSettings ({project}) {
                                     <tr>
                                         <th>Email</th>
                                         <th className={'hidden sm:table-cell'}>Permissions</th>
-                                        {user_can_update_project && <th></th>}
+                                        {project.data.user_can_update && <th></th>}
                                     </tr>
                                     </thead>
                                     <tbody>
@@ -190,7 +188,7 @@ export default function ProjectSettings ({project}) {
                                             <td className={'hidden sm:table-cell'}>
                                                 {userRole(user)}
                                             </td>
-                                            {user_can_update_project && <td className={'text-sm'}>
+                                            {project.data.user_can_update && <td className={'text-sm'}>
                                                 <span className={'text-sky-600 cursor-pointer'}
                                                       onClick={() => confirmRemoveUser(user)}
                                                 >Remove</span>
