@@ -3,15 +3,19 @@ import InputLabel from '@/Components/InputLabel';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import GuestLayout from '@/Layouts/GuestLayout';
-import { Head, Link, useForm } from '@inertiajs/react';
+import {Head, Link, useForm, usePage} from '@inertiajs/react';
 
 export default function Register() {
+    const props = usePage().props
+
     const { data, setData, post, processing, errors, reset } = useForm({
         first_name: '',
         last_name: '',
         email: '',
         password: '',
         password_confirmation: '',
+        project_id: props.project_id ?? null,
+        auto_accept: props.auto_accept ?? null,
     });
 
     const submit = (e) => {
@@ -28,7 +32,7 @@ export default function Register() {
 
             <form onSubmit={submit}>
                 <div>
-                    <InputLabel htmlFor="first_name" value="First Name" />
+                    <InputLabel htmlFor="first_name" value="First Name"/>
 
                     <TextInput
                         id="first_name"
@@ -41,7 +45,7 @@ export default function Register() {
                         required
                     />
 
-                    <InputError message={errors.first_name} className="mt-2" />
+                    <InputError message={errors.first_name} className="mt-2"/>
                 </div>
 
                 <div className="mt-4">

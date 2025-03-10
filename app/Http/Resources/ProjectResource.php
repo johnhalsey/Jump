@@ -16,11 +16,14 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id'         => $this->id,
-            'name'       => $this->name,
-            'short_code' => $this->short_code,
-            'users'      => UserResource::collection($this->users),
-            'owners'     => UserResource::collection($this->users()->wherePivot('owner', true)->get()),
+            'id'                  => $this->id,
+            'name'                => $this->name,
+            'short_code'          => $this->short_code,
+            'users'               => UserResource::collection($this->users),
+            'owners'              => UserResource::collection($this->users()->wherePivot('owner', true)->get()),
+            'user_added_recently' => $this->userAddedWithinLastHour($request->user()),
+            'can_update'          => $request->user()?->can('update', $this),
+
         ];
 
         foreach ($this->statuses as $status) {

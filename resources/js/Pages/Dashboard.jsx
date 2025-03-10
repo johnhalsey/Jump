@@ -7,7 +7,7 @@ import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
 
-export default function Dashboard ({projects, default_statuses}) {
+export default function Dashboard ({projects, default_statuses, flash}) {
 
     const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')

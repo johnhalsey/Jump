@@ -19,20 +19,8 @@ class UserAddedToProject
     /**
      * Create a new event instance.
      */
-    public function __construct(User $user, Project $project)
+    public function __construct(public User $user, public Project $project)
     {
         //
-    }
-
-    /**
-     * Get the channels the event should broadcast on.
-     *
-     * @return array<int, \Illuminate\Broadcasting\Channel>
-     */
-    public function broadcastOn(): array
-    {
-        return [
-            new PrivateChannel('channel-name'),
-        ];
     }
 }

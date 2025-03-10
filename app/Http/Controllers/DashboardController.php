@@ -6,6 +6,7 @@ use App\Enums\DefaultProjectStatus;
 use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use Illuminate\Support\Facades\Session;
 
 class DashboardController extends Controller
 {
@@ -15,9 +16,9 @@ class DashboardController extends Controller
         $projects = $request->user()->projects()->with('statuses')->get();
 
         return Inertia::render('Dashboard', [
-            'projects' => ProjectResource::collection($projects),
-            'default_statuses' => DefaultProjectStatus::cases()
-        ]);
-
+                'projects'         => ProjectResource::collection($projects),
+                'default_statuses' => DefaultProjectStatus::cases(),
+            ]
+        );
     }
 }

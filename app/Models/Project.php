@@ -33,4 +33,12 @@ class Project extends Model
     {
         return $this->hasMany(ProjectTask::class);
     }
+
+    public function userAddedWithinLastHour(User $user): bool
+    {
+        return $this->users()
+            ->wherePivot('user_id', $user->id)
+            ->wherePivot('created_at', '>', now()->subHour())
+            ->exists();
+    }
 }

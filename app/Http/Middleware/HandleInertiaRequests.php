@@ -39,11 +39,8 @@ class HandleInertiaRequests extends Middleware
             ],
         ];
 
-        $shareData['user_can_update_project'] = false;
-
         if ($request->route('project')) {
             $shareData['project'] = new ProjectResource($request->route('project'));
-            $shareData['user_can_update_project'] = $request->user()->can('update', $request->route('project'));
         }
 
         return $shareData;
