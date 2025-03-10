@@ -1,63 +1,62 @@
 <p align="center"><img src="/public/images/jump-logo-no-bg.png" width="400" alt="Laravel Logo"></p>
 
 <p align="center">
-<a href="https://github.com/johnhalsey/Jump/actions"><img src="https://github.com/johnhalsey/Jump/actions/workflows/laravel.yml/badge.svg" alt="Tests Status"></a>
+<a href="https://github.com/johnhalsey/Jump/actions"><img src="https://github.com/johnhalsey/Jump/actions/workflows/tests.yml/badge.svg" alt="Tests Status"></a>
 </p>
 
-## About Laravel
+## About Jump
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+Project management application built using Laravel, Ineria.js, React.js and TailwindCSS.
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+Users can create unlimited projects, unlimited tasks for those projects and invite unlimited users to contribute towards to those projects.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+Only projedt owners can update any project settings and invite users.
 
-## Learning Laravel
+## Tasks Statuses
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+Tasks can be set into one of 3 standard statuses, "To Do", "In Progress" or "Done".  These statuses belong to the project, 
+which get created by default when a project is created, this is to allow the potential to offer customised statuses per 
+project on a paid project plan, later down the line.
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+## Tasks
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+Tasks can be created directly in the "To Do" status.  Once a task has been created it is automatically given a reference code
+and clicked into, to be edited.  The description will initially be blank, but can easily be edited by clicking into the 
+descripton box, adding any text (TODO, add a WYSIWYG) and hitting save.
 
-## Laravel Sponsors
+Users can also assign the task to any project user, or update its status.
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Users can also add notes to the task, which will show latest at the top.
 
-### Premium Partners
+## Local Installation
 
-- **[Vehikl](https://vehikl.com/)**
-- **[Tighten Co.](https://tighten.co)**
-- **[WebReinvent](https://webreinvent.com/)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel/)**
-- **[Cyber-Duck](https://cyber-duck.co.uk)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Jump24](https://jump24.co.uk)**
-- **[Redberry](https://redberry.international/laravel/)**
-- **[Active Logic](https://activelogic.com)**
-- **[byte5](https://byte5.de)**
-- **[OP.GG](https://op.gg)**
+You will ideally need Laravel valet or Herd set up on your machine.
 
-## Contributing
+- `git clone git@github.com:johnhalsey/Jump.git`
+- `cd Jump`
+- `composer install`
+- `npm instll`
+- `cp .env.example .env.example`
+- `php artisan key:generate`
+- Create a local database ideally called jump
+- Update the database creds in the .env file (if you called the db something different)
+- `php artisan migrate`
+- `php artisan db:seed`
+- `npm run dev`
+- Open an additional terminal window and ensire you are in the jump directory
+- `php artisan queue:work`
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
 
-## Code of Conduct
+## Seeded data
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+You will now have seeded data in your database.
 
-## Security Vulnerabilities
+You can log in with `user0@example.com` (there is also user1, user2... up to user9)
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+Password: password.
 
-## License
+user0 is teh standard projedt owner for all projects
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+## Running Tests
+
+`php artisan test` will run the whole test suite
