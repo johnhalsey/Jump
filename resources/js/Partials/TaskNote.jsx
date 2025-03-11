@@ -50,7 +50,7 @@ export default function TaskNote ({note}) {
             >
                 <div className="whitespace-pre-wrap">{content}</div>
                 <div className="text-sm text-right mt-5">
-                    {note.user.name} - {note.date}
+                    {note.user.full_name} - {note.date}
                 </div>
             </div>}
 

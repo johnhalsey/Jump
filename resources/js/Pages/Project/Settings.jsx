@@ -7,13 +7,13 @@ import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
 import FullPagePanel from "@/Components/FullPagePanel.jsx"
+import UsersList from "@/Partials/Project/UsersList.jsx"
 
 export default function ProjectSettings ({project}) {
 
     const [shortCode, setShortCode] = useState(project.data.short_code)
     const [projectName, setProjectName] = useState(project.data.name)
     const [loading, setLoading] = useState(false)
-    const [newEmail, setNewEmail] = useState('')
 
     function saveSettings () {
         if (!project.data.user_can_update) {
@@ -34,49 +34,6 @@ export default function ProjectSettings ({project}) {
             .catch(error => {
                 FormErrors.pushErrors(error.response.data.errors)
                 setLoading(false)
-            })
-    }
-
-    function inviteUserToProject () {
-        if (!project.data.user_can_update) {
-            return
-        }
-
-        setLoading(true)
-        FormErrors.resetErrors()
-
-        axios.post('/api/project/' + project.data.id + '/invitations', {
-            'email': newEmail
-        })
-            .then(() => {
-                router.reload()
-                setLoading(false)
-            })
-            .catch(error => {
-                FormErrors.pushErrors(error.response.data.errors)
-                setLoading(false)
-            })
-    }
-
-    function userRole (user) {
-        return project.data.owners.find(owner => owner.id == user.id) ? 'Administrator' : 'Editor';
-    }
-
-    function confirmRemoveUser (user) {
-        if (!project.data.user_can_update) {
-            return
-        }
-
-        if (!confirm('Are you sure you wish to remove ' + user.name + ' from this project')) {
-            return
-        }
-
-        axios.delete('/api/project/' + project.data.id + '/user/' + user.id)
-            .then(() => {
-                router.reload()
-            })
-            .catch(error => {
-                alert(error.response.data.errors.user[0])
             })
     }
 
@@ -106,7 +63,7 @@ export default function ProjectSettings ({project}) {
                 <FullPagePanel title={
                     <div className={'flex justify-between'}>
                         <span className="font-bold">Settings</span>
-                        {project.data.user_can_update && <PrimaryButton onClick={saveSettings}>Save</PrimaryButton>}
+                        {project.data.user_can_update && <PrimaryButton loading={loading} onClick={saveSettings}>Save</PrimaryButton>}
                         {!project.data.user_can_update && <span>Only Administrators can make changes</span>}
                     </div>}>
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
@@ -146,59 +103,8 @@ export default function ProjectSettings ({project}) {
 
                         </div>
 
-                        <div className={'mt-3 md:mt-0'}>
-                            <div className="mb-3 font-bold">
-                                Project Users
-                            </div>
+                        <UsersList project={project.data}></UsersList>
 
-                            <Panel className={'pt-5'}>
-
-                                {project.data.user_can_update && <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
-                                    <div className={'flex-grow'}>
-                                        <TextInput placeholder={'Add project user email here'}
-                                                   className={'w-full border-gray-300 shadow rounded'}
-                                                   value={newEmail}
-                                                   onChange={e => setNewEmail(e.target.value)}
-                                        ></TextInput>
-                                        {FormErrors.errorsHas('email') && <div className={'text-red-500'}>
-                                            {FormErrors.errorValue('email')}
-                                        </div>}
-                                    </div>
-                                    <div className={'ml-5 content-stretch'}>
-                                        <PrimaryButton loading={loading}
-                                                       disabled={loading}
-                                                       className={'h-full'}
-                                                       onClick={inviteUserToProject}
-                                        >Add</PrimaryButton>
-                                    </div>
-                                </div>}
-
-                                <table>
-                                    <thead>
-                                    <tr>
-                                        <th>Email</th>
-                                        <th className={'hidden sm:table-cell'}>Permissions</th>
-                                        {project.data.user_can_update && <th></th>}
-                                    </tr>
-                                    </thead>
-                                    <tbody>
-                                    {project.data.users.map((user, index) => (
-                                        <tr key={'project-user-' + index}>
-                                            <td className={'max-w-28 overflow-x-scroll'}>{user.email}</td>
-                                            <td className={'hidden sm:table-cell'}>
-                                                {userRole(user)}
-                                            </td>
-                                            {project.data.user_can_update && <td className={'text-sm'}>
-                                                <span className={'text-sky-600 cursor-pointer'}
-                                                      onClick={() => confirmRemoveUser(user)}
-                                                >Remove</span>
-                                            </td>}
-                                        </tr>
-                                    ))}
-                                    </tbody>
-                                </table>
-                            </Panel>
-                        </div>
                     </div>
                 </FullPagePanel>
 

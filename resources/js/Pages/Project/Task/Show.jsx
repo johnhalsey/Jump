@@ -104,7 +104,7 @@ export default function ShowProjectTask ({project, task}) {
                                         <option key={'user-' + index}
                                                 value={user.id}
                                         >
-                                            {user.name}
+                                            {user.full_name}
                                         </option>
                                     ))}
                                 </select>

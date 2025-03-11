@@ -261,4 +261,34 @@ class ProjectTaskControllerTest extends TestCase
         )->assertStatus(403);
 
     }
+
+    public function test_updating_task_assignee_will_not_overwrite_description_or_status()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user, $user2]);
+
+        $inprogressStatus = $project->statuses()->where('name', 'In Progress')->first();
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $inprogressStatus->id,
+            'description' => 'I am a descrtiption',
+            'assignee_id' => $user->id,
+        ]);
+
+        $this->actingAs($user);
+        $response = $this->json(
+            'PATCH',
+            'api/project/' . $project->id . '/task/' . $task->id,
+            [
+                'assignee_id' => $user2->id,
+            ]
+        )->assertStatus(200);
+
+        $task = $task->fresh();
+        $this->assertEquals($task->assignee_id, $user2->id);
+        $this->assertEquals('I am a descrtiption', $task->description);
+        $this->assertEquals($inprogressStatus->id, $task->status_id);
+    }
 }

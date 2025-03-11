@@ -23,7 +23,7 @@ class ProjectResource extends JsonResource
             'owners'              => UserResource::collection($this->users()->wherePivot('owner', true)->get()),
             'user_added_recently' => $this->resource->userAddedWithinLastHour($request->user()),
             'user_can_update'     => $request->user()->can('update', $this->resource),
-
+            'invitations'         => InvitationResource::collection($this->invitations),
         ];
 
         foreach ($this->statuses as $status) {

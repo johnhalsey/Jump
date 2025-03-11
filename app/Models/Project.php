@@ -34,6 +34,11 @@ class Project extends Model
         return $this->hasMany(ProjectTask::class);
     }
 
+    public function invitations(): HasMany
+    {
+        return $this->hasMany(Invitation::class);
+    }
+
     public function userAddedWithinLastHour(User $user): bool
     {
         return $this->users()

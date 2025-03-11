@@ -35,9 +35,9 @@ class ProjectTaskController extends Controller
     {
         // update the project here
         $projectTask->update([
-            'assignee_id' => $request->input('assignee_id', null),
-            'status_id'   => $request->input('status_id', $project->statuses()->where('name', DefaultProjectStatus::TO_DO)->first()->id),
-            'description' => $request->input('description', null),
+            'assignee_id' => $request->input('assignee_id', $projectTask->assignee_id),
+            'status_id'   => $request->input('status_id', $projectTask->status_id),
+            'description' => $request->input('description', $projectTask->description),
         ]);
 
         return new ProjectTaskResource($projectTask);
