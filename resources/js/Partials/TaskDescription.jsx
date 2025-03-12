@@ -10,11 +10,15 @@ export default function TaskDescription ({description}) {
     const [content, setContent] = useState(description ?? '')
     const [scrollHeight, setScrollHeight] = useState(0)
 
-    const { project, task } = usePage().props
+    const {project, task} = usePage().props
 
     function edit (e) {
         setEditing(true)
         setScrollHeight(e.target.scrollHeight)
+    }
+
+    function cancelEdit () {
+        setEditing(false)
     }
 
     function updateContent (e) {
@@ -75,6 +79,7 @@ export default function TaskDescription ({description}) {
                 >
                     Save
                 </PrimaryButton>
+                <span onClick={cancelEdit} className={'text-sky-600 cursor-pointer ml-5'}>Cancel</span>
             </>}
         </>
     );

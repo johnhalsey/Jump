@@ -3,6 +3,7 @@ import {Link, Head} from '@inertiajs/react';
 import {useEffect, useState} from 'react'
 import axios from 'axios'
 import ProjectStatusColumn from "@/Partials/ProjectStatusColumn.jsx"
+import eventBus from "@/EventBus.js"
 
 export default function ShowProject ({project}) {
 
@@ -11,6 +12,7 @@ export default function ShowProject ({project}) {
 
     useEffect(() => {
         getTasks()
+        eventBus.on('task-deleted', getTasks)
     }, [])
 
     const getTasks = function () {

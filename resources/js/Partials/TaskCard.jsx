@@ -1,4 +1,5 @@
 import {Head, Link} from '@inertiajs/react';
+import TaskContext from "@/Partials/TaskContext.jsx"
 
 export default function TaskCard ({task}) {
 
@@ -10,12 +11,12 @@ export default function TaskCard ({task}) {
                     <div>
                         {task.title}
                     </div>
-                    <div className="mt-5">
+                    <div className="mt-5 flex justify-between">
                         {task.reference}
+                        <TaskContext task={task}></TaskContext>
                     </div>
                 </div>
             </Link>
-
         </>
     );
 }

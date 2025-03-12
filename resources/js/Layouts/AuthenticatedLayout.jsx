@@ -4,6 +4,7 @@ import NavLink from '@/Components/NavLink';
 import ResponsiveNavLink from '@/Components/ResponsiveNavLink';
 import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
+import eventBus from "@/EventBus.js"
 
 export default function AuthenticatedLayout({ header, children }) {
     const user = usePage().props.auth.user.data;
@@ -11,8 +12,12 @@ export default function AuthenticatedLayout({ header, children }) {
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
         useState(false);
 
+    function handleClickEvent (e) {
+        eventBus.emit('page-clicked', e.target)
+    }
+
     return (
-        <div className="min-h-screen bg-gray-100">
+        <div className="min-h-screen bg-gray-100" onClick={handleClickEvent}>
             <nav className="shadow">
                 <div className="mx-auto px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-sky-50 to-sky-400">
                     <div className="flex h-16 justify-between ">

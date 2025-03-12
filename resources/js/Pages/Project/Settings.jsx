@@ -1,10 +1,9 @@
-import {Head, Link, router, usePage} from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.jsx"
 import TextInput from "@/Components/TextInput.jsx"
-import {useEffect, useState} from "react"
+import {useState} from "react"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import axios from "axios"
-import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
 import FullPagePanel from "@/Components/FullPagePanel.jsx"
 import UsersList from "@/Partials/Project/UsersList.jsx"

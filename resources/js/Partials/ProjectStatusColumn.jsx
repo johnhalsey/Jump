@@ -44,7 +44,7 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                 <div className="p-8 border-dashed rounded-t-md border-b bg-white">
                     <div className="font-bold text-lg">{status} ({tasks.length})</div>
                 </div>
-                <div className="overflow-scroll">
+                <div className="">
 
                     {addTask && <div className="flex items-stretch px-3 my-3">
                         <div className="grow">
