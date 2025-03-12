@@ -17,7 +17,14 @@ class ProjectTaskController extends Controller
 {
     public function index(Request $request, Project $project): JsonResource
     {
-        return ProjectTaskResource::collection($project->tasks->sortByDesc('created_at'));
+        if ($request->has('search') && !empty($request->get('search'))) {
+            $query = $project->tasks()->where('title', 'like', '%' . $request->get('search') . '%')
+                ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
+        } else {
+            $query = $project->tasks();
+        }
+
+        return ProjectTaskResource::collection($query->orderByDesc('created_at')->get());
     }
 
     public function store(StoreProjectTaskRequest $request, Project $project): JsonResource
