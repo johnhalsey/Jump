@@ -1,11 +1,12 @@
-import {Head, Link} from '@inertiajs/react';
+import {Head, Link, router} from '@inertiajs/react';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {useState, useEffect, useRef} from "react"
+import {useEffect, useRef, useState} from "react"
 import axios from 'axios'
-import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import TaskNotes from "@/Partials/TaskNotes.jsx"
 import TaskDescription from "@/Partials/TaskDescription.jsx"
 import FullPagePanel from "@/Components/FullPagePanel.jsx"
+import TaskContext from "@/Partials/TaskContext.jsx"
+import eventBus from "@/EventBus.js"
 
 export default function ShowProjectTask ({project, task}) {
 
@@ -15,6 +16,8 @@ export default function ShowProjectTask ({project, task}) {
     const firstUpdate = useRef(true);
 
     useEffect(() => {
+        eventBus.on('task-deleted', handleDeletedTask)
+
         if (firstUpdate.current) {
             // STOP
             firstUpdate.current = false;
@@ -23,7 +26,18 @@ export default function ShowProjectTask ({project, task}) {
 
         // hammer time 🔨
         updateTask()
+
     }, [statusId, assigneeId]);
+
+    function handleDeletedTask (eventTask) {
+        if (eventTask.id != task.data.id) {
+            // this task was not deleted
+            return
+        }
+
+        // this task was deleted, send user back to the project page
+        router.visit('/project/' + project.data.id)
+    }
 
     const updateTask = function () {
         let data = {
@@ -61,7 +75,15 @@ export default function ShowProjectTask ({project, task}) {
 
                 <Head title={task.data.title}/>
 
-                <FullPagePanel title={task.data.reference + ' - ' + task.data.title}>
+                <FullPagePanel title={
+                    <div className={'flex justify-between'}>
+                        <div className={'grow'}>{task.data.reference + ' - ' + task.data.title}</div>
+                        <div>
+                            <TaskContext task={task.data}></TaskContext>
+                        </div>
+                    </div>
+
+                }>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 lg:gap-10">
 
                         <div>
