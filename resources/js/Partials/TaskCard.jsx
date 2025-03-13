@@ -12,7 +12,7 @@ export default function TaskCard ({task}) {
                         {task.title}
                     </div>
                     <div className="mt-5 flex justify-between">
-                        {task.reference}
+                        <div className={'text-sm'}>{task.reference}</div>
                         <TaskContext task={task}></TaskContext>
                     </div>
                 </div>

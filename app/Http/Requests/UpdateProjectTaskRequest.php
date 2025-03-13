@@ -28,11 +28,13 @@ class UpdateProjectTaskRequest extends FormRequest
                     $query->where('project_id', $this->route('project')->id);
                 })
             ],
-            'status_id' => [
+            'status_id'   => [
                 Rule::exists('project_statuses', 'id')->where(function ($query) {
                     $query->where('project_id', $this->route('project')->id);
                 })
             ],
+            'title'       => 'nullable|string|max:255',
+            'description' => 'nullable|string',
         ];
     }
 }

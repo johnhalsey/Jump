@@ -48,7 +48,7 @@ export default function TaskContext ({task}) {
         <>
             <div className={'relative overflow-visible z-50'} id={'task-context-' + task.id}>
                 <div onClick={openContext}
-                     className={'cursor-pointer text-sky-600 hover:text-sky-800'}>
+                     className={'cursor-pointer text-sm text-sky-600 hover:text-sky-800'}>
                     Options
                 </div>
 

@@ -7,11 +7,15 @@ import TaskDescription from "@/Partials/TaskDescription.jsx"
 import FullPagePanel from "@/Components/FullPagePanel.jsx"
 import TaskContext from "@/Partials/TaskContext.jsx"
 import eventBus from "@/EventBus.js"
+import TextInput from "@/Components/TextInput.jsx"
+import PrimaryButton from "@/Components/PrimaryButton.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
     const [statusId, setStatusId] = useState(task.data.status.id)
     const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id)
+    const [editTitle, setEditTitle] = useState(false)
+    const [taskTitle, setTaskTitle] = useState(task.data.title)
 
     const firstUpdate = useRef(true);
 
@@ -43,11 +47,13 @@ export default function ShowProjectTask ({project, task}) {
         let data = {
             'status_id': statusId,
             'assignee_id': assigneeId,
+            'title': taskTitle,
         }
 
         axios.patch('/api/project/' + project.data.id + '/task/' + task.data.id, data)
             .then(response => {
                 task = response.data.data
+                setEditTitle(false)
             })
             .catch(error => {
                 console.log('error')
@@ -77,7 +83,29 @@ export default function ShowProjectTask ({project, task}) {
 
                 <FullPagePanel title={
                     <div className={'flex justify-between'}>
-                        <div className={'grow'}>{task.data.reference + ' - ' + task.data.title}</div>
+                        <div className={'grow'}>
+                            <div className={'text-sm'}>{task.data.reference}</div>
+
+                            {!editTitle &&
+                                <div onClick={() => setEditTitle(true)}
+                                      className={'cursor-pointer hover:text-sky-600 mt-3'}
+                                >
+                                    <h2 className={'text-2xl'}>{taskTitle}</h2>
+
+                            </div>
+                            }
+                            {editTitle && <div className={'flex mt-3'}>
+                                <TextInput value={taskTitle}
+                                           onChange={(e) => setTaskTitle(e.target.value)}
+                                           className={'w-1/2'}>
+                                </TextInput>
+                                <PrimaryButton onClick={updateTask} className={'ml-3'}>Save</PrimaryButton>
+                                <span className={'text-sky-600 hover:text-sky-800 ml-3 self-center cursor-pointer'}
+                                      onClick={() => setEditTitle(false)}
+                                >Cancel</span>
+                            </div>
+                            }
+                        </div>
                         <div>
                             <TaskContext task={task.data}></TaskContext>
                         </div>

@@ -142,6 +142,7 @@ class ProjectTaskControllerTest extends TestCase
             'project_id'  => $project->id,
             'status_id'   => $project->statuses()->where('name', DefaultProjectStatus::TO_DO->value)->first()->id,
             'assignee_id' => null,
+            'title'       => 'Task Title'
         ]);
 
         $this->assertNull($task->assignee_id);
@@ -157,12 +158,17 @@ class ProjectTaskControllerTest extends TestCase
             [
                 'status_id'   => $inProgressStatus->id,
                 'assignee_id' => $user2->id,
+                'description' => 'I am a description',
+                'title'       => 'Updated Task Title'
             ]
         )->assertStatus(200);
 
         $task = $task->refresh();
         $this->assertSame($user2->id, $task->assignee_id);
         $this->assertSame($inProgressStatus->id, $task->status_id);
+        $this->assertSame('I am a description', $task->description);
+        $this->assertSame('Updated Task Title', $task->title);
+
     }
 
     public function test_cannot_update_task_with_assignee_who_is_not_in_project()
