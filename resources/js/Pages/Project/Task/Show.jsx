@@ -141,7 +141,7 @@ export default function ShowProjectTask ({project, task}) {
                             <div className="mb-3 mt-8 font-bold">
                                 Assignee
                             </div>
-                            <div class={'flex'}>
+                            <div className={'flex'}>
                                 <Gravatar user={task.data.assignee}></Gravatar>
                                 <select name="assignee"
                                         id="assignee"

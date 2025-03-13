@@ -2,6 +2,8 @@ import {Head, Link, usePage} from '@inertiajs/react';
 import {useState} from "react"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import axios from "axios"
+import Gravatar from "@/Partials/Task/Gravatar.jsx"
+import Tooltip from "@/Components/Tooltip.jsx"
 
 export default function TaskNote ({note}) {
 
@@ -13,7 +15,7 @@ export default function TaskNote ({note}) {
     const [scrollHeight, setScrollHeight] = useState(0)
 
     function editNote (e) {
-        setScrollHeight(e.target.scrollHeight)
+        setScrollHeight(e.target.scrollHeight + 40)
         setEditing(true)
     }
 
@@ -45,16 +47,21 @@ export default function TaskNote ({note}) {
 
     return (
         <>
-            {!editing && <div className="border rounded shadow mb-3 p-3 bg-white hover:bg-sky-50"
-                              onClick={editNote}
-            >
-                <div className="whitespace-pre-wrap">{content}</div>
-                <div className="text-sm text-right mt-5">
-                    {note.user.full_name} - {note.date}
-                </div>
-            </div>}
+        <div className={'flex'}>
+            <Gravatar user={note.user}></Gravatar>
 
-            {editing && <div className="mb-3">
+            {!editing &&
+                <div className="border rounded shadow mb-3 p-3 bg-white hover:bg-sky-50 w-full ml-3"
+                     onClick={editNote}>
+                    <div className="whitespace-pre-wrap">{content}</div>
+                    <div className="text-sm text-right mt-5">
+                        {note.date}
+                    </div>
+                </div>
+            }
+
+            {editing &&
+                <div className="mb-3 w-full ml-3">
                 <textarea
                     className="w-full border-gray-400 rounded shadow"
                     value={content}
@@ -62,14 +69,14 @@ export default function TaskNote ({note}) {
                     onFocus={setCursorPosition}
                     style={{minHeight: scrollHeight + 'px'}}
                     onChange={updateContent}></textarea>
-                <PrimaryButton loading={loading}
-                               disabled={loading}
-                               onClick={updateNote}
-                >
-                    Save
-                </PrimaryButton>
-            </div>}
-
+                    <PrimaryButton loading={loading}
+                                   disabled={loading}
+                                   onClick={updateNote}
+                    >
+                        Save
+                    </PrimaryButton>
+                </div>}
+        </div>
         </>
     );
 }
