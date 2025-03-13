@@ -18,10 +18,10 @@ class ProjectTaskController extends Controller
     public function index(Request $request, Project $project): JsonResource
     {
         if ($request->has('search') && !empty($request->get('search'))) {
-            $query = $project->tasks()->where('title', 'like', '%' . $request->get('search') . '%')
+            $query = $project->tasks()->with('project')->where('title', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
         } else {
-            $query = $project->tasks();
+            $query = $project->tasks()->with('project');
         }
 
         return ProjectTaskResource::collection($query->orderByDesc('created_at')->get());
@@ -35,7 +35,7 @@ class ProjectTaskController extends Controller
             'creator_id' => $request->user()->id,
         ]);
 
-        return new ProjectTaskResource($task);
+        return new ProjectTaskResource($task->load('project'));
     }
 
     public function update(UpdateProjectTaskRequest $request, Project $project, ProjectTask $projectTask): JsonResource
@@ -47,7 +47,7 @@ class ProjectTaskController extends Controller
             'description' => $request->input('description', $projectTask->description),
         ]);
 
-        return new ProjectTaskResource($projectTask);
+        return new ProjectTaskResource($projectTask->load('project'));
     }
 
     public function destroy(Request $request, Project $project, ProjectTask $projectTask)

@@ -53,6 +53,61 @@ class ProjectTaskControllerTest extends TestCase
         }
     }
 
+    public function test_project_user_can_search_when_indexing_tasks()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $status = ProjectStatus::factory()->create([
+            'project_id' => $project->id,
+            'name'       => DefaultProjectStatus::TO_DO->value
+        ]);
+        $task1 = ProjectTask::factory()->create([
+            'project_id' => $project->id,
+            'status_id'  => $status->id,
+            'title'      => 'Task Title'
+        ]);
+
+        $task2 = ProjectTask::factory()->create([
+            'project_id' => $project->id,
+            'status_id'  => $status->id,
+            'title'      => 'I am not a description'
+        ]);
+
+        $task3 = ProjectTask::factory()->create([
+            'project_id' => $project->id,
+            'status_id'  => $status->id,
+            'title'      => 'Im good ta'
+        ]);
+
+        $user->projects()->attach($project->id);
+        $this->actingAs($user);
+
+        $response = $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'search' => 'ta'
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+
+        $data = json_decode($response->getContent(), true)['data'];
+        $this->assertSame($task1->id, $data[0]['id']);
+        $this->assertSame($task3->id, $data[1]['id']);
+
+        $response = $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'search' => $task2->reference
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(1, 'data');
+
+        $data = json_decode($response->getContent(), true)['data'];
+        $this->assertSame($task2->id, $data[0]['id']);
+    }
+
     public function test_gate_will_stop_user_from_indexing_tasks()
     {
         $user = User::factory()->create();
@@ -177,7 +232,7 @@ class ProjectTaskControllerTest extends TestCase
             'PATCH',
             'api/project/' . $project->id . '/task/' . $task->id,
             [
-                'status_id'   => $newStatus->id,
+                'status_id' => $newStatus->id,
             ]
         )->assertStatus(422)
             ->assertJsonValidationErrors('status_id');
@@ -225,8 +280,8 @@ class ProjectTaskControllerTest extends TestCase
         $project = Project::factory()->create();
         $project->users()->attach($user);
         $task = ProjectTask::factory()->create([
-            'project_id'  => $project->id,
-            'status_id'   => $project->statuses()->first()->id,
+            'project_id' => $project->id,
+            'status_id'  => $project->statuses()->first()->id,
         ]);
 
         $this->assertCount(1, ProjectTask::all());
@@ -244,14 +299,14 @@ class ProjectTaskControllerTest extends TestCase
         $project = Project::factory()->create();
         $project->users()->attach($user);
         $task = ProjectTask::factory()->create([
-            'project_id'  => $project->id,
-            'status_id'   => $project->statuses()->first()->id,
+            'project_id' => $project->id,
+            'status_id'  => $project->statuses()->first()->id,
         ]);
 
         $project2 = Project::factory()->create();
         $task2 = ProjectTask::factory()->create([
-            'project_id'  => $project2->id,
-            'status_id'   => $project2->statuses()->first()->id,
+            'project_id' => $project2->id,
+            'status_id'  => $project2->statuses()->first()->id,
         ]);
 
         $this->actingAs($user);
