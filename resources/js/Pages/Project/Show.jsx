@@ -71,7 +71,7 @@ export default function ShowProject ({project}) {
                     <h2 className="text-xl font-semibold leading-tight text-gray-800">
                         {project.data.name}
                     </h2>
-                    <div className={'mt-3 md:mt-0'}>
+                    <div className={'mt-3 md:my-[-8px] '}>
                         <div className={'flex'}>
                             <TextInput placeholder={'Search here'}
                                        value={search}
@@ -81,7 +81,7 @@ export default function ShowProject ({project}) {
                             {loading && <div className={'ml-3 inline-block self-center'}>
                                 <LoadingSpinner></LoadingSpinner>
                             </div>}
-                            {!loading &&
+                            {!loading && search != '' &&
                             <span className={'ml-3 self-center text-sky-600 hover:text-sky-800 cursor-pointer'}
                                   onClick={clearSearch}
                             >Clear</span>}
