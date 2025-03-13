@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\User;
 use App\Models\Project;
+use App\Models\TaskNote;
 use App\Models\ProjectTask;
 use App\Models\ProjectStatus;
 use Database\Factories\ProjectFactory;
@@ -26,6 +27,9 @@ class ProjectTaskControllerTest extends TestCase
             'project_id' => $project->id,
             'status_id' => $status->id,
         ]);
+        TaskNote::factory()->count(5)->create([
+            'task_id' => $projectTask->id,
+        ]);
         $projectTask->project->users()->attach($projectTask->assignee);
         $this->actingAs($projectTask->assignee);
 
@@ -33,7 +37,9 @@ class ProjectTaskControllerTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Project/Task/Show')
-                ->has('task')
+                ->has('task', fn (AssertableInertia $page) => $page
+                    ->has('data.notes', 5)
+                )
             );
     }
 }

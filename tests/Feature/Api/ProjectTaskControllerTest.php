@@ -42,15 +42,7 @@ class ProjectTaskControllerTest extends TestCase
 
         $data = json_decode($response->getContent(), true)['data'];
         $this->assertCount(5, $data); // 5 tasks
-        $this->assertCount(5, $data[0]['notes']);
-        // make sure all notes belong to the project
-        for ($i = 0; $i < 5; $i++) {
-            for ($n = 0; $n < 5; $n++) {
-                $this->assertTrue(TaskNote::where('id', $data[$i]['notes'][$n]['id'])->whereHas('task.project', function ($query) use ($project) {
-                    $query->where('project_id', $project->id);
-                })->exists());
-            }
-        }
+        $this->assertFalse(isset($data[0]['notes']));  // notes not included in the resource unless loaded
     }
 
     public function test_project_user_can_search_when_indexing_tasks()
