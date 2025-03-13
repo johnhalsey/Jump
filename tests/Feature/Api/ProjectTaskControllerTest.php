@@ -171,6 +171,35 @@ class ProjectTaskControllerTest extends TestCase
 
     }
 
+    public function test_task_assignee_can_set_to_null()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses()->where('name', DefaultProjectStatus::TO_DO->value)->first()->id,
+            'assignee_id' => $user->id,
+            'title'       => 'Task Title'
+        ]);
+
+        $this->assertNotNull($task->assignee_id);
+
+        $project->users()->attach($user);
+        $this->actingAs($user);
+
+        $this->json(
+            'PATCH',
+            'api/project/' . $project->id . '/task/' . $project->tasks->first()->id,
+            [
+                'assignee_id' => null,
+            ]
+        )->assertStatus(200);
+
+        $task = $task->refresh();
+        $this->assertNull($task->assignee_id);
+    }
+
     public function test_cannot_update_task_with_assignee_who_is_not_in_project()
     {
         $user = User::factory()->create();

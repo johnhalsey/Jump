@@ -24,6 +24,7 @@ class UpdateProjectTaskRequest extends FormRequest
     {
         return [
             'assignee_id' => [
+                'nullable',
                 Rule::exists('project_user', 'user_id')->where(function ($query) {
                     $query->where('project_id', $this->route('project')->id);
                 })

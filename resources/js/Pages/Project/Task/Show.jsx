@@ -9,11 +9,12 @@ import TaskContext from "@/Partials/TaskContext.jsx"
 import eventBus from "@/EventBus.js"
 import TextInput from "@/Components/TextInput.jsx"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
+import Gravatar from "@/Partials/Task/Gravatar.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
     const [statusId, setStatusId] = useState(task.data.status.id)
-    const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id)
+    const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id || null)
     const [editTitle, setEditTitle] = useState(false)
     const [taskTitle, setTaskTitle] = useState(task.data.title)
 
@@ -54,6 +55,7 @@ export default function ShowProjectTask ({project, task}) {
             .then(response => {
                 task = response.data.data
                 setEditTitle(false)
+                router.reload()
             })
             .catch(error => {
                 console.log('error')
@@ -66,7 +68,8 @@ export default function ShowProjectTask ({project, task}) {
     }
 
     function updateAssignee (e) {
-        setAssigneeId(e.target.value)
+        let value = e.target.value == 'Unassigned' ? null : e.target.value
+        setAssigneeId(value)
     }
 
     return (
@@ -138,10 +141,11 @@ export default function ShowProjectTask ({project, task}) {
                             <div className="mb-3 mt-8 font-bold">
                                 Assignee
                             </div>
-                            <div>
+                            <div class={'flex'}>
+                                <Gravatar user={task.data.assignee}></Gravatar>
                                 <select name="assignee"
                                         id="assignee"
-                                        className="w-full border shadow rounded border-gray-300"
+                                        className="w-full ml-3 border shadow rounded border-gray-300"
                                         onChange={updateAssignee}
                                         value={assigneeId}
                                 >
