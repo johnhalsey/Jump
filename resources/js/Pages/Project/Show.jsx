@@ -59,8 +59,8 @@ export default function ShowProject ({project}) {
             })
     }
 
-    const tasksByStatus = function (status) {
-        return tasks.filter(task => task.status.name == status)
+    const tasksByStatusId = function (id) {
+        return tasks.filter(task => task.status.id == id)
     }
 
     return (
@@ -102,21 +102,14 @@ export default function ShowProject ({project}) {
             <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10 pb-12">
-                    <ProjectStatusColumn
-                        status="To Do"
-                        tasks={tasksByStatus('To Do')}
-                        addTask
-                    ></ProjectStatusColumn>
-
-                    <ProjectStatusColumn
-                        status="In Progress"
-                        tasks={tasksByStatus('In Progress')}
-                    ></ProjectStatusColumn>
-
-                    <ProjectStatusColumn
-                        status="Done"
-                        tasks={tasksByStatus('Done')}
-                    ></ProjectStatusColumn>
+                    {project.data.statuses.map((status, index) => (
+                        <ProjectStatusColumn
+                            key={'project-status-column-' + index}
+                            status={status}
+                            tasks={tasksByStatusId(status.id)}
+                            updateTaskStatus     addTask={status.name == 'To Do'}
+                        ></ProjectStatusColumn>
+                    ))}
                 </div>
 
             </div>
