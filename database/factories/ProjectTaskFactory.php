@@ -39,10 +39,14 @@ class ProjectTaskFactory extends Factory
     public function withNotes(): static
     {
         return $this->afterCreating(function (ProjectTask $task) {
-            TaskNote::factory()->count(random_int(3, 20))->create([
-                'task_id' => $task->id,
-                'user_id' => $task->assignee_id,
-            ]);
+            $random = random_int(3, 20);
+            for ($i = 0; $i < $random; $i++) {
+                TaskNote::factory()->create([
+                    'task_id' => $task->id,
+                    'user_id' => $task->project->users()->inRandomOrder()->first()->id,
+                ]);
+            }
+
         });
     }
 
