@@ -10,7 +10,7 @@ Project management application built using Laravel, Ineria.js, React.js and Tail
 
 Users can create unlimited projects, unlimited tasks for those projects and invite unlimited users to contribute towards to those projects.
 
-Only projedt owners can update any project settings and invite users.
+Only project owners can update any project settings and invite users.
 
 ## Tasks Statuses
 
