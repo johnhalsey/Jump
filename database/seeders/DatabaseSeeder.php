@@ -19,14 +19,16 @@ class DatabaseSeeder extends Seeder
 
         for ($i = 0; $i < 10; $i++) {
             User::factory()->create([
-                'name'        => 'Test User ' . $i,
+                'first_name'  => 'Test',
+                'last_name'   => 'User ' . $i,
                 'email'       => 'user' . $i . '@example.com',
                 'super_admin' => 0,
             ]);
         }
 
         User::factory()->create([
-            'name'        => 'Admin User',
+            'first_name'  => 'Admin',
+            'last_name'   => 'User',
             'email'       => 'admin@example.com',
             'super_admin' => 1,
         ]);

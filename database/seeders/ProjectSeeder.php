@@ -21,8 +21,8 @@ class ProjectSeeder extends Seeder
         for ($i = 0; $i < 10; $i++) {
             $project = Project::factory()->create();
 
-            foreach ($project->statuses() as $status) {
-                ProjectTask::factory()->withnotes()->count(5)->create([
+            foreach ($project->statuses as $status) {
+                ProjectTask::factory()->withNotes()->count(5)->create([
                     'project_id'  => $project->id,
                     'status_id'   => $status->id,
                     'assignee_id' => User::where('email', 'user' . random_int(0, 9) . '@example.com')->first()->id,

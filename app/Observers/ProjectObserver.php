@@ -15,9 +15,8 @@ class ProjectObserver
     public function created(Project $project): void
     {
         foreach (DefaultProjectStatus::cases() as $status) {
-            ProjectStatus::create([
+            $project->statuses()->create([
                 'name'       => $status->value,
-                'project_id' => $project->id,
             ]);
         }
 
