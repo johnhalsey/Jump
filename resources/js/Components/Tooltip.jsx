@@ -10,7 +10,7 @@ export default function Tooltip ({text, children}) {
                     'after:border-8 after:border after:border-t-transparent after:border-r-transparent ' +
                     'after:border-b-gray-800 after:border-l-transparent'
                 }>
-                    {text}
+                <span className={'text-sm'}>{text}</span>
                 </div>
             </div>
         </>

@@ -87,7 +87,7 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                  onDragOver={allowDrop}
             >
                 <div className="p-8 border-dashed rounded-t-md border-b bg-white">
-                    <div className="font-bold text-lg">{status.name} ({status.count})</div>
+                    <div className="font-bold text-lg">{status.name} ({status.tasks_count})</div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 p-3">
 

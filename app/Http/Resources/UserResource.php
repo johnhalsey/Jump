@@ -21,7 +21,8 @@ class UserResource extends JsonResource
             'full_name'    => $this->full_name,
             'email'        => $this->email,
             'su'           => (bool)$this->super_admin,
-            'gravatar_url' => $this->constructGravatarUrl()
+            'gravatar_url' => $this->constructGravatarUrl(),
+            'tasks_count'  => $this->when($this->tasks_count, $this->tasks_count),
         ];
     }
 

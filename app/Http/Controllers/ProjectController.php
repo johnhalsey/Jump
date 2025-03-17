@@ -11,7 +11,13 @@ class ProjectController extends Controller
 {
     public function show(Request $request, Project $project)
     {
-        $project->load('statuses');
+        $project->load(['statuses' => function ($query) {
+            $query->withCount('tasks');
+        }, 'users' => function ($query) use ($project) {
+            $query->withCount(['tasks' => function ($query) use ($project) {
+                $query->where('project_id', $project->id);
+            }]);
+        }]);
 
         return Inertia::render('Project/Show');
     }

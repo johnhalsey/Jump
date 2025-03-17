@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use App\Models\Project;
 use App\Models\ProjectTask;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Log;
 use App\Enums\DefaultProjectStatus;
 use App\Http\Controllers\Controller;
@@ -20,8 +21,24 @@ class ProjectTaskController extends Controller
         $query = $project->tasks()->with(['project', 'assignee', 'status']);
 
         if ($request->has('search') && !empty($request->get('search'))) {
-            $query->where('title', 'like', '%' . $request->get('search') . '%')
-                ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
+            $query->where(function ($query) use ($request) {
+                $query->where('title', 'like', '%' . $request->get('search') . '%')
+                    ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
+            });
+
+        }
+
+        if($request->has('userIds') && !empty($request->get('userIds'))){
+            if ($request->get('userIds') == []) {
+               $query->where(function ($query) {
+                   $query->whereNull('assignee_id');
+               });
+
+            } else {
+                $query->where(function ($query) use ($request) {
+                    $query->whereIn('assignee_id', $request->get('userIds'));
+                });
+            }
         }
 
         return ProjectTaskResource::collection($query->orderByDesc('created_at')->get());
@@ -40,14 +57,12 @@ class ProjectTaskController extends Controller
 
     public function update(UpdateProjectTaskRequest $request, Project $project, ProjectTask $projectTask): JsonResource
     {
-        // update the project here
-
         $projectTask->update($request->validated());
 
         return new ProjectTaskResource($projectTask->load(['project', 'assignee', 'status']));
     }
 
-    public function destroy(Request $request, Project $project, ProjectTask $projectTask)
+    public function destroy(Request $request, Project $project, ProjectTask $projectTask): Response
     {
         $projectTask->delete();
 
