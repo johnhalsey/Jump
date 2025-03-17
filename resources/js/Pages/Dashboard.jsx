@@ -7,7 +7,7 @@ import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
 
-export default function Dashboard ({projects, default_statuses, flash}) {
+export default function Dashboard ({projects, default_statuses}) {
 
     const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')
@@ -21,9 +21,9 @@ export default function Dashboard ({projects, default_statuses, flash}) {
             }}>
                 <td>{project.owners[0].full_name}</td>
                 <td>{project.name}</td>
-                {projectDefaultStatuses(project).map((status, index) => (
+                {project.statuses.map((status, index) => (
                     <td key={'project-' + project.id + '-status-' + status.id}>
-                        {status.count}
+                        {status.tasks_count}
                     </td>
                 ))}
             </tr>

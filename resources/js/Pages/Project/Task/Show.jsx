@@ -46,8 +46,8 @@ export default function ShowProjectTask ({project, task}) {
 
     const updateTask = function () {
         let data = {
-            'status_id': statusId,
-            'assignee_id': assigneeId,
+            'status_id': parseInt(statusId),
+            'assignee_id': parseInt(assigneeId),
             'title': taskTitle,
         }
 

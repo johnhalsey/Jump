@@ -12,8 +12,10 @@ class ProjectTaskController extends Controller
 {
     public function show(Request $request, Project $project, ProjectTask $projectTask)
     {
+        $project->load(['statuses', 'users']);
+
         return Inertia::render('Project/Task/Show', [
-            'task' => new ProjectTaskResource($projectTask->load(['notes', 'project'])),
+            'task' => new ProjectTaskResource($projectTask->load(['notes.user', 'project', 'status', 'assignee'])),
         ]);
     }
 }

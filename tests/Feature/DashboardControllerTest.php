@@ -12,6 +12,19 @@ class DashboardControllerTest extends TestCase
 {
     use RefreshDatabase;
 
+    public function test_guest_is_redirected_to_login_via_dashboard()
+    {
+        $this->get('/')->assertRedirect('/dashboard');
+        $this->get('/dashboard')->assertRedirect('/login');
+    }
+
+    public function test_auth_users_are_redirected_to_dashboard()
+    {
+        $user = User::factory()->create();
+        $this->actingAs($user);
+        $this->get('/')->assertRedirect('/dashboard');
+    }
+
     public function test_it_will_send_users_projects_to_dashboard()
     {
         $user = User::factory()->create();
@@ -24,12 +37,5 @@ class DashboardControllerTest extends TestCase
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->has('projects', 1)
             );
-    }
-
-    public function test_guest_is_redirected()
-    {
-        $this->call('GET', 'dashboard')
-            ->assertStatus(302)
-            ->assertRedirect('/login');
     }
 }

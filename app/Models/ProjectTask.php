@@ -25,7 +25,7 @@ class ProjectTask extends Model
 
     public function notes(): HasMany
     {
-        return $this->hasMany(TaskNote::class, 'task_id');
+        return $this->hasMany(TaskNote::class, 'task_id')->orderByDesc('created_at');
     }
 
     public function assignee(): BelongsTo

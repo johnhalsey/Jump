@@ -14,16 +14,25 @@ class ProjectTaskResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'id'          => $this->id,
-            'project'     => new ProjectResource($this->project),
             'title'       => $this->title,
             'description' => $this->description,
-            'assignee'    => new UserResource($this->assignee),
             'creator_id'  => $this->creator_id,
             'reference'   => $this->reference,
             'status'      => $this->status,
-            'notes'       => $this->when($this->resource->relationLoaded('notes'), TaskNoteResource::collection($this->notes->sortByDesc('created_at'))),
         ];
+
+        if ($this->resource->relationLoaded('project')) {
+            $data['project'] = new ProjectResource($this->project);
+        }
+        if ($this->resource->relationLoaded('assignee')) {
+            $data['assignee'] = new UserResource($this->assignee);
+        }
+        if ($this->resource->relationLoaded('notes')) {
+            $data['notes'] = TaskNoteResource::collection($this->notes);
+        }
+
+        return $data;
     }
 }

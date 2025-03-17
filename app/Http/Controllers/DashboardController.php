@@ -13,7 +13,13 @@ class DashboardController extends Controller
     public function index(Request $request)
     {
         // send the users projects along to the jsx
-        $projects = $request->user()->projects()->with('statuses')->get();
+        $projects = $request->user()->projects()
+            ->with('statuses', function ($query) {
+                $query->withCount(['tasks']);
+            })
+            ->with('users')
+            ->with('owners')
+            ->get();
 
         return Inertia::render('Dashboard', [
                 'projects'         => ProjectResource::collection($projects),

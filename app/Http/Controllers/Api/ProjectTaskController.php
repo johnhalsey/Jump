@@ -17,11 +17,11 @@ class ProjectTaskController extends Controller
 {
     public function index(Request $request, Project $project): JsonResource
     {
+        $query = $project->tasks()->with(['project', 'assignee', 'status']);
+
         if ($request->has('search') && !empty($request->get('search'))) {
-            $query = $project->tasks()->with('project')->where('title', 'like', '%' . $request->get('search') . '%')
+            $query->where('title', 'like', '%' . $request->get('search') . '%')
                 ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
-        } else {
-            $query = $project->tasks()->with('project');
         }
 
         return ProjectTaskResource::collection($query->orderByDesc('created_at')->get());
@@ -41,14 +41,17 @@ class ProjectTaskController extends Controller
     public function update(UpdateProjectTaskRequest $request, Project $project, ProjectTask $projectTask): JsonResource
     {
         // update the project here
-        $projectTask->update([
-            'assignee_id' => $request->input('assignee_id', $projectTask->assignee_id),
-            'status_id'   => $request->input('status_id', $projectTask->status_id),
-            'description' => $request->input('description', $projectTask->description),
-            'title'       => $request->input('title', $projectTask->title),
-        ]);
 
-        return new ProjectTaskResource($projectTask->load('project'));
+        $projectTask->update($request->validated());
+
+//        $projectTask->update([
+//            'assignee_id' => $request->input('assignee_id', $projectTask->assignee_id),
+//            'status_id'   => $request->input('status_id', $projectTask->status_id),
+//            'description' => $request->input('description', $projectTask->description),
+//            'title'       => $request->input('title', $projectTask->title),
+//        ]);
+
+        return new ProjectTaskResource($projectTask->load(['project', 'assignee', 'status']));
     }
 
     public function destroy(Request $request, Project $project, ProjectTask $projectTask)
