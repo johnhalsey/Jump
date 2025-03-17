@@ -45,7 +45,7 @@ class ProjectTaskControllerTest extends TestCase
         $this->assertFalse(isset($data[0]['notes']));  // notes not included in the resource unless loaded
     }
 
-    public function test_project_user_can_search_when_indexing_tasks()
+    public function test_can_filter_tasks_by_search_term()
     {
         $user = User::factory()->create();
         $project = Project::factory()->create();
@@ -98,6 +98,177 @@ class ProjectTaskControllerTest extends TestCase
 
         $data = json_decode($response->getContent(), true)['data'];
         $this->assertSame($task2->id, $data[0]['id']);
+    }
+
+    public function test_request_invalid_if_search_not_string()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user->id]);
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'search' => ['search text'],
+            ]
+        )->assertStatus(422)
+            ->assertJsonValidationErrors('search');
+    }
+
+    public function test_can_filter_tasks_by_assignee()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user3 = User::factory()->create();
+        $user4 = User::factory()->create();
+        $user5 = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user->id, $user2->id, $user3->id, $user4->id, $user5->id]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user2->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user3->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user4->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user5->id,
+        ]);
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'userIds' => [$user->id],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'userIds' => [$user3->id, $user2->id],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(4, 'data');
+
+    }
+
+    public function test_request_invalid_if_userids_not_array()
+    {
+        $user = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user->id]);
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'userIds' => $user->id,
+            ]
+        )->assertStatus(422)
+            ->assertJsonValidationErrors('userIds');
+    }
+
+    public function test_can_filter_tasks_by_userIds_and_search()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user3 = User::factory()->create();
+        $user4 = User::factory()->create();
+        $user5 = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user->id, $user2->id, $user3->id, $user4->id, $user5->id]);
+
+        ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user->id,
+            'title'       => 'ABC'
+        ]);
+
+        ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user2->id,
+            'title'       => 'ABC'
+        ]);
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user3->id,
+        ]);
+        $task->update([
+            'reference' => 'ABC'
+        ]);
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user4->id,
+        ]);
+        $task->update([
+            'reference' => 'ABC'
+        ]);
+
+        $task = ProjectTask::factory()->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user5->id,
+            'title'       => 'No Match',
+        ]);
+        $task->update([
+            'reference'   => 'ZZ-XX'
+        ]);
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'search' => 'BC',
+                'userIds' => [$user->id],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(1, 'data');
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'search' => 'BC',
+                'userIds' => [$user2->id, $user3->id, $user5->id],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(2, 'data');
     }
 
     public function test_gate_will_stop_user_from_indexing_tasks()

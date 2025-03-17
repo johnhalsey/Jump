@@ -28,7 +28,6 @@ export default function ShowProject ({project}) {
             firstUpdate.current = false;
         } else {
             // other logic here to fire on second load onwards
-
         }
 
     }, [])
@@ -73,15 +72,22 @@ export default function ShowProject ({project}) {
         return tasks.filter(task => task.status.id == id)
     }
 
-    function toggleFilterByUser (user) {
+    function toggleUnnassigned() {
+        toggleFilterByUser({id: ''})
+    }
 
+    function tasksAreFilteredByNull () {
+        return tasksAreFilteredByUser({id: ''})
+    }
+
+    function toggleFilterByUser (user) {
         if (tasksAreFilteredByUser(user)) {
             // remove user id from state array
             let idFilter = filteredUserIds.filter(userId => userId != user.id)
             setFilteredUserIds(idFilter)
             getTasks(search, idFilter)
-            return
 
+            return
         }
 
         // add user id to state array
@@ -111,10 +117,10 @@ export default function ShowProject ({project}) {
                             </h2>
 
                             <div className={'flex mt-2'}>
-                                <div onClick={() => toggleFilterByUser({id: 'null'})}>
+                                <div onClick={() => toggleUnnassigned()}>
                                     <Tooltip text={'Unassigned'}>
                                         <Gravatar user={null}
-                                                  className={tasksAreFilteredByUser({id: 'null'}) && 'border-sky-600 border-2'}>
+                                                  className={tasksAreFilteredByNull() && 'border-sky-600 border-2'}>
                                         </Gravatar>
                                     </Tooltip>
                                 </div>

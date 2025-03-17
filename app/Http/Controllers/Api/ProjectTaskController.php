@@ -12,11 +12,12 @@ use Illuminate\Http\Request;
 use App\Http\Resources\ProjectTaskResource;
 use App\Http\Requests\StoreProjectTaskRequest;
 use App\Http\Requests\UpdateProjectTaskRequest;
+use App\Http\Requests\IndexProjectTasksRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
 class ProjectTaskController extends Controller
 {
-    public function index(Request $request, Project $project): JsonResource
+    public function index(IndexProjectTasksRequest $request, Project $project): JsonResource
     {
         $query = $project->tasks()->with(['project', 'assignee', 'status']);
 
@@ -25,20 +26,16 @@ class ProjectTaskController extends Controller
                 $query->where('title', 'like', '%' . $request->get('search') . '%')
                     ->orWhere('reference', 'like', '%' . $request->get('search') . '%');
             });
-
         }
 
-        if($request->has('userIds') && !empty($request->get('userIds'))){
-            if ($request->get('userIds') == []) {
-               $query->where(function ($query) {
-                   $query->whereNull('assignee_id');
-               });
+        if ($request->has('userIds')) {
+            $query->where(function ($query) use ($request) {
+                $query->whereIn('assignee_id', $request->get('userIds'));
+                if (in_array(NULL, $request->get('userIds'))) {
+                    $query->orWhereNull('assignee_id');
+                }
+            });
 
-            } else {
-                $query->where(function ($query) use ($request) {
-                    $query->whereIn('assignee_id', $request->get('userIds'));
-                });
-            }
         }
 
         return ProjectTaskResource::collection($query->orderByDesc('created_at')->get());
