@@ -44,13 +44,6 @@ class ProjectTaskController extends Controller
 
         $projectTask->update($request->validated());
 
-//        $projectTask->update([
-//            'assignee_id' => $request->input('assignee_id', $projectTask->assignee_id),
-//            'status_id'   => $request->input('status_id', $projectTask->status_id),
-//            'description' => $request->input('description', $projectTask->description),
-//            'title'       => $request->input('title', $projectTask->title),
-//        ]);
-
         return new ProjectTaskResource($projectTask->load(['project', 'assignee', 'status']));
     }
 
