@@ -1,24 +1,28 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, Link, router} from '@inertiajs/react';
+import {Head, router} from '@inertiajs/react';
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from "react"
 import TextInput from "@/Components/TextInput.jsx"
 import axios from "axios"
 import Panel from "@/Components/Panel.jsx"
 import * as FormErrors from "@/Utils/FormErrors.js"
+import ProjectStatusesDonutChart from "@/Partials/Project/ProjectStatusesDonutChart.jsx"
+import ProjectAssigneesDonutChart from "@/Partials/Project/ProjectAssigneesDonutChart.jsx"
 
 export default function Dashboard ({projects, default_statuses}) {
 
     const [loading, setLoading] = useState(false)
     const [projectName, setProjectName] = useState('')
+    const [selectedProject, setSelectedProject] = useState(projects.data[0])
 
     let tableRows = []
 
     projects.data.forEach((project, index) => {
         tableRows.push(
-            <tr className={'hover:bg-sky-50 cursor-pointer'} onClick={() => {
-                redirectToProject('/project/' + project.id)
-            }}>
+            <tr className={'hover:bg-sky-50 cursor-pointer'}
+                onClick={() => {selectProject(project)}}
+                key={'project-' + index}
+            >
                 <td>{project.owners[0].full_name}</td>
                 <td>{project.name}</td>
                 {project.statuses.map((status, index) => (
@@ -34,8 +38,12 @@ export default function Dashboard ({projects, default_statuses}) {
         return project.statuses.filter(status => default_statuses.includes(status.name))
     }
 
+    function selectProject(project) {
+        setSelectedProject(project)
+    }
+
     function redirectToProject (url) {
-        window.location = url
+        router.visit(url)
     }
 
     function createProject () {
@@ -57,15 +65,19 @@ export default function Dashboard ({projects, default_statuses}) {
     return (
         <AuthenticatedLayout
             header={
-                <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                <h2 className="text-2xl">
                     Your Projects
                 </h2>
             }
         >
             <Head title="Your Projects"/>
 
-            <div className="grid gap-4 grid-cols-3 mx-5">
-                <div className={'border p-5'}>Col 1</div>
+            <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mx-5">
+                <div className={'p-5'}>
+
+                    <ProjectStatusesDonutChart project={selectedProject}></ProjectStatusesDonutChart>
+                    <ProjectAssigneesDonutChart project={selectedProject}></ProjectAssigneesDonutChart>
+                </div>
                 <Panel className={'col-span-2 pt-5'}>
 
                     <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>

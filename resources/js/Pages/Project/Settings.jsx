@@ -42,7 +42,7 @@ export default function ProjectSettings ({project}) {
                 header={
                     <div className={'flex justify-between'}>
 
-                        <h2 className="text-xl font-semibold leading-tight text-gray-800">
+                        <h2 className="text-2xl">
                             <Link href={'/project/' + project.data.id}>
                                 {project.data.name}
                             </Link>

@@ -17,7 +17,11 @@ class DashboardController extends Controller
             ->with('statuses', function ($query) {
                 $query->withCount(['tasks']);
             })
-            ->with('users')
+            ->with(['users' => function ($query) {
+                $query->withCount(['tasks' => function ($query) {
+                    $query->whereColumn('project_tasks.project_id', 'project_user.project_id'); // Use pivot table
+                }]);
+            }])
             ->with('owners')
             ->get();
 
