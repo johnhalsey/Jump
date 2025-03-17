@@ -42,9 +42,10 @@ export default function ShowProject ({project}) {
         searchTasks()
     }
 
-    function clearSearch () {
+    function clearFilters () {
         setSearch('')
-        getTasks('', filteredUserIds)
+        setFilteredUserIds([])
+        getTasks('', [])
     }
 
     // getTasks expects search and users to be passed through, for timing purposes.
@@ -72,7 +73,7 @@ export default function ShowProject ({project}) {
         return tasks.filter(task => task.status.id == id)
     }
 
-    function toggleUnnassigned() {
+    function toggleUnnassigned () {
         toggleFilterByUser({id: ''})
     }
 
@@ -116,54 +117,61 @@ export default function ShowProject ({project}) {
                                 {project.data.name}
                             </h2>
 
-                            <div className={'flex mt-2'}>
-                                <div onClick={() => toggleUnnassigned()}>
-                                    <Tooltip text={'Unassigned'}>
-                                        <Gravatar user={null}
-                                                  className={tasksAreFilteredByNull() && 'border-sky-600 border-2'}>
-                                        </Gravatar>
-                                    </Tooltip>
+                            <div className={'md:flex mt-2'}>
+                                <div className={'flex'}>
+                                    <div onClick={() => toggleUnnassigned()}>
+                                        <Tooltip text={'Unassigned'}>
+                                            <Gravatar user={null}
+                                                      className={tasksAreFilteredByNull() && 'border-sky-600 border-2'}>
+                                            </Gravatar>
+                                        </Tooltip>
+                                    </div>
+                                    {project.data.users.map((user, index) => (
+                                        user.tasks_count > 0
+                                            ? (
+                                                <div key={'project-users-' + index}
+                                                     className={'-ml-3'}
+                                                     onClick={() => toggleFilterByUser(user)}
+                                                >
+                                                    <Tooltip text={user.full_name + ' (' + user.tasks_count + ')'}>
+                                                        <Gravatar user={user}
+                                                                  className={tasksAreFilteredByUser(user) && 'border-sky-600 border-2'}
+                                                        ></Gravatar>
+                                                    </Tooltip>
+                                                </div>)
+                                            : null
+                                    ))}
                                 </div>
-                                {project.data.users.map((user, index) => (
-                                    user.tasks_count > 0
-                                        ? (
-                                            <div key={'project-users-' + index}
-                                                 className={'-ml-3'}
-                                                 onClick={() => toggleFilterByUser(user)}
-                                            >
-                                                <Tooltip text={user.full_name + ' ('+user.tasks_count+')'}>
-                                                    <Gravatar user={user}
-                                                              className={tasksAreFilteredByUser(user) && 'border-sky-600 border-2'}
-                                                    ></Gravatar>
-                                                </Tooltip>
-                                            </div>)
-                                        : null
-                                ))}
+
+                                <div className={'mt-3 md:mt-0 md:ml-5 '}>
+                                    <div className={'flex'}>
+                                        <TextInput placeholder={'Search here'}
+                                                   value={search}
+                                                   onChange={setSearchTerm}
+                                                   className={'w-full md:w-auto'}
+                                        >
+                                        </TextInput>
+                                        {loading && <div className={'ml-3 inline-block self-center'}>
+                                            <LoadingSpinner></LoadingSpinner>
+                                        </div>}
+                                        {!loading && (filteredUserIds.length || search != '') &&
+                                            <span
+                                                className={'ml-3 self-center text-sky-600 hover:text-sky-800 cursor-pointer'}
+                                                onClick={clearFilters}
+                                            >Clear Filters</span>}
+                                    </div>
+                                </div>
+
                             </div>
                         </div>
-                        <div className={'shrink mt-3 md:mt-0 text-right'}>
+                        <div className={'shrink mt-3 md:mt-0 md:text-right'}>
                             <Link href={'/project/' + project.data.id + '/settings'}
                                   className={'text-sky-600 hover:text-sky-800'}
                             >
                                 Settings
                             </Link>
-                            <div className={'mt-3'}>
-                                <div className={'flex'}>
-                                    <TextInput placeholder={'Search here'}
-                                               value={search}
-                                               onChange={setSearchTerm}
-                                    >
-                                    </TextInput>
-                                    {loading && <div className={'ml-3 inline-block self-center'}>
-                                        <LoadingSpinner></LoadingSpinner>
-                                    </div>}
-                                    {!loading && search != '' &&
-                                        <span
-                                            className={'ml-3 self-center text-sky-600 hover:text-sky-800 cursor-pointer'}
-                                            onClick={clearSearch}
-                                        >Clear</span>}
-                                </div>
-                            </div>
+
+
                         </div>
 
                     </div>

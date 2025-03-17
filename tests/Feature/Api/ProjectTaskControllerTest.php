@@ -179,6 +179,79 @@ class ProjectTaskControllerTest extends TestCase
 
     }
 
+    public function test_can_filter_by_unassigned_assignee()
+    {
+        $user = User::factory()->create();
+        $user2 = User::factory()->create();
+        $user3 = User::factory()->create();
+        $user4 = User::factory()->create();
+        $user5 = User::factory()->create();
+        $project = Project::factory()->create();
+        $project->users()->sync([$user->id, $user2->id, $user3->id, $user4->id, $user5->id]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user2->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user3->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user4->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => $user5->id,
+        ]);
+
+        ProjectTask::factory()->count(2)->create([
+            'project_id'  => $project->id,
+            'status_id'   => $project->statuses->first()->id,
+            'assignee_id' => NULL
+        ]);
+
+
+        $this->actingAs($user);
+        $response = $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'userIds' => [NULL],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(2, 'data');
+
+        $json = $response->json()['data'];
+        foreach ($json as $task) {
+            $this->assertNull($task['assignee']);
+        }
+
+        $this->actingAs($user);
+        $this->json(
+            'GET',
+            'api/project/' . $project->id . '/tasks',
+            [
+                'userIds' => [$user3->id, $user2->id, NULL],
+            ]
+        )->assertStatus(200)
+            ->assertJsonCount(6, 'data');
+    }
+
     public function test_request_invalid_if_userids_not_array()
     {
         $user = User::factory()->create();
