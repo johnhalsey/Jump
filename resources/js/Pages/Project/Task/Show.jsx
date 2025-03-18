@@ -14,7 +14,7 @@ import Gravatar from "@/Partials/Task/Gravatar.jsx"
 export default function ShowProjectTask ({project, task}) {
 
     const [statusId, setStatusId] = useState(task.data.status.id)
-    const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id || null)
+    const [assigneeId, setAssigneeId] = useState(task.data.assignee?.id || '')
     const [editTitle, setEditTitle] = useState(false)
     const [taskTitle, setTaskTitle] = useState(task.data.title)
 

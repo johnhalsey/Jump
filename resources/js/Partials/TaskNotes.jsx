@@ -18,10 +18,10 @@ export default function TaskNotes ({notes}) {
             note: note
         })
             .then(response => {
+                notes.unshift(response.data.data)
                 setNote('')
                 setScrollHeight(0)
                 setLoading(false)
-                router.reload()
             })
             .catch(error => {
                 console.log(error.response)
@@ -65,7 +65,7 @@ export default function TaskNotes ({notes}) {
 
             <div className="mt-3 max-h-[1000px] overflow-y-scroll">
                 {notes.map((note, index) => (
-                    <TaskNote note={note} key={'note-' + index}></TaskNote>
+                    <TaskNote note={note} key={'note-' + note.id}></TaskNote>
                 ))}
             </div>
         </>
