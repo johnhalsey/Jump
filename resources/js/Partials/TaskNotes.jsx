@@ -1,4 +1,4 @@
-import { usePage } from '@inertiajs/react'
+import { usePage, router } from '@inertiajs/react'
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from "react"
 import axios from "axios"
@@ -18,10 +18,10 @@ export default function TaskNotes ({notes}) {
             note: note
         })
             .then(response => {
-                notes.unshift(response.data.data)
                 setNote('')
                 setScrollHeight(0)
                 setLoading(false)
+                router.reload()
             })
             .catch(error => {
                 console.log(error.response)
@@ -39,11 +39,11 @@ export default function TaskNotes ({notes}) {
                 Notes
             </div>
             <div>
-                <div className="border-b border-dashed pb-3">
+                <div className="border-b border-dashed border-gray-300 pb-3">
                     <div className="">
                         <textarea
                             id="new-note-textarea"
-                            className="p-3 flex grow border rounded shadow w-full border border-gray-300"
+                            className="p-3 flex grow bg-white rounded shadow w-full border border-gray-200"
                             style={{minHeight: scrollHeight + 'px'}}
                             placeholder="New note here"
                             value={note}
