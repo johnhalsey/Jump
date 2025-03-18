@@ -23,8 +23,10 @@ export default function Dashboard ({projects, default_statuses}) {
 
     projects.data.forEach((project, index) => {
         tableRows.push(
-            <tr className={selectedProject.id == project.id ? 'bg-sky-100' : '' + 'hover:bg-sky-50 cursor-pointer'}
-                onClick={() => {selectProject(project)}}
+            <tr className={selectedProject && selectedProject.id == project.id ? 'bg-sky-100' : '' + 'hover:bg-sky-50 cursor-pointer'}
+                onClick={() => {
+                    selectProject(project)
+                }}
                 key={'project-' + index}
             >
                 <td className={'hidden md:block'}>{project.owners[0].full_name}</td>
@@ -36,7 +38,8 @@ export default function Dashboard ({projects, default_statuses}) {
                         {projectStatusByName(project, status).tasks_count}
                     </td>
                 ))}
-                <td><Link href={'/project/' + project.id} className={'text-sky-600 hover:text-sky-800 cursor-pointer'}>Manage</Link></td>
+                <td><Link href={'/project/' + project.id}
+                          className={'text-sky-600 hover:text-sky-800 cursor-pointer'}>Manage</Link></td>
             </tr>
         )
     })
@@ -45,7 +48,7 @@ export default function Dashboard ({projects, default_statuses}) {
         return project.statuses.filter(status => default_statuses.includes(status.name))
     }
 
-    function selectProject(project) {
+    function selectProject (project) {
         setSelectedProject(project)
     }
 
@@ -82,49 +85,52 @@ export default function Dashboard ({projects, default_statuses}) {
             <div className="flex mx-1 sm:mx-3 md:mx-5">
                 <div className={'hidden md:block md:w-80 lg:w-96'}>
 
-                    <ProjectStatusesDonutChart project={selectedProject}></ProjectStatusesDonutChart>
+                    {selectedProject &&
+                        <ProjectStatusesDonutChart project={selectedProject}></ProjectStatusesDonutChart>}
                     {/*<ProjectAssigneesDonutChart project={selectedProject}></ProjectAssigneesDonutChart>*/}
                 </div>
-                <Panel className={'col-span-2 pt-5 grow'}>
+                <div className={'col-span-2 grow'}>
+                    <Panel className={'pt-5 w-full'}>
 
-                    <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
-                        <div className={'flex-grow'}>
-                            <TextInput placeholder={'Add new project here'}
-                                       className={'w-full border-gray-300 shadow rounded'}
-                                       value={projectName}
-                                       onChange={e => setProjectName(e.target.value)}
-                            ></TextInput>
-                            {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
-                                {FormErrors.errorValue('name')}
-                            </div>}
+                        <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                            <div className={'flex-grow'}>
+                                <TextInput placeholder={'Add new project here'}
+                                           className={'w-full border-gray-300 shadow rounded'}
+                                           value={projectName}
+                                           onChange={e => setProjectName(e.target.value)}
+                                ></TextInput>
+                                {FormErrors.errorsHas('name') && <div className={'text-red-500'}>
+                                    {FormErrors.errorValue('name')}
+                                </div>}
+                            </div>
+                            <div className={'ml-5 content-stretch'}>
+                                <PrimaryButton loading={loading}
+                                               disabled={loading}
+                                               className={'h-full'}
+                                               onClick={createProject}
+                                >Add</PrimaryButton>
+                            </div>
                         </div>
-                        <div className={'ml-5 content-stretch'}>
-                            <PrimaryButton loading={loading}
-                                           disabled={loading}
-                                           className={'h-full'}
-                                           onClick={createProject}
-                            >Add</PrimaryButton>
-                        </div>
-                    </div>
 
-                    <table>
-                        <thead>
-                        <tr>
-                            <th className={'hidden md:block'}>Owner</th>
-                            <th>Project Name</th>
-                            {default_statuses.map((status, index) => (
-                                <th key={'default-status-' + index}
-                                    className={'hidden md:table-cell'}
-                                >{status}</th>
-                            ))}
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {tableRows}
-                        </tbody>
-                    </table>
-                </Panel>
+                        {projects.data.length > 0 && <table>
+                            <thead>
+                            <tr>
+                                <th className={'hidden md:block'}>Owner</th>
+                                <th>Project Name</th>
+                                {default_statuses.map((status, index) => (
+                                    <th key={'default-status-' + index}
+                                        className={'hidden md:table-cell'}
+                                    >{status}</th>
+                                ))}
+                                <th></th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {tableRows}
+                            </tbody>
+                        </table>}
+                    </Panel>
+                </div>
             </div>
 
         </AuthenticatedLayout>

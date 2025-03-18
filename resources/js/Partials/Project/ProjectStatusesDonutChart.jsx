@@ -1,4 +1,4 @@
-import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js';
 import {Doughnut} from "react-chartjs-2"
 
 ChartJS.register(ArcElement, Tooltip, Legend);
@@ -40,10 +40,20 @@ export default function ProjectStatusesDonutChart ({project}) {
         data.datasets[0].data.push(status.tasks_count);
     })
 
+    function totalCount () {
+        let count = 0
+        for (let i = 0; i < data.datasets[0].data.length; i++) {
+            count += data.datasets[0].data[i]
+        }
+        return count
+    }
+
     return (
         <>
-            <h2 className={'text-center text-2xl'}>{project.name} Statuses</h2>
-            {data.labels.length && <Doughnut data={data}></Doughnut>}
+            {totalCount() > 0 && <div>
+                <h2 className={'text-center text-2xl'}>{project.name} Statuses</h2>
+                <Doughnut data={data}></Doughnut>
+            </div>}
         </>
     );
 }
