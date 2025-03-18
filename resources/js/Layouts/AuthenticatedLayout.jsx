@@ -141,7 +141,7 @@ export default function AuthenticatedLayout({ header, children }) {
                         </ResponsiveNavLink>
                     </div>
 
-                    <div className="border-t border-gray-200 pb-1 pt-4">
+                    <div className="border-t border-gray-200 pb-1 pt-4 border-gray-300">
                         <div className="px-4">
                             <div className="text-base font-medium text-gray-800">
                                 {user.name}
