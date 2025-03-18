@@ -32,6 +32,9 @@ class RegistrationTest extends TestCase
 
         $this->assertAuthenticated();
         $response->assertRedirect(route('dashboard', absolute: false));
+
+        $this->call('GET', '/dashboard')
+            ->assertRedirect(route('verification.notice'));
     }
 
     public function test_project_invite_can_be_auto_accepted()
