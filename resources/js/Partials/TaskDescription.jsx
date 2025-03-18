@@ -58,7 +58,7 @@ export default function TaskDescription ({description}) {
             </div>
             {!editing &&
                 <div
-                    className="min-h-20 bg-white hover:bg-sky-50 p-3 rounded border shadow whitespace-pre-wrap cursor-pointer"
+                    className="min-h-20 bg-white hover:bg-sky-50 p-3 rounded border border-gray-200 shadow whitespace-pre-wrap cursor-pointer"
                     onClick={edit}
                 >
                     {content}
@@ -67,7 +67,7 @@ export default function TaskDescription ({description}) {
 
             {editing && <>
                 <textarea
-                    className="w-full border-gray-300 rounded shadow"
+                    className="w-full border bg-white border-gray-200 rounded shadow p-3 focus:border-sky-300 focus-visible:border-sky-300!"
                     autoFocus
                     onFocus={setCursorPosition}
                     style={{minHeight: scrollHeight + 'px'}}

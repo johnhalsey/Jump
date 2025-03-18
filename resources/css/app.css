@@ -1,6 +1,4 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
 /* common table classes*/
 table{
@@ -8,7 +6,7 @@ table{
 }
 
 th {
-    @apply border-b border-gray-200 p-4 pt-0 pb-3 lg:pl-8 text-left text-gray-600 dark:border-gray-600 dark:text-gray-200;
+    @apply font-medium border-b border-gray-200 p-4 pt-0 pb-3 lg:pl-8 text-left text-gray-600 dark:border-gray-600 dark:text-gray-200;
 }
 
 td {

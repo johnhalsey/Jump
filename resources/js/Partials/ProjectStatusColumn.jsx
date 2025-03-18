@@ -80,14 +80,14 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
     return (
         <>
-            <div className={dragoverClasses() + ' border rounded-md shadow-md column'}
+            <div className={dragoverClasses() + ' border border-gray-200 rounded-md shadow-md column'}
                  onDrop={drop}
                  onDragEnter={() => setDraggingOver(true)}
                  onDragLeave={() => setDraggingOver(false)}
                  onDragOver={allowDrop}
             >
-                <div className="p-8 border-dashed rounded-t-md border-b bg-white">
-                    <div className="font-bold text-lg">{status.name} ({status.tasks_count})</div>
+                <div className="p-8 border-dashed border-gray-300 rounded-t-md border-b bg-white">
+                    <div className="font-medium text-lg">{status.name} ({status.tasks_count})</div>
                 </div>
                 <div className="grid grid-cols-1 gap-3 p-3">
 
@@ -97,7 +97,7 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                                    type="text"
                                    onChange={setNewTaskTitle}
                                    value={newTitle}
-                                   className="p-3 flex grow border rounded shadow w-full border border-gray-300"/>
+                                   className="p-3 flex grow border rounded shadow w-full border border-gray-200 bg-white"/>
                             {FormErrors.errorsHas('title') && <div className={'text-red-500'}>
                                 {FormErrors.errorValue('title')}
                             </div>}

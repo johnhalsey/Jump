@@ -51,10 +51,10 @@ export default function TaskNote ({note}) {
             <Gravatar user={note.user}></Gravatar>
 
             {!editing &&
-                <div className="border rounded shadow mb-3 p-3 bg-white hover:bg-sky-50 w-full ml-3"
+                <div className="border border-gray-200 rounded shadow mb-3 p-3 bg-white hover:bg-sky-50 w-full ml-3"
                      onClick={editNote}>
-                    <div className="whitespace-pre-wrap">{content}</div>
-                    <div className="text-sm text-right mt-5">
+                    <div className="whitespace-pre-wrap text-gray-600">{content}</div>
+                    <div className="text-sm text-gray-600 text-right mt-5">
                         {note.date}
                     </div>
                 </div>
@@ -63,7 +63,7 @@ export default function TaskNote ({note}) {
             {editing &&
                 <div className="mb-3 w-full ml-3">
                 <textarea
-                    className="w-full border-gray-400 rounded shadow"
+                    className="w-full border border-gray-200 p-3 text-gray-600 rounded shadow bg-white"
                     value={content}
                     autoFocus
                     onFocus={setCursorPosition}

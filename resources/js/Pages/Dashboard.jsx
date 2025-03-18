@@ -90,9 +90,9 @@ export default function Dashboard ({projects, default_statuses}) {
                     {/*<ProjectAssigneesDonutChart project={selectedProject}></ProjectAssigneesDonutChart>*/}
                 </div>
                 <div className={'col-span-2 grow'}>
-                    <Panel className={'pt-5 w-full'}>
+                    <Panel className={'pt-3 w-full'}>
 
-                        <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                        <div className={'flex w-full mb-3 border-b border-dashed border-gray-300 pb-3 px-3'}>
                             <div className={'flex-grow'}>
                                 <TextInput placeholder={'Add new project here'}
                                            className={'w-full border-gray-300 shadow rounded'}

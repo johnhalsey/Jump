@@ -126,7 +126,7 @@ export default function ShowProjectTask ({project, task}) {
                             <div>
                                 <select name="status"
                                         id="status"
-                                        className="w-full border shadow rounded border-gray-300"
+                                        className="w-full border shadow rounded border-gray-200 p-3 bg-white"
                                         onChange={updateStatus}
                                         value={statusId}
                                 >
@@ -145,7 +145,7 @@ export default function ShowProjectTask ({project, task}) {
                                 <Gravatar user={task.data.assignee}></Gravatar>
                                 <select name="assignee"
                                         id="assignee"
-                                        className="w-full ml-3 border shadow rounded border-gray-300"
+                                        className="w-full ml-3 border shadow rounded border-gray-200 p-3 bg-white"
                                         onChange={updateAssignee}
                                         value={assigneeId}
                                 >

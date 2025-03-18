@@ -61,9 +61,9 @@ export default function UsersList ({project}) {
                     Project Users
                 </div>
 
-                <Panel className={'pt-5'}>
+                <Panel className={'pt-3'}>
 
-                    {project.user_can_update && <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
+                    {project.user_can_update && <div className={'flex w-full mb-3 border-b border-dashed border-gray-300 pb-3 px-3'}>
                         <div className={'flex-grow'}>
                             <TextInput placeholder={'Add project user email here'}
                                        className={'w-full border-gray-300 shadow rounded'}

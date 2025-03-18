@@ -21,7 +21,7 @@ export default function TaskCard ({task}) {
               draggable="true"
               onDragStart={() => dragStart()}
         >
-            <div className={'p-3 border rounded shadow bg-white hover:bg-sky-50'}>
+            <div className={'p-3 border border-gray-200 rounded shadow bg-white hover:bg-sky-50'}>
                 <div className={'flex justify-between'}>
                     <div className={'mr-3'}>
                         {task.title}
