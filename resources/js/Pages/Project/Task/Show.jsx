@@ -77,7 +77,7 @@ export default function ShowProjectTask ({project, task}) {
             <AuthenticatedLayout
                 header={
                     <h2 className="text-2xl">
-                        <Link href={'/project/' + task.data.project.id}>{task.data.project.name}</Link>
+                        <Link href={'/project/' + task.data.project.id}>🔙 {task.data.project.name}</Link>
                     </h2>
                 }
             >

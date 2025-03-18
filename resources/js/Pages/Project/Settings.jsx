@@ -44,7 +44,7 @@ export default function ProjectSettings ({project}) {
 
                         <h2 className="text-2xl">
                             <Link href={'/project/' + project.data.id}>
-                                {project.data.name}
+                                🔙  {project.data.name}
                             </Link>
                         </h2>
                         <div>
