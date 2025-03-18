@@ -7,20 +7,12 @@ import {useEffect, useState} from "react"
 
 export default function TaskCard ({task}) {
 
-    useEffect(() => {
-        EventBus.on('task-card-drag-end', dragStop)
-    }, []);
-
     function dragStart () {
         EventBus.emit('task-card-drag-start', {
                 elementId: 'task-card-' + task.id,
                 taskId: task.id
             }
         )
-    }
-
-    function dragStop () {
-        //
     }
 
     return (

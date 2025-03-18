@@ -1,11 +1,12 @@
 import {router, usePage} from '@inertiajs/react';
 import TaskCard from "@/Partials/TaskCard.jsx"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
-import {useEffect, useState} from 'react'
+import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import LoadingSpinner from '@/Components/LoadingSpinner.jsx'
 import * as FormErrors from "@/Utils/FormErrors.js"
 import EventBus from "@/EventBus.js"
+import eventBus from "@/EventBus.js"
 
 export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
@@ -70,7 +71,6 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
         })
             .then(response => {
                 EventBus.emit('task-card-drag-end')
-                router.reload()
             })
     }
 

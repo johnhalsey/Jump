@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Link, Head, useForm} from '@inertiajs/react';
+import {Head, Link} from '@inertiajs/react';
 import {useEffect, useRef, useState} from 'react'
 import axios from 'axios'
 import ProjectStatusColumn from "@/Partials/ProjectStatusColumn.jsx"
@@ -119,7 +119,7 @@ export default function ShowProject ({project}) {
 
                             <div className={'md:flex mt-2'}>
                                 <div className={'flex'}>
-                                    <div onClick={() => toggleUnnassigned()}>
+                                    <div onClick={() => toggleUnnassigned()} className={'cursor-pointer'}>
                                         <Tooltip text={'Unassigned'}>
                                             <Gravatar user={null}
                                                       className={tasksAreFilteredByNull() && 'border-sky-600 border-2'}>
@@ -130,7 +130,7 @@ export default function ShowProject ({project}) {
                                         user.tasks_count > 0
                                             ? (
                                                 <div key={'project-users-' + index}
-                                                     className={'-ml-3'}
+                                                     className={'-ml-3 cursor-pointer'}
                                                      onClick={() => toggleFilterByUser(user)}
                                                 >
                                                     <Tooltip text={user.full_name + ' (' + user.tasks_count + ')'}>
@@ -188,7 +188,7 @@ export default function ShowProject ({project}) {
                             key={'project-status-column-' + index}
                             status={status}
                             tasks={tasksByStatusId(status.id)}
-                            updateTaskStatus addTask={status.name == 'To Do'}
+                            addTask={status.name == 'To Do'}
                         ></ProjectStatusColumn>
                     ))}
                 </div>
