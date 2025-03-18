@@ -12,22 +12,24 @@ export default function ProjectStatusesDonutChart ({project}) {
                 label: 'Project Statuses',
                 data: [],
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.7)',
-                    'rgba(54, 162, 235, 0.7)',
-                    'rgba(255, 206, 86, 0.7)',
-                    'rgba(75, 192, 192, 0.7)',
-                    'rgba(153, 102, 255, 0.7)',
-                    'rgba(255, 159, 64, 0.7)',
+                    'rgba(247, 103, 103, 0.8)',
+                    'rgba(71, 129, 255, 0.8)',
+                    'rgba(95, 226, 112, 0.8)',
+                    'rgba(242, 236, 82, 0.8)',
+                    'rgba(255, 174, 68, 0.8)',
+                    'rgba(82, 244, 249, 0.8)',
+                    'rgba(245, 112, 255, 0.8)'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(54, 162, 235, 1)',
-                    'rgba(255, 206, 86, 1)',
-                    'rgba(75, 192, 192, 1)',
-                    'rgba(153, 102, 255, 1)',
-                    'rgba(255, 159, 64, 1)',
+                    'rgba(247, 103, 103, 1)',
+                    'rgba(71, 129, 255, 1)',
+                    'rgba(95, 226, 112, 1)',
+                    'rgba(242, 236, 82, 1)',
+                    'rgba(255, 174, 68, 1)',
+                    'rgba(82, 244, 249, 1)',
+                    'rgba(245, 112, 255, 1)'
                 ],
-                borderWidth: 1,
+                borderWidth: 2,
             },
         ],
     };
@@ -40,6 +42,7 @@ export default function ProjectStatusesDonutChart ({project}) {
 
     return (
         <>
+            <h2 className={'text-center text-2xl'}>{project.name} Statuses</h2>
             {data.labels.length && <Doughnut data={data}></Doughnut>}
         </>
     );

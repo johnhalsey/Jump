@@ -1,5 +1,5 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
-import {Head, router} from '@inertiajs/react';
+import {Head, router, Link} from '@inertiajs/react';
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import {useState} from "react"
 import TextInput from "@/Components/TextInput.jsx"
@@ -17,19 +17,26 @@ export default function Dashboard ({projects, default_statuses}) {
 
     let tableRows = []
 
+    function projectStatusByName (project, statusName) {
+        return project.statuses.find(status => status.name == statusName)
+    }
+
     projects.data.forEach((project, index) => {
         tableRows.push(
-            <tr className={'hover:bg-sky-50 cursor-pointer'}
+            <tr className={selectedProject.id == project.id ? 'bg-sky-100' : '' + 'hover:bg-sky-50 cursor-pointer'}
                 onClick={() => {selectProject(project)}}
                 key={'project-' + index}
             >
-                <td>{project.owners[0].full_name}</td>
+                <td className={'hidden md:block'}>{project.owners[0].full_name}</td>
                 <td>{project.name}</td>
-                {project.statuses.map((status, index) => (
-                    <td key={'project-' + project.id + '-status-' + status.id}>
-                        {status.tasks_count}
+                {default_statuses.map((status, index) => (
+                    <td key={'project-' + project.id + '-status-' + index}
+                        className={'hidden md:table-cell'}
+                    >
+                        {projectStatusByName(project, status).tasks_count}
                     </td>
                 ))}
+                <td><Link href={'/project/' + project.id} className={'text-sky-600 hover:text-sky-800 cursor-pointer'}>Manage</Link></td>
             </tr>
         )
     })
@@ -72,13 +79,13 @@ export default function Dashboard ({projects, default_statuses}) {
         >
             <Head title="Your Projects"/>
 
-            <div className="grid gap-4 grid-cols-1 md:grid-cols-3 mx-5">
-                <div className={'p-5'}>
+            <div className="flex mx-1 sm:mx-3 md:mx-5">
+                <div className={'hidden md:block md:w-80 lg:w-96'}>
 
                     <ProjectStatusesDonutChart project={selectedProject}></ProjectStatusesDonutChart>
-                    <ProjectAssigneesDonutChart project={selectedProject}></ProjectAssigneesDonutChart>
+                    {/*<ProjectAssigneesDonutChart project={selectedProject}></ProjectAssigneesDonutChart>*/}
                 </div>
-                <Panel className={'col-span-2 pt-5'}>
+                <Panel className={'col-span-2 pt-5 grow'}>
 
                     <div className={'flex w-full mb-5 border-b border-dashed pb-5 px-5'}>
                         <div className={'flex-grow'}>
@@ -103,11 +110,14 @@ export default function Dashboard ({projects, default_statuses}) {
                     <table>
                         <thead>
                         <tr>
-                            <th>Owner</th>
+                            <th className={'hidden md:block'}>Owner</th>
                             <th>Project Name</th>
                             {default_statuses.map((status, index) => (
-                                <th key={'default-status-' + index}>{status}</th>
+                                <th key={'default-status-' + index}
+                                    className={'hidden md:table-cell'}
+                                >{status}</th>
                             ))}
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody>
