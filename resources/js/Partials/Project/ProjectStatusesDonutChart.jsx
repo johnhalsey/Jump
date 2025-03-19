@@ -51,7 +51,7 @@ export default function ProjectStatusesDonutChart ({project}) {
     return (
         <>
             {totalCount() > 0 && <div>
-                <h2 className={'text-center text-2xl'}>{project.name} Statuses</h2>
+                <h2 className={'text-center text-2xl'}>{project.name} Progress</h2>
                 <Doughnut data={data}></Doughnut>
             </div>}
         </>

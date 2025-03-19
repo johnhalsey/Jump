@@ -9,7 +9,7 @@ use Inertia\Inertia;
 use App\Http\Controllers\ProjectTaskController;
 
 Route::get('/', function () {
-    return redirect('/dashboard');
+    return Inertia::render('Welcome', []);
 });
 
 Route::middleware(['auth', 'verified', \App\Http\Middleware\FullProfile::class])->group(function () {

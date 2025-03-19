@@ -1,18 +1,50 @@
 import ApplicationLogo from '@/Components/ApplicationLogo';
-import { Link } from '@inertiajs/react';
+import {Head, Link} from '@inertiajs/react';
 
-export default function GuestLayout({ children }) {
+export default function GuestLayout ({children}) {
     return (
-        <div className="flex min-h-screen flex-col items-center bg-gray-100 pt-6 sm:justify-center sm:pt-0">
-            <div>
-                <Link href="/">
-                    <ApplicationLogo className="h-20 w-20 fill-current text-gray-500" />
-                </Link>
+        <>
+            <div className="bg-gradient-to-br from-sky-50 to-white min-h-screen">
+                <header className="p-3 shadow bg-white">
+                    <nav className="container flex flex-1 mx-auto justify-between items-center">
+                        <div className={'w-36'}>
+                            <Link href={'/'}>
+                                <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800"/>
+                            </Link>
+                        </div>
+
+                        <div className={'align-middle'}>
+                            <Link
+                                href={route('login')}
+                                className="border border-sky-600 hover:bg-sky-100 rounded-md px-3 py-2 text-gray-800
+                                transition hover:text-black/70 focus:outline-none focus-visible:ring-[#FF2D20]
+                                dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >
+                                Log in
+                            </Link>
+                            <Link
+                                href={route('register')}
+                                className="ml-3 border border-sky-600 hover:bg-sky-100 hover:shadow rounded-md px-3 py-2
+                                text-gray-800 ring-1 ring-transparent transition hover:text-black/70 focus:outline-none
+                                focus-visible:ring-[#FF2D20] dark:text-white dark:hover:text-white/80 dark:focus-visible:ring-white"
+                            >
+                                Register
+                            </Link>
+                        </div>
+                    </nav>
+                </header>
+
+                <main className="mt-10 px-3">
+
+                    {children}
+
+                </main>
+
+                <footer className="py-16 text-center text-sm text-black dark:text-white/70">
+
+                </footer>
             </div>
 
-            <div className="mt-6 w-full overflow-hidden bg-white px-6 py-4 shadow-md sm:max-w-md sm:rounded-lg">
-                {children}
-            </div>
-        </div>
+        </>
     );
 }
