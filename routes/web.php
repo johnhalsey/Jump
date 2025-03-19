@@ -10,7 +10,7 @@ use App\Http\Controllers\ProjectTaskController;
 
 Route::get('/', function () {
     return Inertia::render('Welcome', []);
-});
+})->middleware(['guest']);
 
 Route::middleware(['auth', 'verified', \App\Http\Middleware\FullProfile::class])->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])
