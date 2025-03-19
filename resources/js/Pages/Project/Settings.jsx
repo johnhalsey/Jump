@@ -39,27 +39,13 @@ export default function ProjectSettings ({project}) {
     return (
         <>
             <AuthenticatedLayout
-                header={
-                    <div className={'flex justify-between'}>
+                breadcrumb={project.data.breadcrumb}
 
-                        <h2 className="text-2xl">
-                            <Link href={'/project/' + project.data.id}>
-                                🔙  {project.data.name}
-                            </Link>
-                        </h2>
-                        <div>
-                            <Link href={'/project/' + project.data.id + '/settings'}
-                                  className={'text-sky-600 hover:text-sky-800'}
-                            >
-                                Settings
-                            </Link>
-                        </div>
-                    </div>
-                }
             >
                 <Head title={project.data.name + ' Settings'}/>
 
-                <FullPagePanel title={
+                <FullPagePanel
+                    title={
                     <div className={'flex justify-between'}>
                         <span className="font-bold">Settings</span>
                         {project.data.user_can_update && <PrimaryButton loading={loading} onClick={saveSettings}>Save</PrimaryButton>}

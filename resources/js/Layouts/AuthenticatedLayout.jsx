@@ -6,7 +6,7 @@ import { Link, usePage } from '@inertiajs/react';
 import { useState } from 'react';
 import eventBus from "@/EventBus.js"
 
-export default function AuthenticatedLayout({ header, children }) {
+export default function AuthenticatedLayout({ breadcrumb, header, children }) {
     const user = usePage().props.auth.user.data;
 
     const [showingNavigationDropdown, setShowingNavigationDropdown] =
@@ -18,12 +18,12 @@ export default function AuthenticatedLayout({ header, children }) {
 
     return (
         <div className="min-h-screen bg-gray-100" onClick={handleClickEvent}>
-            <nav className="shadow">
-                <div className="mx-auto px-4 sm:px-6 lg:px-8 bg-gradient-to-r from-sky-50 to-sky-400">
-                    <div className="flex h-16 justify-between ">
+            <nav className="">
+                <div className="mx-auto p-3 bg-white shadow">
+                    <nav className="flex justify-between mx-5">
                         <div className="flex">
-                            <div className="flex w-40 items-center">
-                                <Link href="/" className="p-3">
+                            <div className="w-36">
+                                <Link href="/">
                                     <ApplicationLogo className="block h-9 w-auto fill-current text-gray-800" />
                                 </Link>
                             </div>
@@ -35,6 +35,13 @@ export default function AuthenticatedLayout({ header, children }) {
                                 >
                                     Dashboard
                                 </NavLink>
+
+                                {breadcrumb && <NavLink
+                                    href={breadcrumb.route}
+                                    active={route().current(breadcrumb.route)}
+                                >
+                                    {breadcrumb.display}
+                                </NavLink>}
                             </div>
                         </div>
 
@@ -123,7 +130,7 @@ export default function AuthenticatedLayout({ header, children }) {
                                 </svg>
                             </button>
                         </div>
-                    </div>
+                    </nav>
                 </div>
 
                 <div
@@ -167,15 +174,18 @@ export default function AuthenticatedLayout({ header, children }) {
                 </div>
             </nav>
 
-            {header && (
-                <header className="bg-white shadow mb-5">
-                    <div className="px-4 py-5 sm:px-6 md:px-8">
-                        {header}
-                    </div>
-                </header>
-            )}
+            <div className={'px-4 sm:px-6 lg:px-8'}>
 
-            <main>{children}</main>
+                {header && (
+                    <header className="bg-white rounded-md shadow my-4 sm:my-6">
+                        <div className="px-4 sm:px-6 lg:px-8 py-5">
+                            {header}
+                        </div>
+                    </header>
+                )}
+
+                <main>{children}</main>
+            </div>
         </div>
     );
 }

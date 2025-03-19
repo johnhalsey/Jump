@@ -74,15 +74,11 @@ export default function Dashboard ({projects, default_statuses}) {
 
     return (
         <AuthenticatedLayout
-            header={
-                <h2 className="text-2xl">
-                    Your Projects
-                </h2>
-            }
+
         >
             <Head title="Your Projects"/>
 
-            <div className="flex mx-1 sm:mx-3 md:mx-5">
+            <div className="flex mx-1 sm:mx-3 md:mx-5 mt-8">
                 <div className={'hidden md:block md:w-80 lg:w-96'}>
 
                     {selectedProject &&

@@ -20,6 +20,11 @@ export default function ShowProjectTask ({project, task}) {
 
     const firstUpdate = useRef(true);
 
+    const projectBreadcrumb = {
+        route: '/project/' + project.data.id,
+        display: project.data.name
+    }
+
     useEffect(() => {
         eventBus.on('task-deleted', handleDeletedTask)
 
@@ -75,16 +80,13 @@ export default function ShowProjectTask ({project, task}) {
     return (
         <>
             <AuthenticatedLayout
-                header={
-                    <h2 className="text-2xl">
-                        <Link href={'/project/' + task.data.project.id}>🔙 {task.data.project.name}</Link>
-                    </h2>
-                }
+                breadcrumb={project.data.breadcrumb}
             >
 
                 <Head title={task.data.title}/>
 
-                <FullPagePanel title={
+                <FullPagePanel
+                    title={
                     <div className={'flex justify-between'}>
                         <div className={'grow'}>
                             <div className={'text-sm'}>{task.data.reference}</div>
