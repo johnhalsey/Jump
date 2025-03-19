@@ -116,8 +116,8 @@ export default function ShowProject ({project}) {
                     <div className={'md:flex justify-between'}>
 
                         <div>
-                            <div className={'md:flex mt-2'}>
-                                <div className={'flex'}>
+                            <div className={'md:flex items-center'}>
+                                <div className={'flex mt-1'}>
                                     <div onClick={() => toggleUnnassigned()} className={'cursor-pointer'}>
                                         <Tooltip text={'Unassigned'}>
                                             <Gravatar user={null}

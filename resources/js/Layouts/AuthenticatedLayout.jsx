@@ -38,7 +38,7 @@ export default function AuthenticatedLayout({ breadcrumb, header, children }) {
 
                                 {breadcrumb && <NavLink
                                     href={breadcrumb.route}
-                                    active={route().current(breadcrumb.route)}
+                                    active={breadcrumb.route}
                                 >
                                     {breadcrumb.display}
                                 </NavLink>}
