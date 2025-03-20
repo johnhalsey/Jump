@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('short_code', 6)->nullable();
+            $table->string('plan', 15);
             $table->timestamps();
         });
     }
