@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\MorphMany;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\MorphToMany;
 
 class ProjectTask extends Model
 {
@@ -31,5 +34,10 @@ class ProjectTask extends Model
     public function assignee(): BelongsTo
     {
         return $this->belongsTo(User::class);
+    }
+
+    public function links(): MorphMany
+    {
+        return $this->morphMany(Link::class, 'linkable');
     }
 }
