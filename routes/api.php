@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Auth\Middleware\Authenticate;
+use Illuminate\Support\Facades\Route;
 
 Route::middleware(['auth', 'verified'])
     ->name('api.')
@@ -54,33 +55,40 @@ Route::middleware(['auth', 'verified'])
                         /**
                          * Project Task -> Notes
                          */
-                        Route::post(
-                            '/notes', [\App\Http\Controllers\Api\Project\Task\NoteController::class, 'store']
-                        )->name('notes.store');
+                        Route::controller(\App\Http\Controllers\Api\Project\Task\NoteController::class)
+                            ->name('notes.')
+                            ->group(function () {
+                                Route::post(
+                                    '/notes', 'store'
+                                )->name('store');
 
-                        Route::patch(
-                            '/note/{taskNote}', [\App\Http\Controllers\Api\Project\Task\NoteController::class, 'update']
-                        )->name('notes.update');
+                                Route::patch(
+                                    '/note/{taskNote}', 'update'
+                                )->name('update');
+                            });
 
                         /**
                          * Project Task -> Links
                          */
-                        Route::get(
-                            '/links', [\App\Http\Controllers\Api\Project\Task\LinkController::class, 'index']
-                        )->name('links.index');
+                        Route::controller(\App\Http\Controllers\Api\Project\Task\LinkController::class)
+                            ->name('links.')
+                            ->group(function () {
+                                Route::get(
+                                    '/links', 'index'
+                                )->name('index');
 
-                        Route::post(
-                            '/links', [\App\Http\Controllers\Api\Project\Task\LinkController::class, 'store']
-                        )->name('links.store');
+                                Route::post(
+                                    '/links', 'store'
+                                )->name('store');
 
-                        Route::patch(
-                            '/link/{link}', [\App\Http\Controllers\Api\Project\Task\LinkController::class, 'update']
-                        )->name('links.update');
+                                Route::patch(
+                                    '/link/{link}', 'update'
+                                )->name('update');
 
-                        Route::delete(
-                            '/link/{link}', [\App\Http\Controllers\Api\Project\Task\LinkController::class, 'destroy']
-                        )->name('links.destroy');
-
+                                Route::delete(
+                                    '/link/{link}', 'destroy'
+                                )->name('destroy');
+                            });
                     });
 
             });
