@@ -2,6 +2,8 @@
 
 namespace App\Http\Resources;
 
+use App\Enums\ProjectPlan;
+use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Models\ProjectStatus;
 use Illuminate\Support\Facades\Log;
@@ -18,14 +20,15 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id'              => $this->id,
-            'name'            => $this->name,
-            'short_code'      => $this->short_code,
-            'user_can_update' => $request->user()->can('update', $this->resource),
-            'breadcrumb'      => [
+            'id'                                               => $this->id,
+            'name'                                             => $this->name,
+            'short_code'                                       => $this->short_code,
+            'user_can_update'                                  => $request->user()->can('update', $this->resource),
+            'breadcrumb'                                       => [
                 'route'   => route('project.show', $this->id),
                 'display' => $this->name
             ],
+            Str::lower(ProjectPlan::ADVANCED->value) . '_plan' => $this->planIs(ProjectPlan::ADVANCED)
         ];
 
         if ($this->resource->relationLoaded('users')) {

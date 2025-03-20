@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Enums\ProjectPlan;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Console\View\Components\Task;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -13,6 +14,10 @@ class Project extends Model
     use HasFactory;
 
     protected $guarded = ['id'];
+
+    protected $casts = [
+        'plan' => ProjectPlan::class,
+    ];
 
     public function users(): BelongsToMany
     {
@@ -45,5 +50,10 @@ class Project extends Model
             ->wherePivot('user_id', $user->id)
             ->wherePivot('created_at', '>', now()->subHour())
             ->exists();
+    }
+
+    public function planIs(ProjectPlan $plan): bool
+    {
+        return $this->plan == $plan;
     }
 }

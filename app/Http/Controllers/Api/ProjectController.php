@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Api;
 
 use App\Models\Project;
+use App\Enums\ProjectPlan;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectResource;
 use App\Http\Requests\StoreProjectRequest;
