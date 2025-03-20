@@ -1,8 +1,8 @@
-export default function FullPagePanel ({title, children}) {
+export default function FullPagePanel ({title, children, className}) {
 
     return (
         <>
-            <div className="mx-2 sm:mx-4 md:mx-8 bg-white rounded-md border border-gray-200 shadow">
+            <div className={"mt-6 bg-white rounded-md border border-gray-200 shadow " + className}>
                 <div className="px-3 sm:px-4 md:p-8 py-4 border-b border-dashed border-gray-300">
                     {title}
                 </div>

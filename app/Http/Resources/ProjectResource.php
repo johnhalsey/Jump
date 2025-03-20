@@ -18,10 +18,14 @@ class ProjectResource extends JsonResource
     public function toArray(Request $request): array
     {
         $data = [
-            'id'                  => $this->id,
-            'name'                => $this->name,
-            'short_code'          => $this->short_code,
-            'user_can_update'     => $request->user()->can('update', $this->resource),
+            'id'              => $this->id,
+            'name'            => $this->name,
+            'short_code'      => $this->short_code,
+            'user_can_update' => $request->user()->can('update', $this->resource),
+            'breadcrumb'      => [
+                'route'   => route('project.show', $this->id),
+                'display' => $this->name
+            ],
         ];
 
         if ($this->resource->relationLoaded('users')) {

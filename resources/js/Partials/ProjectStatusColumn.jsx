@@ -80,7 +80,7 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
 
     return (
         <>
-            <div className={dragoverClasses() + ' border border-gray-200 rounded-md shadow-md column'}
+            <div className={dragoverClasses() + ' border border-gray-200 bg-gray-50 rounded-md shadow-md column'}
                  onDrop={drop}
                  onDragEnter={() => setDraggingOver(true)}
                  onDragLeave={() => setDraggingOver(false)}
@@ -89,7 +89,7 @@ export default function ProjectStatusColumn ({status, tasks, addTask = false}) {
                 <div className="p-8 border-dashed border-gray-300 rounded-t-md border-b bg-white">
                     <div className="font-medium text-lg">{status.name} ({status.tasks_count})</div>
                 </div>
-                <div className="grid grid-cols-1 gap-3 p-3">
+                <div className="grid grid-cols-1 gap-3 p-3 ">
 
                     {addTask && <div className="flex items-stretch">
                         <div className="grow">

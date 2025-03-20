@@ -108,17 +108,16 @@ export default function ShowProject ({project}) {
 
     return (
         <AuthenticatedLayout
+
+            breadcrumb={project.data.breadcrumb}
+
             header={
                 <>
                     <div className={'md:flex justify-between'}>
 
                         <div>
-                            <h2 className="text-2xl">
-                                {project.data.name}
-                            </h2>
-
-                            <div className={'md:flex mt-2'}>
-                                <div className={'flex'}>
+                            <div className={'md:flex items-center'}>
+                                <div className={'flex mt-1'}>
                                     <div onClick={() => toggleUnnassigned()} className={'cursor-pointer'}>
                                         <Tooltip text={'Unassigned'}>
                                             <Gravatar user={null}
@@ -180,7 +179,7 @@ export default function ShowProject ({project}) {
         >
             <Head title={project.data.name}/>
 
-            <div className="w-full mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="w-full mx-auto">
 
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6 lg:gap-10 pb-12">
                     {project.data.statuses.map((status, index) => (
