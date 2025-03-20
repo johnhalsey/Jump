@@ -1,16 +1,13 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Project;
 
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
-use App\Events\UserAddedToProject;
-use Illuminate\Support\Facades\Event;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectUsersControllerTest extends TestCase
+class UserControllerTest extends TestCase
 {
     use RefreshDatabase;
 

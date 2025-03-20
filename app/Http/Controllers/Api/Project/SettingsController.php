@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Project;
 
 use App\Models\Project;
 use App\Http\Controllers\Controller;
@@ -8,7 +8,7 @@ use App\Http\Resources\ProjectResource;
 use Illuminate\Http\Resources\Json\JsonResource;
 use App\Http\Requests\UpdateProjectSettingsRequest;
 
-class ProjectSettingsController extends Controller
+class SettingsController extends Controller
 {
     public function update(UpdateprojectSettingsRequest $request, Project $project): JsonResource
     {

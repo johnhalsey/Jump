@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Project\Task;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -9,7 +9,7 @@ use App\Models\TaskNote;
 use App\Models\ProjectTask;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class TaskNoteControllerTest extends TestCase
+class NoteControllerTest extends TestCase
 {
     use RefreshDatabase;
 

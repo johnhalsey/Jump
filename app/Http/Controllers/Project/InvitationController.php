@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Project;
 
 use App\Models\User;
 use App\Models\Project;
@@ -9,8 +9,9 @@ use Illuminate\Http\Request;
 use App\Events\UserAddedToProject;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
+use App\Http\Controllers\Controller;
 
-class ProjectInvitationController extends Controller
+class InvitationController extends Controller
 {
     public function accept(Request $request, Project $project, string $email, string $token)
     {

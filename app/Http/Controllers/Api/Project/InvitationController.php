@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Project;
 
 use App\Models\Project;
 use App\Models\Invitation;
@@ -9,7 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Events\UserInvitedToProject;
 use App\Http\Requests\StoreProjectInvitationRequest;
 
-class ProjectInvitationsController extends Controller
+class InvitationController extends Controller
 {
     public function store(StoreProjectInvitationRequest $request, Project $project): JsonResponse
     {

@@ -1,18 +1,16 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Project;
 
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\Invitation;
-use App\Events\UserAddedToProject;
 use App\Events\UserInvitedToProject;
 use Illuminate\Support\Facades\Event;
-use Illuminate\Auth\Events\Registered;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectInvitationsControllerTest extends TestCase
+class InvitationsControllerTest extends TestCase
 {
     use RefreshDatabase;
 

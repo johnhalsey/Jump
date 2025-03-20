@@ -1,21 +1,20 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Project;
 
 use App\Models\Project;
 use App\Models\ProjectTask;
+use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Illuminate\Support\Facades\Log;
 use App\Enums\DefaultProjectStatus;
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 use App\Http\Resources\ProjectTaskResource;
 use App\Http\Requests\StoreProjectTaskRequest;
 use App\Http\Requests\UpdateProjectTaskRequest;
 use App\Http\Requests\IndexProjectTasksRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ProjectTaskController extends Controller
+class TaskController extends Controller
 {
     public function index(IndexProjectTasksRequest $request, Project $project): JsonResource
     {

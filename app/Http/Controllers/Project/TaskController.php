@@ -1,16 +1,18 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Project;
 
 use Inertia\Inertia;
+use Inertia\Response;
 use App\Models\Project;
 use App\Models\ProjectTask;
 use Illuminate\Http\Request;
+use App\Http\Controllers\Controller;
 use App\Http\Resources\ProjectTaskResource;
 
-class ProjectTaskController extends Controller
+class TaskController extends Controller
 {
-    public function show(Request $request, Project $project, ProjectTask $projectTask)
+    public function show(Request $request, Project $project, ProjectTask $projectTask): Response
     {
         $project->load(['statuses', 'users']);
 

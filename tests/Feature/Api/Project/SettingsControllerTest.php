@@ -1,13 +1,13 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Project;
 
 use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectSettingsControllerTest extends TestCase
+class SettingsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
