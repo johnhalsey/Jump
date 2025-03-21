@@ -13,6 +13,11 @@ use Illuminate\Http\Resources\Json\JsonResource;
 
 class NoteController extends Controller
 {
+    public function index(Request $request, Project $project, ProjectTask $projectTask): JsonResource
+    {
+        return TaskNoteResource::collection($projectTask->notes()->with('user')->paginate());
+    }
+
     public function store(StoreTaskNoteRequest $request, Project $project, ProjectTask $projectTask): JsonResource
     {
         $note = $projectTask->notes()->create([
