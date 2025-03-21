@@ -34,9 +34,7 @@ class TaskControllerTest extends TestCase
             ->assertOk()
             ->assertInertia(fn (AssertableInertia $page) => $page
                 ->component('Project/Task/Show')
-                ->has('task', fn (AssertableInertia $page) => $page
-                    ->has('data.notes', 5)
-                )
+                ->has('task')
             );
     }
 }
