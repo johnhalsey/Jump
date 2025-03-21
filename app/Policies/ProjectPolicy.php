@@ -43,7 +43,7 @@ class ProjectPolicy
 
     public function ownTask(User $user, Project $project, ProjectTask $task): bool
     {
-        return $this->view($user, $project) && $task->project_id == $project->id;
+        return $this->view($user, $project) && $task->project->is($project);
     }
 
     /**

@@ -21,11 +21,6 @@ export default function ShowProjectTask ({project, task}) {
 
     const firstUpdate = useRef(true);
 
-    const projectBreadcrumb = {
-        route: '/project/' + project.data.id,
-        display: project.data.name
-    }
-
     useEffect(() => {
         eventBus.on('task-deleted', handleDeletedTask)
 
@@ -171,7 +166,7 @@ export default function ShowProjectTask ({project, task}) {
                         </div>
 
                         <div className="mt-3 md:mt-0">
-                            <TaskNotes notes={task.data.notes}></TaskNotes>
+                            <TaskNotes></TaskNotes>
                         </div>
                     </div>
                 </FullPagePanel>
