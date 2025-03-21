@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('links', function (Blueprint $table) {
             $table->id();
             $table->morphs('linkable');
-            $table->string('name');
+            $table->string('text')->nullable();
             $table->text('url');
             $table->timestamps();
         });

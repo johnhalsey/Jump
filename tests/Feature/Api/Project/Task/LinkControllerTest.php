@@ -7,7 +7,6 @@ use App\Models\Link;
 use App\Models\User;
 use App\Models\Project;
 use App\Models\ProjectTask;
-use Illuminate\Console\View\Components\Task;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
 class LinkControllerTest extends TestCase
@@ -114,7 +113,7 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
-                'name' => 'My Test Link',
+                'text' => 'My Test Link',
                 'url' => 'http://my-test-link',
             ]
         )->assertStatus(201);
@@ -123,7 +122,7 @@ class LinkControllerTest extends TestCase
         $this->assertCount(1, $task->links);
     }
 
-    public function test_store_task_link_validation_will_fail_if_name_missing()
+    public function test_store_task_link_validation_will_fail_if_text_invalid()
     {
         $project = Project::factory()->create();
         $task = ProjectTask::factory()->create([
@@ -142,36 +141,11 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
+                'text' => 111,
                 'url' => 'http://my-test-link',
             ]
         )->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
-
-        $this->json(
-            'POST',
-            route('api.project.task.links.store', [
-                'project' => $project,
-                'projectTask' => $task,
-            ]),
-            [
-                'name' => '',
-                'url' => 'http://my-test-link',
-            ]
-        )->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
-
-        $this->json(
-            'POST',
-            route('api.project.task.links.store', [
-                'project' => $project,
-                'projectTask' => $task,
-            ]),
-            [
-                'name' => 111,
-                'url' => 'http://my-test-link',
-            ]
-        )->assertStatus(422)
-            ->assertJsonValidationErrors(['name']);
+            ->assertJsonValidationErrors(['text']);
     }
 
     public function test_store_task_link_validation_will_fail_if_url_invalid()
@@ -193,7 +167,7 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
-                'name' => 'My Test Link',
+                'text' => 'My Test Link',
                 'url' => 'my-test-link',
             ]
         )->assertStatus(422)
@@ -206,7 +180,7 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
-                'name' => 'My Test Link',
+                'text' => 'My Test Link',
             ]
         )->assertStatus(422)
             ->assertJsonValidationErrors(['url']);
@@ -218,7 +192,7 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
-                'name' => 'My Test Link',
+                'text' => 'My Test Link',
                 'url' => '',
             ]
         )->assertStatus(422)
@@ -231,7 +205,7 @@ class LinkControllerTest extends TestCase
                 'projectTask' => $task,
             ]),
             [
-                'name' => 'My Test Link',
+                'text' => 'My Test Link',
                 'url' => 111,
             ]
         )->assertStatus(422)
@@ -247,7 +221,7 @@ class LinkControllerTest extends TestCase
         ]);
         $link = Link::factory()->make([
             'linkable_id' => $task->id,
-            'name' => 'I am a Link',
+            'text' => 'I am a Link',
             'url' => 'http://my-test-link',
         ]);
         $task->links()->save($link);
@@ -267,19 +241,19 @@ class LinkControllerTest extends TestCase
                 'link' => $link,
             ]),
             [
-                'name' => $updatedName,
+                'text' => $updatedName,
                 'url' => $updatedUrl,
             ]
         )
             ->assertStatus(200);
 
         $data = json_decode($resonse->getContent(), true)['data'];
-        $this->assertEquals($updatedName, $data['name']);
+        $this->assertEquals($updatedName, $data['text']);
         $this->assertEquals($updatedUrl, $data['url']);
 
         $link = Link::first();
 
-        $this->assertEquals($updatedName, $link->name);
+        $this->assertEquals($updatedName, $link->text);
         $this->assertEquals($updatedUrl, $link->url);
     }
 

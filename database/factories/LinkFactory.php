@@ -18,7 +18,7 @@ class LinkFactory extends Factory
     public function definition(): array
     {
         return [
-            'name'          => $this->faker->words(3, true),
+            'text'          => $this->faker->words(3, true),
             'url'           => $this->faker->url(),
             'linkable_type' => ProjectTask::class,
             'linkable_id'   => function () {

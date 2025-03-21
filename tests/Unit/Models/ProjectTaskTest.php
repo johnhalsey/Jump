@@ -58,7 +58,7 @@ class ProjectTaskTest extends TestCase
         $this->assertDatabaseHas('links', [
             'linkable_id' => $task->id,
             'linkable_type' => ProjectTask::class,
-            'name' => $link->name,
+            'text' => $link->text,
             'url' => $link->url,
         ]);
     }

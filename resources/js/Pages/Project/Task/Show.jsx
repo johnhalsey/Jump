@@ -10,6 +10,7 @@ import eventBus from "@/EventBus.js"
 import TextInput from "@/Components/TextInput.jsx"
 import PrimaryButton from "@/Components/PrimaryButton.jsx"
 import Gravatar from "@/Partials/Task/Gravatar.jsx"
+import TaskLinks from "@/Partials/Task/Links.jsx"
 
 export default function ShowProjectTask ({project, task}) {
 
@@ -121,6 +122,8 @@ export default function ShowProjectTask ({project, task}) {
 
                         <div>
                             <TaskDescription description={task.data.description}></TaskDescription>
+
+                            <TaskLinks task={task.data}></TaskLinks>
 
                             <div className="mb-3 mt-8 font-bold">
                                 Status
