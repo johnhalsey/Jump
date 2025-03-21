@@ -4,6 +4,7 @@ namespace Tests\Unit\Models;
 
 use Tests\TestCase;
 use App\Models\User;
+use App\Models\Link;
 use App\Models\Project;
 use App\Models\ProjectTask;
 use App\Models\ProjectStatus;
@@ -38,5 +39,27 @@ class ProjectTaskTest extends TestCase
         ]);
 
         $this->assertNotNull($task->reference);
+    }
+
+    public function test_task_links()
+    {
+        $project = Project::factory()->create();
+        $task = ProjectTask::factory()->create([
+            'project_id' => $project->id,
+            'status_id'  => $project->statuses()->first()->id,
+        ]);
+        $link = Link::factory()->make([
+            'linkable_id' => $task->id,
+        ]);
+
+        $task->links()->save($link);
+
+        $this->assertEquals($task->links()->count(), 1);
+        $this->assertDatabaseHas('links', [
+            'linkable_id' => $task->id,
+            'linkable_type' => ProjectTask::class,
+            'text' => $link->text,
+            'url' => $link->url,
+        ]);
     }
 }

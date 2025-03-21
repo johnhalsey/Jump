@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Project;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -11,7 +11,7 @@ use Illuminate\Support\Facades\URL;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectInvitationControllerTest extends TestCase
+class InvitationControllerTest extends TestCase
 {
     use RefreshDatabase;
 

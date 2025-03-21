@@ -1,19 +1,16 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Project;
 
-use App\Models\User;
+use Tests\TestCase;
 use App\Models\Project;
 use App\Models\TaskNote;
 use App\Models\ProjectTask;
 use App\Models\ProjectStatus;
-use Database\Factories\ProjectFactory;
 use Inertia\Testing\AssertableInertia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class ProjectTaskControllerTest extends TestCase
+class TaskControllerTest extends TestCase
 {
     use RefreshDatabase;
 

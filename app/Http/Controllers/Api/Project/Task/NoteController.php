@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\Project\Task;
 
 use App\Models\Project;
 use App\Models\TaskNote;
 use App\Models\ProjectTask;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Resources\TaskNoteResource;
 use App\Http\Requests\StoreTaskNoteRequest;
 use App\Http\Requests\UpdateTaskNoteRequest;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class TaskNoteController extends Controller
+class NoteController extends Controller
 {
     public function store(StoreTaskNoteRequest $request, Project $project, ProjectTask $projectTask): JsonResource
     {

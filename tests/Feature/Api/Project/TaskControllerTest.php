@@ -1,6 +1,6 @@
 <?php
 
-namespace Tests\Feature\Api;
+namespace Tests\Feature\Api\Project;
 
 use Tests\TestCase;
 use App\Models\User;
@@ -11,7 +11,7 @@ use App\Models\ProjectStatus;
 use App\Enums\DefaultProjectStatus;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-class ProjectTaskControllerTest extends TestCase
+class TaskControllerTest extends TestCase
 {
     use RefreshDatabase;
 

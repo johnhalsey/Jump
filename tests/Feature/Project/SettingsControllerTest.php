@@ -1,15 +1,14 @@
 <?php
 
-namespace Tests\Feature;
+namespace Tests\Feature\Project;
 
+use Tests\TestCase;
 use App\Models\User;
 use App\Models\Project;
 use Inertia\Testing\AssertableInertia;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Illuminate\Foundation\Testing\WithFaker;
-use Tests\TestCase;
 
-class ProjectSettingsControllerTest extends TestCase
+class SettingsControllerTest extends TestCase
 {
     use RefreshDatabase;
 
