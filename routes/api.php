@@ -39,6 +39,9 @@ Route::middleware(['auth', 'verified'])
 
                 });
 
+                /**
+                 * Project -> Tasks
+                 */
                 Route::middleware(['can:ownTask,project,projectTask'])
                     ->prefix('/task/{projectTask}')
                     ->name('task.')
@@ -58,13 +61,23 @@ Route::middleware(['auth', 'verified'])
                         Route::controller(\App\Http\Controllers\Api\Project\Task\NoteController::class)
                             ->name('notes.')
                             ->group(function () {
-                                Route::post(
-                                    '/notes', 'store'
-                                )->name('store');
 
-                                Route::patch(
-                                    '/note/{taskNote}', 'update'
-                                )->name('update');
+                                Route::get('/notes', 'index')
+                                    ->name('index');
+
+                                Route::post('/notes', 'store')
+                                    ->name('store');
+
+                                Route::middleware('can:ownNote,projectTask,taskNote')
+                                    ->prefix('/note/{taskNote}')
+                                    ->group(function () {
+                                        Route::patch('/', 'update')
+                                            ->name('update');
+
+                                        Route::delete('/', 'destroy')
+                                            ->name('destroy');
+                                    });
+
                             });
 
                         /**
@@ -73,21 +86,22 @@ Route::middleware(['auth', 'verified'])
                         Route::controller(\App\Http\Controllers\Api\Project\Task\LinkController::class)
                             ->name('links.')
                             ->group(function () {
-                                Route::get(
-                                    '/links', 'index'
-                                )->name('index');
+                                Route::get('/links', 'index')
+                                    ->name('index');
 
-                                Route::post(
-                                    '/links', 'store'
-                                )->name('store');
+                                Route::post('/links', 'store')
+                                    ->name('store');
 
-                                Route::patch(
-                                    '/link/{link}', 'update'
-                                )->name('update');
+                                Route::middleware('can:ownLink,projectTask,link')
+                                    ->prefix('/link/{link}')
+                                    ->group(function () {
 
-                                Route::delete(
-                                    '/link/{link}', 'destroy'
-                                )->name('destroy');
+                                        Route::patch('/', 'update')
+                                            ->name('update');
+
+                                        Route::delete('/', 'destroy')
+                                            ->name('destroy');
+                                    });
                             });
                     });
 

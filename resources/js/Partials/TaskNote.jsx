@@ -5,7 +5,7 @@ import axios from "axios"
 import Gravatar from "@/Partials/Task/Gravatar.jsx"
 import Tooltip from "@/Components/Tooltip.jsx"
 
-export default function TaskNote ({note}) {
+export default function TaskNote ({note, onDelete}) {
 
     const {project, task} = usePage().props
 
@@ -27,13 +27,30 @@ export default function TaskNote ({note}) {
     function updateNote () {
         setLoading(true)
 
-        axios.patch('/api/project/' + project.data.id + '/task/' + task.data.id + '/note/' + note.id, {
+        axios.patch(route('api.project.task.notes.update', [
+            project.data.id,
+            task.data.id,
+            note.id
+        ]), {
             note: content
         })
             .then(response => {
                 setEditing(false)
                 setLoading(false)
             })
+    }
+
+    function deleteNote () {
+        axios.delete(route('api.project.task.notes.destroy', [
+            project.data.id,
+            task.data.id,
+            note.id
+        ]))
+            .then(() => {
+                onDelete()
+            })
+
+
     }
 
     function setCursorPosition (e) {
@@ -47,21 +64,21 @@ export default function TaskNote ({note}) {
 
     return (
         <>
-        <div className={'flex'}>
-            <Gravatar user={note.user}></Gravatar>
+            <div className={'flex'}>
+                <Gravatar user={note.user}></Gravatar>
 
-            {!editing &&
-                <div className="border border-gray-200 rounded shadow mb-3 p-3 bg-white hover:bg-sky-50 w-full ml-3"
-                     onClick={editNote}>
-                    <div className="whitespace-pre-wrap text-gray-600">{content}</div>
-                    <div className="text-sm text-gray-600 text-right mt-5">
-                        {note.date}
+                {!editing &&
+                    <div className="border border-gray-200 rounded shadow mb-3 p-3 bg-white hover:bg-sky-50 w-full ml-3"
+                         onClick={editNote}>
+                        <div className="whitespace-pre-wrap text-gray-600">{content}</div>
+                        <div className="text-sm text-gray-600 text-right mt-5">
+                            {note.date}
+                        </div>
                     </div>
-                </div>
-            }
+                }
 
-            {editing &&
-                <div className="mb-3 w-full ml-3">
+                {editing &&
+                    <div className="mb-3 w-full ml-3">
                 <textarea
                     className="w-full border border-gray-200 p-3 text-gray-600 rounded shadow bg-white"
                     value={content}
@@ -69,14 +86,22 @@ export default function TaskNote ({note}) {
                     onFocus={setCursorPosition}
                     style={{minHeight: scrollHeight + 'px'}}
                     onChange={updateContent}></textarea>
-                    <PrimaryButton loading={loading}
-                                   disabled={loading}
-                                   onClick={updateNote}
-                    >
-                        Save
-                    </PrimaryButton>
-                </div>}
-        </div>
+                        <div className={'flex justify-between mt-1'}>
+                            <div>
+                                <PrimaryButton loading={loading}
+                                               disabled={loading}
+                                               onClick={updateNote}
+                                >
+                                    Save
+                                </PrimaryButton>
+                                <span className={'ml-5 cursor-pointer text-sky-600 hover:text-sky-800'}
+                                      onClick={() => setEditing(false)}
+                                >Cancel</span>
+                            </div>
+                            <span className={'cursor-pointer'} onClick={() => deleteNote()}>🗑️</span>
+                        </div>
+                    </div>}
+            </div>
         </>
     );
 }
